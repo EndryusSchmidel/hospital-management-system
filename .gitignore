@@ -147,3 +147,5 @@ dist
 # System
 .android/
 .eclipse/
+back-end/HELP.md
+back-end/.mvn/wrapper/maven-wrapper.properties
