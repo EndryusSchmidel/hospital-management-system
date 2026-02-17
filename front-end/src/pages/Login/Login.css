@@ -1,0 +1,89 @@
+.login-screen-wrapper {
+    /* Faz a div ocupar a tela toda */
+    width: 100vw;
+    min-height: 100vh;
+    
+    /* Aplica o fundo aqui */
+    background-image: url(../../assets/hospital.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    /* Centraliza o formulário (o menuzinho) no meio da tela */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.container {
+    width: 450px;
+    background-color: rgba(255, 255, 255, 0.1); /* Ajustei levemente para o vidro aparecer melhor */
+    backdrop-filter: blur(50px);
+    border-radius: 30px 30px 30px 30px;
+    padding: 40px;
+    border: 2px rgba(0, 0, 0, 0.211) solid;
+    box-shadow: 1px 0px 20px 13px rgba(0, 0, 0, 0.3);
+}
+
+
+.titulo {
+    display: block;
+    margin: 10px auto;
+    text-align: center;
+}
+
+.input-email {
+    padding: 10px;
+    margin: 7px 10px 10px 5px;
+    border-radius: 5px;
+    border-style: none;
+    width: 100%;
+}
+
+.input-password {
+    padding: 10px;
+    margin: 7px 10px 10px 5px;
+    border-radius: 5px;
+    border-style: none;
+    width: 100%;
+}
+
+.recall-forget {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+/* 
+.forget-password {
+    margin-left: 55px;
+} */
+
+.checkbox {
+    margin-right: 5px;
+}
+.button-enter {
+    display: block;
+    width: 100%;
+    background-color: #015fa3cb;
+    color: white;
+    cursor: pointer;
+    border: none;
+    padding: 10px;
+    margin: 10px 0px 10px 5px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+
+}
+
+.button-enter:hover{
+    transform: scale(1.03); /* Aumenta o tamanho em 3% */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Adiciona uma sombra suave */
+    filter: brightness(1.5); /* Dá um brilho leve na cor */
+}
+
+
+
+.signup-link {
+    margin: 7px;
+}
