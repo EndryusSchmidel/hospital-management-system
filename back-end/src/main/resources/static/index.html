@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Painel Hospitalar - Teste</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Cadastrar Patrimônio</h2>
+        <input type="hidden" id="idEdicao">
+        <input type="text" id="nome" placeholder="Nome (Ex: Monitor)">
+        <input type="text" id="marca" placeholder="Marca">
+        <input type="text" id="etiqueta" placeholder="Nº Etiqueta">
+        <button onclick="salvar()">Salvar</button>
+
+        <h2>Lista de Equipamentos</h2>
+        <button onclick="listar()">Atualizar Lista</button>
+        <table id="tabela">
+            <thead>
+                <tr><th>Nome</th><th>Marca</th><th>Etiqueta</th></tr>
+            </thead>
+            <tbody id="corpoTabela"></tbody>
+        </table>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
