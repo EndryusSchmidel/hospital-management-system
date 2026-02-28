@@ -1,5 +1,6 @@
 🏥  Sistema de Gestão de Patrimônio Hospitalar (Full Stack)
-    Solução completa para controle e rastreabilidade de ativos, contando com um Dashboard Administrativo em React e um Backend robusto em Java.
+
+Solução completa para controle e rastreabilidade de ativos, contando com um Dashboard Administrativo em React e um Backend robusto em Java.
 
 🖥️  Tecnologias Frontend
 * **React + Vite**: Base para uma interface rápida e reativa.
