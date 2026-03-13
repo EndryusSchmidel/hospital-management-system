@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import "../PatrimonioModal/patrimoniomodal.css";
+import "../PatrimonioModal/PatrimonioModal.css";
 import api from '../../../services/api';
 
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./inventorytable.css";
+import "./InventoryTable.css";
 
 const InventoryTable = ({ data, onEdit, onDelete, onVerHistorico}) => {
     const [busca, setBusca] = useState("");

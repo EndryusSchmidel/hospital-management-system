@@ -1,4 +1,4 @@
-import "./kpicards.css"
+import "./KpiCards.css"
 
 const Kpicards = ({ dados }) => {
     if (!dados) return null;
