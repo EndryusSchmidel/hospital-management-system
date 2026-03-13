@@ -11,6 +11,7 @@ import {
     ArcElement,
 } from "chart.js";
 
+
 // Registrar as ferramentas do gráfico
 ChartJS.register(
     CategoryScale,

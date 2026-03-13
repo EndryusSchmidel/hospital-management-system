@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
-import axios from 'axios';
-import "../patrimoniomodal/patrimoniomodal.css";
+import "../PatrimonioModal/patrimoniomodal.css";
+import api from '../../../services/api';
 
 
 const HistoryModal = ({ idPatrimonio, onClose}) => {
@@ -8,7 +8,7 @@ const HistoryModal = ({ idPatrimonio, onClose}) => {
 
     useEffect(() => {
         if (idPatrimonio) {
-            axios.get(`http://localhost:8080/patrimonios/${idPatrimonio}/historico`)
+            api.get(`/patrimonios/${idPatrimonio}/historico`)
                 .then(response => setHistorico(response.data))
                 .catch(err => console.error("Erro ao buscar histórico", err));
         }

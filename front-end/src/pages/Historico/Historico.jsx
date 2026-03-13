@@ -1,8 +1,8 @@
 import React, { useEffect, useState} from 'react';
 import "./Historico.css";
-import Sidebar from '../../components/dashboard/Sidebar/Sidebar';
-import Header from '../../components/dashboard/header/Header';
-import axios from 'axios';
+import Sidebar from '../../components/DashboardComponents/Sidebar/Sidebar';
+import Header from '../../components/DashboardComponents/Header/Header';
+import api from '../../services/api';
 import { RefreshCw } from 'lucide-react';
 
 const Historico = () => {
@@ -20,7 +20,7 @@ const Historico = () => {
     const carregarHistorico = (pagina = 0) => {
         setLoading(true);
 
-        axios.get(`http://localhost:8080/patrimonios/historico-geral?page=${pagina}&size=10`)
+        api.get(`/patrimonios/historico-geral?page=${pagina}&size=10`)
             .then(response => {
                 setHistoricoPatrimonios(response.data.content);
                 setTotalPages(response.data.totalPages);

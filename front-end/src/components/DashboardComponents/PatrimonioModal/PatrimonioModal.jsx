@@ -1,6 +1,6 @@
 import "./patrimoniomodal.css";
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from "../../../services/api";
 
 const PatrimonioModal = ({ data, isOpen, onClose, onPatrimonioSalvo }) => {
     // Estado inicial do formulário (vazio)
@@ -33,10 +33,10 @@ const PatrimonioModal = ({ data, isOpen, onClose, onPatrimonioSalvo }) => {
         
         // Se existe idPatrimonio, usamos o método PUT (Editar)
         if (formData.idPatrimonio) {
-            response = await axios.put(`http://localhost:8080/patrimonios/${formData.idPatrimonio}`, formData);
+            response = await api.put(`/patrimonios/${formData.idPatrimonio}`, formData);
         } else {
             // Se não tem ID, é um novo cadastro (Criar)
-            response = await axios.post(`http://localhost:8080/patrimonios`, formData);
+            response = await api.post(`/patrimonios`, formData);
         }
 
         if (response.status === 201 || response.status === 200) {

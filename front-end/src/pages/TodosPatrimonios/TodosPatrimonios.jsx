@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Sidebar from '../../components/dashboard/Sidebar/Sidebar';
-import Header from '../../components/dashboard/header/Header';
+import Sidebar from '../../components/DashboardComponents/Sidebar/Sidebar';
+import Header from '../../components/DashboardComponents/Header/Header';
 import "./TodosPatrimonios.css";
 import { RefreshCw } from 'lucide-react';
 

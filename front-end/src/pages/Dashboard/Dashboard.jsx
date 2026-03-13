@@ -1,20 +1,21 @@
 import "./Dashboard.css";
 import { useEffect, useState } from 'react';
-import Sidebar from "../../components/dashboard/Sidebar/Sidebar"
-import Kpicards from "../../components/dashboard/kpicards/kpicards"
-import PatrimonioModal from "../../components/dashboard/patrimoniomodal/patrimoniomodal"
-import InventoryTable from "../../components/dashboard/inventorytable/inventorytable";
-import Header from "../../components/dashboard/header/Header";
-import DashboardCharts from "../../components/dashboard/dashboardcharts.jsx/dashboardcharts";
-import axios from 'axios';
-import HistoryModal from "../../components/dashboard/historymodal/historymodal";
+import Sidebar from "../../components/DashboardComponents/Sidebar/Sidebar";
+import Kpicards from "../../components/DashboardComponents/kpicards/kpicards";
+import PatrimonioModal from "../../components/DashboardComponents/patrimoniomodal/patrimoniomodal";
+import InventoryTable from "../../components/DashboardComponents/inventorytable/inventorytable";
+import Header from "../../components/DashboardComponents/Header/Header";
+import DashboardCharts from "../../components/DashboardComponents/DashboardCharts/DashboardCharts";
+import HistoryModal from "../../components/DashboardComponents/HistoryModal/HistoryModal"
+import api from "../../services/api";
+import { ImportIcon } from "lucide-react";
 
 const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [patrimonios, setPatrimonios] = useState([]);
   const carregarPatrimonios = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/patrimonios");
+      const response = await api.get("/patrimonios");
       setPatrimonios(response.data);
     } catch (error) {
       console.error("Erro ao carregar:", error);
@@ -30,7 +31,7 @@ const Dashboard = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Tem certeza que deseja excluir exte patrimônio?")) {
       try {
-        await axios.delete(`http://localhost:8080/patrimonios/${id}`);
+        await api.delete(`/patrimonios/${id}`);
         carregarPatrimonios();
       } catch (error) {
         alert("Erro ao excluir: " + error.response?.data?.message);
