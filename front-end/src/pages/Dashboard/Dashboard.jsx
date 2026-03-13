@@ -1,7 +1,7 @@
 import "./Dashboard.css";
 import { useEffect, useState } from 'react';
 import Sidebar from "../../components/DashboardComponents/Sidebar/Sidebar";
-import Kpicards from "../../components/DashboardComponents/kpicards/kpicards";
+import Kpicards from "../../components/DashboardComponents/KpiCards/KpiCards";
 import PatrimonioModal from "../../components/DashboardComponents/patrimoniomodal/patrimoniomodal";
 import InventoryTable from "../../components/DashboardComponents/inventorytable/inventorytable";
 import Header from "../../components/DashboardComponents/Header/Header";
@@ -75,7 +75,7 @@ const Dashboard = () => {
         </div>
 
         {/* Local dos Cards*/}
-        <Kpicards dados={{
+        <KpiCards dados={{
           total: patrimonios.length,
           ativos: patrimonios.filter(p => p.status === 'ativo').length,
           inativos: patrimonios.filter(p => p.status === 'inativo').length,

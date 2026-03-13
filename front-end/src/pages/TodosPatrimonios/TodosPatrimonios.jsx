@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Sidebar from '../../components/DashboardComponents/Sidebar/Sidebar';
 import Header from '../../components/DashboardComponents/Header/Header';
 import "./TodosPatrimonios.css";
+import api from '../../services/api';
 import { RefreshCw } from 'lucide-react';
 
 const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
@@ -43,7 +43,7 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
     // 2. Função para carregar os dados do Back-end
     const carregarDados = () => {
         setLoading(true);
-        axios.get("http://localhost:8080/patrimonios")
+        api.get("/patrimonios")
             .then(response => {
                 setPatrimonios(response.data);
                 setTimeout(() => setLoading(false), 500);
