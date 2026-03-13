@@ -1,0 +1,26 @@
+.charts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    /* O gráfico de barras é maior que o de rosca */
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+/* A caixa branca que envolve cada gráfico */
+.chart-card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    height: 350px;
+    /* Altura fixa para manter a organização */
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-card h3 {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+    text-align: center;
+}

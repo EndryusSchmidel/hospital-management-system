@@ -1,0 +1,132 @@
+import "./patrimoniomodal.css";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+const PatrimonioModal = ({ data, isOpen, onClose, onPatrimonioSalvo }) => {
+    // Estado inicial do formulário (vazio)
+    const [formData, setFormData] = useState({
+        name: '',
+        marca: '',
+        etiqueta: '',
+        setor: '',
+        status: 'ativo',
+        valor: ''
+    });
+
+    useEffect(() => {
+        if(data) setFormData(data);
+    }, [data])
+
+    if (!isOpen) return null;
+
+    // Função que atualiza o estado conforme o usuário digita
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+        let response;
+        
+        // Se existe idPatrimonio, usamos o método PUT (Editar)
+        if (formData.idPatrimonio) {
+            response = await axios.put(`http://localhost:8080/patrimonios/${formData.idPatrimonio}`, formData);
+        } else {
+            // Se não tem ID, é um novo cadastro (Criar)
+            response = await axios.post(`http://localhost:8080/patrimonios`, formData);
+        }
+
+        if (response.status === 201 || response.status === 200) {
+            alert(formData.idPatrimonio ? "Alterações salvas!" : "Patrimônio cadastrado!");
+            if (onPatrimonioSalvo) onPatrimonioSalvo();
+            onClose();
+            // Reset completo incluindo o valor
+            setFormData({ name: '', marca: '', etiqueta: '', setor: '', status: 'ativo', valor: '' });
+        }
+    } catch (error) {
+        console.error("Erro na operação: ", error);
+        alert(error.response?.data?.message || "Erro ao conectar com o servidor");
+    }
+};
+
+    return (
+        <div className="modal-overlay">
+        <div className="modal-content">
+            <div className="modal-header">
+            <h3>{formData.idPatrimonio ? "Editar Patrimônio" : "Cadastrar Novo Patrimônio"}</h3>
+            <button className="close-btn" onClick={onClose}>
+                &times;
+            </button>
+            </div>
+
+            <form className="modal-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+                <label>Nome do Equipamento</label>
+                <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Ex: Monitor Cardíaco" required />
+            </div>
+
+            <div className="form-group-row">
+                <div className="form-group">
+                <label>Marca</label>
+                <input type="text" name="marca" value={formData.marca} onChange={handleChange} placeholder="Ex: Philips" required />
+                </div>
+                <div className="form-group">
+                <label>Nº Etiqueta</label>
+                <input type="text" name="etiqueta"  value={formData.etiqueta} onChange={handleChange} placeholder="Ex: 124-ABC" />
+                </div>
+            </div>
+            <div className="form-group">
+                <label>Valor do patrimônio (R$)</label>
+                <input 
+                    type="number"
+                    name="valor" 
+                    required
+                    placeholder="Ex: 1500.00"
+                    value={formData.valor}
+                    onChange={handleChange}
+                    step="0.01"
+                    />
+            </div>
+
+            <div className="form-group">
+                <label>Setor Destinado</label>
+                <select name="setor" value={formData.setor} onChange={handleChange} required>
+                <option value="">Selecione o setor...</option>
+                <option value="centro_cirurgico">Centro Cirúrgico</option>
+                <option value="cti">CTI</option>
+                <option value="sala_amarela">Sala Amarela</option>
+                <option value="sala_vermelha">Sala Vermelha</option>
+                </select>
+                <label>Status do Patrimônio</label>
+            <select 
+                name="status" 
+                value={formData.status} // O estado que controla seu formulário
+                onChange={handleChange}  // Sua função de atualizar o estado
+                className="form-select"
+            >
+                <option value="ativo">Ativo</option>
+                <option value="inativo">Inativo</option>
+                <option value="manutencao">Em Manutenção</option>
+            </select>
+            </div>
+            {/* Exemplo de como deve ficar no seu formulário de edição */}
+            
+
+            <div className="modal-footer">
+                <button type="button" className="btn-cancel" onClick={onClose}>
+                Cancelar
+                </button>
+                <button type="submit" className="btn-save">
+                Salvar Patrimônio
+                </button>
+            </div>
+            </form>
+        </div>
+        </div>
+    );
+};
+
+export default PatrimonioModal;

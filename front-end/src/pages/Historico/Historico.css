@@ -1,0 +1,79 @@
+
+.historico-conteudo {
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid #e0e0e0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+}
+
+.historico-lista {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.historico-item {
+    padding: 10px;
+    margin: 10px;
+    background-color: rgba(245, 222, 179, 0.389);
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.historico-item:hover {
+    transform: translateY(-4px); /* Eleva o card levemente */
+    border-color: #007bff; /* Muda a cor da borda para o azul padrão */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* Sombra mais profunda ao "subir" */
+    background-color: #f8fbff; /* Um fundo azulado bem sutil */
+}
+
+/* Destaque para os títulos dentro do card no hover */
+.historico-item:hover strong {
+    color: #007bff;
+    transition: color 0.3s ease;
+}
+
+.historico-detalhe {
+    margin: 10px;
+}
+
+.titulo-secao {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-atualizar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-atualizar:hover {
+    background-color: #e2e6ea;
+}
+
+.btn-atualizar:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Animação de Giro */
+.girando svg {
+    animation: rodar 1s linear infinite;
+}
+
+@keyframes rodar {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serial;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -16,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 
 @Entity
+@Audited
 @Table(name = "tb_patrimonios")
 public class PatrimonioModel extends RepresentationModel<PatrimonioModel> {
 
@@ -27,6 +30,9 @@ public class PatrimonioModel extends RepresentationModel<PatrimonioModel> {
     private String name;
     private String marca;
     @Column(nullable = false, unique = true) // 'unique' impede dois aparelhos com a mesma etiqueta
-    private String numeroEtiqueta;
-//  private String setorPatrimonio;
+    private String etiqueta;
+    private String setor;
+    @Column(name = "status")
+    private String status = "ativo";
+    private BigDecimal valor;
 }

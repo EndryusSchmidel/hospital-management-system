@@ -1,0 +1,108 @@
+.inventory-section {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.inventory-actions {
+    display: flex;
+    gap: 10px;
+    height: 30px;
+}
+
+
+
+
+/* Tabela */
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.inventory-table th {
+    padding: 12px;
+    border-bottom: 2px solid #f4f7f6;
+    color: #888;
+    font-size: 14px;
+}
+
+.inventory-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f4f7f6;
+    font-size: 14px;
+    color: #444;
+}
+
+.status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status.active {
+    background: #e6f4ea;
+    color: #1e7e34;
+}
+
+.status.inactive {
+    background: #fce8e6;
+    color: #d93025;
+}
+
+/* Botões de Ação */
+.btn-edit,
+.btn-delete {
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin: 10px;
+    color: #888;
+}
+
+/* Estilo para a nova coluna de Setor */
+.sector-tag {
+    background-color: #f0f4f8;
+    color: #555;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 400;
+    font-weight: bolder;
+    border: 1px solid #d1d9e0;
+    font-variant: small-caps;
+}
+
+/* Ajuste para a tabela não amassar em telas menores */
+.inventory-table th,
+.inventory-table td {
+    white-space: nowrap;
+    /* Impede que o texto quebre linha e bagunce o alinhamento */
+    padding: 15px 12px;
+}
+
+.btn-edit:hover {
+    color: #0076a8;
+}
+
+.btn-delete:hover {
+    color: #d93025;
+}
+
+
+
+.fa-clock-rotate-left{
+    background-color: #f0f4f8;
+    color: #555;
+    padding: 4px 8px;
+    border-radius: 4px;
+}

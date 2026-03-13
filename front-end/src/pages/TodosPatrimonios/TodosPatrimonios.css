@@ -1,0 +1,159 @@
+.patrimonios-container {
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid #e0e0e0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+}
+
+.patrimonio-item {
+    background-color: rgba(245, 222, 179, 0.389);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 12px;
+    list-style: none;
+    transition: all 0.3s ease; /* Faz a transição ser suave */
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* O Efeito de Hover */
+.patrimonio-item:hover {
+    transform: translateY(-4px); /* Eleva o card levemente */
+    border-color: #007bff; /* Muda a cor da borda para o azul padrão */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* Sombra mais profunda ao "subir" */
+    background-color: #f8fbff; /* Um fundo azulado bem sutil */
+}
+
+/* Destaque para os títulos dentro do card no hover */
+.patrimonio-item:hover strong {
+    color: #007bff;
+    transition: color 0.3s ease;
+}
+
+.patrimonios-lista {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.patrimonio-detalhe {
+    margin: 10px;
+}
+
+.titulo-secao {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-atualizar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-atualizar:hover {
+    background-color: #e2e6ea;
+}
+
+.btn-atualizar:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Animação de Giro */
+.girando svg {
+    animation: rodar 1s linear infinite;
+}
+
+@keyframes rodar {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.not-found {
+    font-size: 2em;
+    text-align: center;
+}
+
+.status-ativo { border-left: 5px solid #28a745; }      /* Verde */
+.status-manutencao { border-left: 5px solid #ffc107; } /* Amarelo */
+.status-inativo { border-left: 5px solid #dc3545; }    /* Vermelho */
+
+/* Estilização das etiquetas (Badges) em cima do nome */
+.badge-status {
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+.badge-ativo { background-color: #e8f5e9; color: #2e7d32; }
+.badge-manutencao { background-color: #fff8e1; color: #f57f17; }
+.badge-inativo { background-color: #ffebee; color: #c62828; }
+
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden; /* Esconde o texto que sai da barra */
+    background: white;
+    border-radius: 20px;
+    padding: 5px 15px;
+    border: 1px solid #ccc;
+}
+
+.marquee-container {
+    position: absolute;
+    left: 40px; /* Distância do ícone de lupa */
+    right: 10px;
+    overflow: hidden;
+    pointer-events: none; /* Deixa clicar no input através do texto */
+    white-space: nowrap;
+}
+
+.marquee-text {
+    display: inline-block;
+    color: #999;
+    font-size: 14px;
+    padding-left: 100%; /* Começa fora da visualização */
+    animation: marquee-animation 10s linear infinite;
+}
+
+@keyframes marquee-animation {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+.search-bar input {
+    background: transparent; /* Importante para ver o texto atrás */
+    border: none;
+    outline: none;
+    width: 100%;
+    z-index: 2; /* Fica por cima para você conseguir digitar */
+    position: relative;
+    margin-left: 10px;
+}
+
+/* Classe Utilitária para dados do Patrimônio */
+.dado-destaque {
+    text-transform: uppercase;
+    font-weight: 400;
+    color: #000000; /* Um cinza escuro profissional */
+    font-family: 'monospace'; /* Opcional: dá um ar de "código de etiqueta" */
+    font-size: 0.95rem;
+}

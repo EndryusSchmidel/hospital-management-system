@@ -17,13 +17,13 @@ const Login = () => {
         console.log("Enviando dados:", { username, password });
 
         // 3. O PULO DO GATO: Redireciona para a rota que você criou no App.jsx
-        navigate('/Dashboard');
+        navigate('/dashboard');
     } else {
         alert("Preencha todos os campos!");
     }
 };
 
-  return (
+return (
     <div className="login-screen-wrapper">
         <div className="container">
             <form onSubmit={handleSubmit}>
@@ -50,7 +50,7 @@ const Login = () => {
             </form>
         </div>
     </div>
-  )
+    )
 }
 
 export default Login

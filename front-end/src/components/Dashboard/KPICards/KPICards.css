@@ -1,0 +1,74 @@
+.kpi-container-bg {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 25px;
+}
+
+/* O container que segura os 4 cards */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* Divide em 4 colunas iguais */
+    gap: 15px;
+    /* Espaço entre os cards */
+}
+
+/* Estilo base de todos os cards */
+.kpi-card {
+    padding: 15px;
+    border-radius: 4px;
+    /* Pontas levemente arredondadas como na imagem */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 90px;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+/* Efeito de hover profissional nos cards */
+.kpi-card:hover {
+    transform: translateY(-5px);
+    /* Dá um pulinho para cima */
+    filter: brightness(1.1);
+}
+
+/* Variações de cores idênticas à imagem */
+.kpi-card.total {
+    background-color: #003e8a;
+}
+
+.kpi-card.valor-total {
+    background-color: #119600;
+}
+
+.kpi-card.inativos {
+    background-color: #8a0000;
+}
+
+.kpi-card.ativos {
+    background-color: #0076a8;
+}
+
+/* Textos dentro do card */
+.kpi-content h2 {
+    font-size: 22px;
+    margin-bottom: 2px;
+}
+
+.kpi-content p {
+    font-size: 11px;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Ícones dentro do card */
+.kpi-card i {
+    font-size: 24px;
+    opacity: 0.8;
+    /* Deixa o ícone mais discreto no fundo */
+}

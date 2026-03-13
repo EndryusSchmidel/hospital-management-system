@@ -1,0 +1,59 @@
+.sidebar {
+    width: 240px;
+    /* Largura fixa da barra lateral */
+    background-color: #ffffff;
+    /* Fundo branco */
+    border-right: 1px solid #e0e0e0;
+    /* Linha sutil de separação */
+    height: 100vh;
+    position: sticky;
+    /* Faz a barra ficar parada enquanto você rola o site */
+    top: 0;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+}
+
+.sidebar-nav li {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #555;
+    /* Cor do texto */
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    border-left: 4px solid transparent;
+    /* Reserva o espaço para a barra azul */
+}
+
+/* Ícones alinhados */
+.sidebar-nav li i {
+    width: 20px;
+    text-align: center;
+}
+
+/* Efeito de passar o mouse */
+.sidebar-nav li:hover {
+    background-color: #f0faff;
+    color: #0076a8;
+}
+
+/* Item Ativo (Destaque) */
+.sidebar-nav li.active {
+    background-color: #f0faff;
+    color: #0076a8;
+    border-left: 4px solid #0076a8;
+    /* A barrinha azul da imagem */
+    font-weight: 500;
+}
+
+.fa-circle-check {
+    color: #0076a8;
+}
+
+.fa-circle-xmark {
+    color: #8a0000;
+}
