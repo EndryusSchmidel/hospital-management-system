@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/patrimonios")
-@CrossOrigin(origins = {"http://localhost:5173", "https://seu-projeto.vercel.app"})
+@CrossOrigin(origins = {"http://localhost:5173", "https://hospital-management-system-gilt-kappa.vercel.app"})
 public class PatrimonioController {
 
     private final
