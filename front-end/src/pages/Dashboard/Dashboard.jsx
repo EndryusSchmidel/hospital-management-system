@@ -1,9 +1,9 @@
 import "./Dashboard.css";
 import { useEffect, useState } from 'react';
 import Sidebar from "../../components/DashboardComponents/Sidebar/Sidebar";
-import Kpicards from "../../components/DashboardComponents/KpiCards/KpiCards";
-import PatrimonioModal from "../../components/DashboardComponents/patrimoniomodal/patrimoniomodal";
-import InventoryTable from "../../components/DashboardComponents/inventorytable/inventorytable";
+import KpiCards from "../../components/DashboardComponents/KpiCards/KpiCards";
+import PatrimonioModal from "../../components/DashboardComponents/PatrimonioModal/PatrimonioModal";
+import InventoryTable from "../../components/DashboardComponents/InventoryTable/InventoryTable";
 import Header from "../../components/DashboardComponents/Header/Header";
 import DashboardCharts from "../../components/DashboardComponents/DashboardCharts/DashboardCharts";
 import HistoryModal from "../../components/DashboardComponents/HistoryModal/HistoryModal"
