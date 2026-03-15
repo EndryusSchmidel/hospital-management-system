@@ -157,3 +157,34 @@
     font-family: 'monospace'; /* Opcional: dá um ar de "código de etiqueta" */
     font-size: 0.95rem;
 }
+
+/* Estilo dos Botões */
+.paginacao-btn {
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: white;
+    color: #374151;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.paginacao-btn:hover:not(:disabled) {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+/* Estado Desabilitado (Quando não há página anterior/próxima) */
+.paginacao-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f9fafb;
+}
+
+/* Texto "Página X de Y" */
+.paginacao-texto {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin: 10px;
+}

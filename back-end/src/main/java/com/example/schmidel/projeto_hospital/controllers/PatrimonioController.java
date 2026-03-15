@@ -39,10 +39,17 @@ public class PatrimonioController {
 
     //Get all
     @GetMapping
-    public ResponseEntity<Page<PatrimonioModel>> getAllPatrimonios(
-        @PageableDefault(size = 10, sort = "idPatrimonio", direction = Sort.Direction.DESC)
-        Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(patrimonioService.getAllPatrimonios(pageable));
+    public ResponseEntity<Page<PatrimonioModel>> listar(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String nome,
+            @PageableDefault(size = 10, sort = "idPatrimonio", direction = Sort.Direction.DESC)
+            Pageable pageable
+    ) {
+
+        Page<PatrimonioModel> page =
+                patrimonioService.listarComFiltro(status, nome, pageable);
+
+        return ResponseEntity.ok(page);
     }
 
     //Get historico da tabela aud do hibernate
@@ -58,34 +65,17 @@ public class PatrimonioController {
     }
 
     //Get id
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getOnePatrimonio(@PathVariable UUID id){
-        var p = patrimonioService.getOnePatrimonio(id);
+    //@GetMapping("/{id}")
+    // public ResponseEntity<Object> getOnePatrimonio(@PathVariable UUID id){
+        //    var p = patrimonioService.getOnePatrimonio(id);
         //if(p.isEmpty()) {
         //            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patrimônio não encontrado.");
         //        }
         //        return ResponseEntity.status(HttpStatus.OK).body(p.get());
-        return p.<ResponseEntity<Object>>map(patrimonioModel -> ResponseEntity.status(HttpStatus.OK).body(patrimonioModel)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patrimônio não encontrado."));
-    }
+        ///    return p.<ResponseEntity<Object>>map(patrimonioModel -> ResponseEntity.status(HttpStatus.OK).body(patrimonioModel)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patrimônio não encontrado."));
+    //}
 
-    //Get name
-    @GetMapping("/buscaNome")
-    public ResponseEntity<List<PatrimonioModel>> getPatrimoniosByName(@RequestParam(value = "name") String name) {
-        return ResponseEntity.status(HttpStatus.OK).body(patrimonioService.buscarPorNome(name));
-    }
 
-    //Get marca
-    @GetMapping("/buscaMarca")
-    public ResponseEntity<List<PatrimonioModel>> getPatrimoniosByMarca(@RequestParam(value = "marca") String marca) {
-        return ResponseEntity.status(HttpStatus.OK).body(patrimonioService.buscarPorMarca(marca));
-    }
-
-    //Get etiqueta
-    @GetMapping("etiqueta/{etiqueta}")
-    public ResponseEntity<Object> getByEtiqueta(@PathVariable String etiqueta) {
-        var p = patrimonioService.getOneEtiqueta(etiqueta);
-        return p.<ResponseEntity<Object>>map(patrimonioModel -> ResponseEntity.status(HttpStatus.OK).body(patrimonioModel)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patrimônio com esta etiqueta não encontrado."));
-    }
 
     //Get historico unico
     @GetMapping("/{id}/historico")

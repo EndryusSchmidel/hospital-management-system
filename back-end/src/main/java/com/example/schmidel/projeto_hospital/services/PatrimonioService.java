@@ -9,7 +9,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
-import org.hibernate.envers.query.AuditEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -47,40 +46,20 @@ public class PatrimonioService {
 
 
     //Get por id
-    @Transactional(readOnly = true)
-    public Optional<PatrimonioModel> getOnePatrimonio(UUID id) {
-        Optional<PatrimonioModel> patrimonioO = patrimonioRepository.findById(id);
-        patrimonioO.ifPresent(p -> p.add(linkTo(methodOn(PatrimonioController.class)
-                .getAllPatrimonios(null))
-                .withRel("Lista de Patrimônios")));
-        return patrimonioO;
-    }
-
-    //Get por nome
-    @Transactional(readOnly = true)
-    public List<PatrimonioModel> buscarPorNome(String name) {
-        List<PatrimonioModel> resultados = patrimonioRepository.findByNameContainingIgnoreCase(name);
-        resultados.forEach(p -> p.add(linkTo(methodOn(PatrimonioController.class).getOnePatrimonio(p.getIdPatrimonio())).withSelfRel()));
-        return resultados;
-    }
-
-    //Get por marca
-    @Transactional(readOnly = true)
-    public List<PatrimonioModel> buscarPorMarca(String marca) {
-        List<PatrimonioModel> resultados = patrimonioRepository.findByMarcaContainingIgnoreCase(marca);
-        resultados.forEach(p -> p.add(linkTo(methodOn(PatrimonioController.class).getOnePatrimonio(p.getIdPatrimonio())).withSelfRel()));
-        return resultados;
-    }
+    //@Transactional(readOnly = true)
+    //public Optional<PatrimonioModel> getOnePatrimonio(UUID id) {
+    //    Optional<PatrimonioModel> patrimonioO = patrimonioRepository.findById(id);
+    //    patrimonioO.ifPresent(p -> p.add(linkTo(methodOn(PatrimonioController.class).getAllPatrimonios()).withRel("Lista de Patrimônios")));
+    //   return patrimonioO;
+    //}
 
     //Get por etiqueta
-    @Transactional(readOnly = true)
-    public Optional<PatrimonioModel> getOneEtiqueta(String etiqueta) {
-        Optional<PatrimonioModel> patrimonioO = patrimonioRepository.findByEtiqueta(etiqueta);
-        patrimonioO.ifPresent(p -> p.add(linkTo(methodOn(PatrimonioController.class)
-                .getAllPatrimonios(null))
-                .withRel("Lista de Patrimônios")));
-        return patrimonioO;
-    }
+    //@Transactional(readOnly = true)
+    //public Optional<PatrimonioModel> getOneEtiqueta(String etiqueta) {
+        //    Optional<PatrimonioModel> patrimonioO = patrimonioRepository.findByEtiqueta(etiqueta);
+        //    patrimonioO.ifPresent(p -> p.add(linkTo(methodOn(PatrimonioController.class).getAllPatrimonios()).withRel("Lista de Patrimônios")));
+        //    return patrimonioO;
+        //}
 
     //Update no Service
     public Optional<PatrimonioModel> updatePatrimonio(UUID id, PatrimonioRecordDto dto) {
@@ -91,6 +70,7 @@ public class PatrimonioService {
                 });
     }
 
+    //Delete
     @Transactional
     public boolean deletePatrimonio(UUID id) {
         Optional<PatrimonioModel> patrimonioO = patrimonioRepository.findById(id);
@@ -102,47 +82,32 @@ public class PatrimonioService {
     }
 
     //Get all
-    //@Transactional(readOnly = true)
-    //public List<PatrimonioModel> getAllPatrimonios() {
-    //    List<PatrimonioModel> patrimonioList = patrimonioRepository.findAll();
-    //    if (!patrimonioList.isEmpty()) {
-    //      for (PatrimonioModel patrimonio : patrimonioList) {
-        //          patrimonio.add(linkTo(methodOn(PatrimonioController.class).getOnePatrimonio(patrimonio.getIdPatrimonio())).withSelfRel());
-        //      }
-    //   }
-//    return patrimonioList;
-//}
-
-    // Get all paginable
     @Transactional(readOnly = true)
-    public Page<PatrimonioModel> getAllPatrimonios(Pageable pageable) {
-        AuditReader reader = AuditReaderFactory.get(entityManager);
-        List<Object[]> resultados = reader.createQuery()
-                .forRevisionsOfEntity(PatrimonioModel.class, false, true)
-                .addOrder(AuditEntity.revisionNumber().desc())
-                .getResultList();
+    public Page<PatrimonioModel> listarComFiltro(
+            String status,
+            String nome,
+            Pageable pageable
+    ) {
 
-        List<PatrimonioModel> listTotal = new ArrayList<>();
-        for (Object[] row : resultados) {
-            PatrimonioModel p = (PatrimonioModel) row[0];
-            PatrimonioModel dto = new PatrimonioModel();
-            dto.setIdPatrimonio(p != null ? p.getIdPatrimonio() : null);
-            dto.setName(p != null ? p.getName() : "Patrimônio Excluído");
-            dto.setMarca(p != null ? p.getMarca() : "---");
-            dto.setEtiqueta(p != null ? p.getEtiqueta() : "---");
-            dto.setSetor(p != null ? p.getSetor() : "---");
-            dto.setStatus(p != null ? p.getStatus() : "---");
-            dto.setValor(p != null ? p.getValor() : BigDecimal.ZERO);
+        if (status != null && nome != null) {
+            return patrimonioRepository
+                    .findByStatusIgnoreCaseAndNameContainingIgnoreCase(
+                            status, nome, pageable);
+        }
 
-            listTotal.add(dto);
+        if (status != null) {
+            return patrimonioRepository
+                    .findByStatusIgnoreCase(status, pageable);
         }
-        int start = (int) pageable.getOffset();
-        int end = Math.min(start + pageable.getPageSize(), listTotal.size());
-        if (start > listTotal.size()) {
-            return new PageImpl<>(new ArrayList<>(), pageable, listTotal.size());
+
+        if (nome != null) {
+            return patrimonioRepository
+                    .findByNameContainingIgnoreCase(nome, pageable);
         }
-        return new PageImpl<>(listTotal.subList(start, end), pageable, listTotal.size());
+        return patrimonioRepository.findAll(pageable);
     }
+
+
 
     // Get historico geral
     @Transactional(readOnly = true)
