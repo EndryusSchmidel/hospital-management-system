@@ -15,8 +15,13 @@ const Dashboard = () => {
   const [patrimonios, setPatrimonios] = useState([]);
   const carregarPatrimonios = async () => {
     try {
-      const response = await api.get("/patrimonios");
-      setPatrimonios(response.data);
+      const response = await api.get("/patrimonios", {
+        params: {
+          page: 0,
+          size: 1000
+        }
+    });
+      setPatrimonios(response.data.content);
     } catch (error) {
       console.error("Erro ao carregar:", error);
     }
