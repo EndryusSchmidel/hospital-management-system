@@ -21,6 +21,4 @@ public interface PatrimonioRepository extends
     Page<PatrimonioModel> findByNameContainingIgnoreCase(String name, Pageable pageable);
     Page<PatrimonioModel> findByStatusIgnoreCaseAndNameContainingIgnoreCase(
             String status, String name, Pageable pageable);
-    Optional<PatrimonioModel> findByEtiqueta(String etiqueta, Pageable pageable);
-
 }

@@ -20,20 +20,6 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
     const [totalPages, setTotalPages] = useState(0);
 
 
-    // 1. Lógica do Filtro
-    // const patrimoniosFiltrados = patrimonios.filter((item) => {
-    //     const termo = busca.toLowerCase();
-    //     const igualStatus = statusFiltro ? item.status?.toLowerCase() === statusFiltro.toLowerCase() : true;
-
-    //     const igualBusca = (item.name && item.name.toLowerCase().includes(termo)) ||
-    //         (item.marca && item.marca.toLowerCase().includes(termo)) ||
-    //         (item.etiqueta && item.etiqueta.toLowerCase().includes(termo)) ||
-    //         (item.setor && item.setor.toLowerCase().includes(termo)) ||
-    //         (item.status && item.status.toLowerCase().includes(termo))
-
-    //     return igualStatus && igualBusca;
-    // });
-
     // Função auxiliar para definir a cor baseada no Status
     const getClasseStatus = (status) => {
         const s = status ? status.toLowerCase() : "";
@@ -58,6 +44,7 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
             .then(response => {
                 setPatrimonios(response.data.content);
                 setTotalPages(response.data.totalPages);
+                setPage(response.data.number);
                 setLoading(false);
             })
             .catch(err => {
@@ -75,7 +62,6 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
     useEffect(() => {
     const timeout = setTimeout(() => {
         setPage(0);
-        carregarDados();
     }, 500);
 
     return () => clearTimeout(timeout);
