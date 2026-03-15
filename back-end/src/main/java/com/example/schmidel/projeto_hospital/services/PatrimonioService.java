@@ -54,10 +54,10 @@ public class PatrimonioService {
     //}
 
     //Get por etiqueta
-    @Transactional(readOnly = true)
-    public Optional<PatrimonioModel> buscarPorEtiqueta(String etiqueta) {
-        return patrimonioRepository.findByEtiqueta(etiqueta);
-    }
+    //@Transactional(readOnly = true)
+    //public Optional<PatrimonioModel> buscarPorEtiqueta(String etiqueta) {
+    //    return patrimonioRepository.findByEtiqueta(etiqueta);
+    //}
 
     //Update no Service
     public Optional<PatrimonioModel> updatePatrimonio(UUID id, PatrimonioRecordDto dto) {

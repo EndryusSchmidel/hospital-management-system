@@ -52,12 +52,12 @@ public class PatrimonioController {
     }
 
     //Get etiqueta
-    public ResponseEntity<?> buscarPorEtiqueta(
-            @RequestParam String etiqueta) {
-        return patrimonioService.buscarPorEtiqueta(etiqueta)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+    //public ResponseEntity<?> buscarPorEtiqueta(
+    //        @RequestParam String etiqueta) {
+    //    return patrimonioService.buscarPorEtiqueta(etiqueta)
+    //            .map(ResponseEntity::ok)
+    //           .orElse(ResponseEntity.notFound().build());
+    //}
 
     //Get historico da tabela aud do hibernate
     @GetMapping("/historico-geral")
