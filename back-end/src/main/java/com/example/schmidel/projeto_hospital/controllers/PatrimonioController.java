@@ -42,14 +42,23 @@ public class PatrimonioController {
     public ResponseEntity<Page<PatrimonioModel>> listar(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String etiqueta,
+            @RequestParam(required = false) String marca,
             @PageableDefault(size = 10, sort = "idPatrimonio", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
 
         Page<PatrimonioModel> page =
-                patrimonioService.listarComFiltro(status, nome, pageable);
+                patrimonioService.listarComFiltro(status, nome, marca, etiqueta, pageable);
 
         return ResponseEntity.ok(page);
+    }
+    //Get etiqueta
+    public ResponseEntity<?> buscarPorEtiqueta(
+            @RequestParam String etiqueta) {
+        return patrimonioService.buscarPorEtiqueta(etiqueta)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     //Get historico da tabela aud do hibernate
@@ -63,6 +72,8 @@ public class PatrimonioController {
 
         return ResponseEntity.ok(historico);
     }
+
+
 
     //Get id
     //@GetMapping("/{id}")

@@ -17,8 +17,12 @@ import java.util.UUID;
 public interface PatrimonioRepository extends
         JpaRepository<PatrimonioModel, UUID>,
         RevisionRepository<PatrimonioModel, UUID, Integer> {
+    Page<PatrimonioModel> findByMarcaContainingIgnoreCase(String marca, Pageable pageable);
     Page<PatrimonioModel> findByStatusIgnoreCase(String status, Pageable pageable);
     Page<PatrimonioModel> findByNameContainingIgnoreCase(String name, Pageable pageable);
     Page<PatrimonioModel> findByStatusIgnoreCaseAndNameContainingIgnoreCase(
             String status, String name, Pageable pageable);
+    // Etiqueta (único)
+    Optional<PatrimonioModel>
+    findByEtiqueta(String etiqueta);
 }

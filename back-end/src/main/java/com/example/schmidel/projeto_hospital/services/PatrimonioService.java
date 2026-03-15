@@ -54,12 +54,10 @@ public class PatrimonioService {
     //}
 
     //Get por etiqueta
-    //@Transactional(readOnly = true)
-    //public Optional<PatrimonioModel> getOneEtiqueta(String etiqueta) {
-        //    Optional<PatrimonioModel> patrimonioO = patrimonioRepository.findByEtiqueta(etiqueta);
-        //    patrimonioO.ifPresent(p -> p.add(linkTo(methodOn(PatrimonioController.class).getAllPatrimonios()).withRel("Lista de Patrimônios")));
-        //    return patrimonioO;
-        //}
+    @Transactional(readOnly = true)
+    public Optional<PatrimonioModel> buscarPorEtiqueta(String etiqueta) {
+        return patrimonioRepository.findByEtiqueta(etiqueta);
+    }
 
     //Update no Service
     public Optional<PatrimonioModel> updatePatrimonio(UUID id, PatrimonioRecordDto dto) {
@@ -86,8 +84,26 @@ public class PatrimonioService {
     public Page<PatrimonioModel> listarComFiltro(
             String status,
             String nome,
+            String marca,
+            String etiqueta,
             Pageable pageable
     ) {
+
+        if (etiqueta != null && !etiqueta.isBlank()) {
+            Optional<PatrimonioModel> resultado = patrimonioRepository.findByEtiqueta(etiqueta);
+            return resultado
+                    .map(p -> new PageImpl<>(
+                            Collections.singletonList(p),
+                            pageable,
+                            1
+                    ))
+                    .orElse(new PageImpl<>(Collections.emptyList(),  pageable, 0));
+        }
+
+        if (marca != null && !marca.isBlank()) {
+            return patrimonioRepository
+                    .findByMarcaContainingIgnoreCase(marca, pageable);
+        }
 
         if (status != null && nome != null) {
             return patrimonioRepository

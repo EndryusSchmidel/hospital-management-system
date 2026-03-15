@@ -56,13 +56,13 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
 
     // 3. Carrega ao montar o componente
     useEffect(() => {
-        carregarDados();
+        carregarDados(page);
     }, [page, statusFiltro]);
 
     useEffect(() => {
     const timeout = setTimeout(() => {
-        setPage(0);
-    }, 500);
+        carregarDados(0);
+    }, 100);
 
     return () => clearTimeout(timeout);
 }, [busca]);
@@ -139,16 +139,16 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
                         )}
                     </ul>
                     <div className="paginacao">
-                        <button
+                        <button className='paginacao-btn'
                             disabled={page === 0}
                             onClick={() => setPage(prev => prev - 1)}
                         >
                             Anterior
                         </button>
 
-                        <span>Página {page + 1} de {totalPages}</span>
+                        <span className='paginacao-texto'>Página {page + 1} de {totalPages}</span>
 
-                        <button
+                        <button className='paginacao-btn'
                             disabled={page >= totalPages - 1}
                             onClick={() => setPage(prev => prev + 1)}
                         >
