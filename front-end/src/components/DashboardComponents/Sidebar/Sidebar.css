@@ -16,7 +16,7 @@
 }
 
 .sidebar-nav li {
-    padding: 12px 20px;
+    padding: 22px 20px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -50,10 +50,75 @@
     font-weight: 500;
 }
 
+.fa-chart-line {
+    color: rgb(44, 7, 255);
+}
+
+.fa-layer-group {
+    color: green;
+}
+
 .fa-circle-check {
     color: #0076a8;
 }
 
 .fa-circle-xmark {
     color: #8a0000;
+}
+
+.fa-screwdriver-wrench {
+    color: orange
+}
+
+.fa-file-signature {
+    color: darkgray;
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 10px;
+    text-align: center;
+}
+
+.profile-info {
+    margin-top: px; /* O "respiro" que faltava abaixo do logo */
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Espaço entre o Nome (se houver) e o Subtítulo */
+}
+
+.profile-subtitle {
+    font-size: 0.7rem;
+    color: #888; /* Um cinza um pouco mais suave fica mais elegante */
+    font-weight: bolder;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    line-height: 1.4;
+    max-width: 200px; /* Evita que o texto estique demais */
+}
+
+/* Container do Logo */
+.profile-photo-container {
+    width: 100%; 
+    padding: 20px; /* Dá um respiro para o logo não colar nas bordas */
+    height: auto;  /* Deixa a altura ser definida pelo conteúdo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Ajuste da Imagem do Logo */
+.profile-photo {
+    width: 100%;      /* Ajusta à largura do container */
+    max-width: 180px; /* Limita para o logo não ficar gigante */
+    height: auto;     /* Mantém a proporção original da imagem */
+    
+    /* Troque 'cover' por 'contain' */
+    object-fit: contain; 
+    
+    /* Remove o aspect-ratio fixo para logos com texto */
+    aspect-ratio: auto; 
 }

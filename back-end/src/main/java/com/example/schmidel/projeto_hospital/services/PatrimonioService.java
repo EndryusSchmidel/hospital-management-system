@@ -83,44 +83,10 @@ public class PatrimonioService {
     @Transactional(readOnly = true)
     public Page<PatrimonioModel> listarComFiltro(
             String status,
-            String nome,
-            String marca,
-            String etiqueta,
+            String busca,
             Pageable pageable
     ) {
-
-        if (etiqueta != null && !etiqueta.isBlank()) {
-            Optional<PatrimonioModel> resultado = patrimonioRepository.findByEtiqueta(etiqueta);
-            return resultado
-                    .map(p -> new PageImpl<>(
-                            Collections.singletonList(p),
-                            pageable,
-                            1
-                    ))
-                    .orElse(new PageImpl<>(Collections.emptyList(),  pageable, 0));
-        }
-
-        if (marca != null && !marca.isBlank()) {
-            return patrimonioRepository
-                    .findByMarcaContainingIgnoreCase(marca, pageable);
-        }
-
-        if (status != null && nome != null) {
-            return patrimonioRepository
-                    .findByStatusIgnoreCaseAndNameContainingIgnoreCase(
-                            status, nome, pageable);
-        }
-
-        if (status != null) {
-            return patrimonioRepository
-                    .findByStatusIgnoreCase(status, pageable);
-        }
-
-        if (nome != null) {
-            return patrimonioRepository
-                    .findByNameContainingIgnoreCase(nome, pageable);
-        }
-        return patrimonioRepository.findAll(pageable);
+        return patrimonioRepository.buscarComFiltro(status, busca, pageable);
     }
 
 

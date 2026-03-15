@@ -1,5 +1,7 @@
 import "./Sidebar.css"
 import { useNavigate, useLocation} from "react-router-dom";
+import logo from '../../../assets/logo.png';
+
 
 const Sidebar = () => {
     const navigate = useNavigate();
@@ -8,10 +10,17 @@ const Sidebar = () => {
 
     return (
         <aside className="sidebar">
-            {/* Área do Logo - Igual à imagem */}
-            <div className="logo-area">
-                <i className="fas fa-info-circle"></i> {/* Ícone azul claro */}
-                <span className="logo-text">Endryus Schmidel</span>
+            <div className="profile-section">
+                <div className="profile-photo-container">
+                    <img 
+                        src={logo} 
+                        alt="Foto de perfil de Endryus Schmidel" 
+                        className="profile-photo" 
+                    />
+                </div>
+                    <div className="profile-info">
+                    <span className="profile-subtitle">Full Stack Developer</span>
+                </div>
             </div>
 
             {/* Lista de Navegação */}
@@ -19,11 +28,11 @@ const Sidebar = () => {
                 <ul>
                 <li className={rotaAtual === '/dashboard' ? 'active' : ''}
                     onClick={() => navigate('/dashboard')}>
-                    <i className="fas fa-th-large"></i> Dashboard
+                    <i className="fa-solid fa-chart-line"></i> Dashboard
                 </li>
                 <li className={rotaAtual === '/todos-patrimonios' ? 'active' : ''}
                     onClick={() => navigate('/todos-patrimonios')}>
-                    <i className="fa-solid fa-boxes-stacked"></i> Todos Patrimônios
+                    <i className="fa-solid fa-layer-group"></i> Todos Patrimônios
                 </li>
                 <li className={rotaAtual === '/ativos' ? 'active' : ''}
                     onClick={() => navigate('/ativos')}

@@ -17,12 +17,20 @@ import java.util.UUID;
 public interface PatrimonioRepository extends
         JpaRepository<PatrimonioModel, UUID>,
         RevisionRepository<PatrimonioModel, UUID, Integer> {
-    Page<PatrimonioModel> findByMarcaContainingIgnoreCase(String marca, Pageable pageable);
-    Page<PatrimonioModel> findByStatusIgnoreCase(String status, Pageable pageable);
-    Page<PatrimonioModel> findByNameContainingIgnoreCase(String name, Pageable pageable);
-    Page<PatrimonioModel> findByStatusIgnoreCaseAndNameContainingIgnoreCase(
-            String status, String name, Pageable pageable);
-    // Etiqueta (único)
-    Optional<PatrimonioModel>
-    findByEtiqueta(String etiqueta);
+    @Query("""
+    SELECT p FROM PatrimonioModel p
+    WHERE (:status IS NULL OR LOWER(p.status) = LOWER(:status))
+    AND (
+        :busca IS NULL OR
+        LOWER(p.name) LIKE LOWER(CONCAT('%', :busca, '%')) OR
+        LOWER(p.marca) LIKE LOWER(CONCAT('%', :busca, '%')) OR
+        LOWER(p.etiqueta) LIKE LOWER(CONCAT('%', :busca, '%')) OR
+        LOWER(p.setor) LIKE LOWER(CONCAT('%', :busca, '%'))
+    )
+""")
+    Page<PatrimonioModel> buscarComFiltro(
+            @Param("status") String status,
+            @Param("busca") String busca,
+            Pageable pageable
+    );
 }

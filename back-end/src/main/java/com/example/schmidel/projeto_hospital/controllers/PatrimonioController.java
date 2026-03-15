@@ -41,18 +41,16 @@ public class PatrimonioController {
     @GetMapping
     public ResponseEntity<Page<PatrimonioModel>> listar(
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) String nome,
-            @RequestParam(required = false) String etiqueta,
-            @RequestParam(required = false) String marca,
-            @PageableDefault(size = 10, sort = "idPatrimonio", direction = Sort.Direction.DESC)
+            @RequestParam(required = false) String busca,
             Pageable pageable
     ) {
 
         Page<PatrimonioModel> page =
-                patrimonioService.listarComFiltro(status, nome, marca, etiqueta, pageable);
+                patrimonioService.listarComFiltro(status, busca, pageable);
 
         return ResponseEntity.ok(page);
     }
+
     //Get etiqueta
     public ResponseEntity<?> buscarPorEtiqueta(
             @RequestParam String etiqueta) {

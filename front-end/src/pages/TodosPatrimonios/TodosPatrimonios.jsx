@@ -33,6 +33,7 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
     const carregarDados = () => {
         setLoading(true);
 
+
         api.get("/patrimonios", {
             params: {
                 page: page,
