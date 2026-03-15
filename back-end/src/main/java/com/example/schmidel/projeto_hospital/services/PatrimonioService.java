@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -42,24 +43,16 @@ public class PatrimonioService {
         return patrimonioRepository.save(patrimonioModel);
     }
 
-    //Get all
-    @Transactional(readOnly = true)
-    public List<PatrimonioModel> getAllPatrimonios() {
-        List<PatrimonioModel> patrimonioList = patrimonioRepository.findAll();
-        if (!patrimonioList.isEmpty()) {
-            for (PatrimonioModel patrimonio : patrimonioList) {
-                patrimonio.add(linkTo(methodOn(PatrimonioController.class).getOnePatrimonio(patrimonio.getIdPatrimonio())).withSelfRel());
-            }
-        }
-        return patrimonioList;
-    }
+
 
 
     //Get por id
     @Transactional(readOnly = true)
     public Optional<PatrimonioModel> getOnePatrimonio(UUID id) {
         Optional<PatrimonioModel> patrimonioO = patrimonioRepository.findById(id);
-        patrimonioO.ifPresent(p -> p.add(linkTo(methodOn(PatrimonioController.class).getAllPatrimonios()).withRel("Lista de Patrimônios")));
+        patrimonioO.ifPresent(p -> p.add(linkTo(methodOn(PatrimonioController.class)
+                .getAllPatrimonios(null))
+                .withRel("Lista de Patrimônios")));
         return patrimonioO;
     }
 
@@ -83,7 +76,9 @@ public class PatrimonioService {
     @Transactional(readOnly = true)
     public Optional<PatrimonioModel> getOneEtiqueta(String etiqueta) {
         Optional<PatrimonioModel> patrimonioO = patrimonioRepository.findByEtiqueta(etiqueta);
-        patrimonioO.ifPresent(p -> p.add(linkTo(methodOn(PatrimonioController.class).getAllPatrimonios()).withRel("Lista de Patrimônios")));
+        patrimonioO.ifPresent(p -> p.add(linkTo(methodOn(PatrimonioController.class)
+                .getAllPatrimonios(null))
+                .withRel("Lista de Patrimônios")));
         return patrimonioO;
     }
 
@@ -106,6 +101,50 @@ public class PatrimonioService {
         return true;
     }
 
+    //Get all
+    //@Transactional(readOnly = true)
+    //public List<PatrimonioModel> getAllPatrimonios() {
+    //    List<PatrimonioModel> patrimonioList = patrimonioRepository.findAll();
+    //    if (!patrimonioList.isEmpty()) {
+    //      for (PatrimonioModel patrimonio : patrimonioList) {
+        //          patrimonio.add(linkTo(methodOn(PatrimonioController.class).getOnePatrimonio(patrimonio.getIdPatrimonio())).withSelfRel());
+        //      }
+    //   }
+//    return patrimonioList;
+//}
+
+    // Get all paginable
+    @Transactional(readOnly = true)
+    public Page<PatrimonioModel> getAllPatrimonios(Pageable pageable) {
+        AuditReader reader = AuditReaderFactory.get(entityManager);
+        List<Object[]> resultados = reader.createQuery()
+                .forRevisionsOfEntity(PatrimonioModel.class, false, true)
+                .addOrder(AuditEntity.revisionNumber().desc())
+                .getResultList();
+
+        List<PatrimonioModel> listTotal = new ArrayList<>();
+        for (Object[] row : resultados) {
+            PatrimonioModel p = (PatrimonioModel) row[0];
+            PatrimonioModel dto = new PatrimonioModel();
+            dto.setIdPatrimonio(p != null ? p.getIdPatrimonio() : null);
+            dto.setName(p != null ? p.getName() : "Patrimônio Excluído");
+            dto.setMarca(p != null ? p.getMarca() : "---");
+            dto.setEtiqueta(p != null ? p.getEtiqueta() : "---");
+            dto.setSetor(p != null ? p.getSetor() : "---");
+            dto.setStatus(p != null ? p.getStatus() : "---");
+            dto.setValor(p != null ? p.getValor() : BigDecimal.ZERO);
+
+            listTotal.add(dto);
+        }
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), listTotal.size());
+        if (start > listTotal.size()) {
+            return new PageImpl<>(new ArrayList<>(), pageable, listTotal.size());
+        }
+        return new PageImpl<>(listTotal.subList(start, end), pageable, listTotal.size());
+    }
+
+    // Get historico geral
     @Transactional(readOnly = true)
     public Page<PatrimonioRecordDtoAuditoria> getHistoricoGeral(Pageable pageable) {
 

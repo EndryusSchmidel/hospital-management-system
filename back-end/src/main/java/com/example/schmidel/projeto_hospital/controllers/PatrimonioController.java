@@ -39,8 +39,10 @@ public class PatrimonioController {
 
     //Get all
     @GetMapping
-    public ResponseEntity<List<PatrimonioModel>> getAllPatrimonios(){
-        return ResponseEntity.status(HttpStatus.OK).body(patrimonioService.getAllPatrimonios());
+    public ResponseEntity<Page<PatrimonioModel>> getAllPatrimonios(
+        @PageableDefault(size = 10, sort = "idPatrimonio", direction = Sort.Direction.DESC)
+        Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(patrimonioService.getAllPatrimonios(pageable));
     }
 
     //Get historico da tabela aud do hibernate

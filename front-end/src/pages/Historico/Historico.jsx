@@ -116,15 +116,19 @@ const Historico = () => {
                         })}
                     </ul>
                     <div className="paginacao">
-                        <button disabled={page === 0}
+
+                        <button className='paginacao-btn' disabled={page === 0}
                         onClick={() => carregarHistorico(page - 1)}>
                             Anterior
                         </button>
-                        <span>Página {page + 1} de {totalPages}</span>
-                        <button disabled={page + 1 >= totalPages}
+
+                        <span className='paginacao-texto'>Página {page + 1} de {totalPages}</span>
+
+                        <button className='paginacao-btn' disabled={page + 1 >= totalPages}
                         onClick={() => carregarHistorico(page + 1)}>
                             Próxima
                         </button>
+
                     </div>
                 </div>
             </main>

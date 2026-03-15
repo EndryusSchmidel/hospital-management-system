@@ -1,6 +1,8 @@
 package com.example.schmidel.projeto_hospital.repositories;
 
 import com.example.schmidel.projeto_hospital.models.PatrimonioModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.history.RevisionRepository;
@@ -18,4 +20,7 @@ public interface PatrimonioRepository extends
     List<PatrimonioModel> findByNameContainingIgnoreCase(String name);
     List<PatrimonioModel> findByMarcaContainingIgnoreCase(String marca);
     Optional<PatrimonioModel> findByEtiqueta(String etiqueta);
+    // No seu PatrimonioRepository.java
+    Page<PatrimonioModel> findByAtivoTrue(Pageable pageable);
+    Page<PatrimonioModel> findByStatus(String status, Pageable pageable);
 }

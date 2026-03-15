@@ -16,9 +16,12 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
     const [patrimonios, setPatrimonios] = useState([]); // Lista que vem do banco
     const [busca, setBusca] = useState(""); // O que o usuário digita
     const [loading, setLoading] = useState(false);
+    const [pagina, setPagina] = useState(0);
+    const [totalPaginas, setTotalPaginas] = useState(0);
+    const itensPorPagina = 10;
 
     // 1. Lógica do Filtro
-    const patrimoniosFiltrados = patrimonios.filter((item) => {
+    const patrimoniosFiltrados = (patrimonios || []).filter((item) => {
         const termo = busca.toLowerCase();
         const igualStatus = statusFiltro ? item.status?.toLowerCase() === statusFiltro.toLowerCase() : true;
 
@@ -43,10 +46,16 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
     // 2. Função para carregar os dados do Back-end
     const carregarDados = () => {
         setLoading(true);
-        api.get("/patrimonios")
+        api.get(`/patrimonios?page=${pagina}&size=${itensPorPagina}`)
             .then(response => {
-                setPatrimonios(response.data);
-                setTimeout(() => setLoading(false), 500);
+                setPatrimonios(response.data.content);
+                setTotalPaginas(response.data.totalPages);
+
+                setLoading(false),
+                setTimeout(() => {
+                    document.documentElement.scrollTop = 0;
+                    document.body.scrollTop = 0;
+                }, 50);
             })
             .catch(err => {
                 console.error("Erro ao buscar patrimônios", err);
@@ -56,8 +65,17 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
 
     // 3. Carrega ao montar o componente
     useEffect(() => {
-        carregarDados();
-    }, []);
+        carregarDados(0);
+    }, [pagina]);
+
+    useEffect(() => {
+            if (!loading) {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+            }
+        }, [loading]);
 
     return (
         <div className="dashboard-container">
@@ -99,7 +117,7 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
                 <div className='patrimonios-container'>
                     <ul className="patrimonios-lista">
                         {patrimoniosFiltrados.length > 0 ? (
-                            patrimoniosFiltrados.reverse().map((p, index) => {
+                            patrimoniosFiltrados.map((p, index) => {
                                 const classeStatus = getClasseStatus(p.status);
                                 
                                 return (
@@ -130,6 +148,21 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
                             <p className="not-found">Nenhum patrimônio encontrado para "{busca}"</p>
                         )}
                     </ul>
+                    <div className="paginacao">
+
+                        <button className='paginacao-btn' disabled={pagina === 0}
+                        onClick={() => carregarDados(pagina - 1)}>
+                            Anterior
+                        </button>
+
+                        <span className='paginacao-texto'>Página {pagina + 1} de {totalPaginas}</span>
+
+                        <button className='paginacao-btn' disabled={pagina + 1 >= totalPaginas}
+                        onClick={() => carregarDados(pagina + 1)}>
+                            Próxima
+                        </button>
+
+                    </div>
                 </div>
             </main>
         </div>
