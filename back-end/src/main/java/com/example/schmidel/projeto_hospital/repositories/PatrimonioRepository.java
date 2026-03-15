@@ -19,9 +19,9 @@ public interface PatrimonioRepository extends
         RevisionRepository<PatrimonioModel, UUID, Integer> {
     @Query("""
     SELECT p FROM PatrimonioModel p
-    WHERE (:status IS NULL OR LOWER(p.status) = LOWER(:status))
+    WHERE (:status IS NULL OR :status = '' OR LOWER(p.status) = LOWER(:status))
     AND (
-        :busca IS NULL OR
+        :busca IS NULL OR :busca = '' OR
         LOWER(p.name) LIKE LOWER(CONCAT('%', :busca, '%')) OR
         LOWER(p.marca) LIKE LOWER(CONCAT('%', :busca, '%')) OR
         LOWER(p.etiqueta) LIKE LOWER(CONCAT('%', :busca, '%')) OR
@@ -32,5 +32,4 @@ public interface PatrimonioRepository extends
             @Param("status") String status,
             @Param("busca") String busca,
             Pageable pageable
-    );
-}
+    );}
