@@ -65,17 +65,8 @@ const Dashboard = () => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h2>Dashboard Geral</h2>
           {/* Botão para Back-end de Patrimônios */}
-          <button className="btn-add-patrimonio" onClick={() => setIsModalOpen(true)}
-            style={{
-              padding: "10px 15px",
-              backgroundColor: "#0076a8",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            + Gerenciar Patrimônios
+          <button className="btn-add-patrimonio" onClick={() => setIsModalOpen(true)}>
+            + Cadastrar Patrimônio
           </button>
         </div>
 

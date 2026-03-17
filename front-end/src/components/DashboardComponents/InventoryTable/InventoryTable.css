@@ -19,8 +19,6 @@
 }
 
 
-
-
 /* Tabela */
 .inventory-table {
     width: 100%;
@@ -31,8 +29,9 @@
 .inventory-table th {
     padding: 12px;
     border-bottom: 2px solid #f4f7f6;
-    color: #888;
+    color: #000000;
     font-size: 14px;
+    text-decoration: underline;
 }
 
 .inventory-table td {
@@ -101,8 +100,109 @@
 
 
 .fa-clock-rotate-left{
-    background-color: #f0f4f8;
     color: #555;
     padding: 4px 8px;
     border-radius: 4px;
+}
+
+.patrimonio-destaque {
+    text-transform: capitalize;
+}
+
+/* Estilo geral para as Tags */
+.tag-patrimonio {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Tag de Setor (Visual Clean/Hospitalar) */
+.tag-setor {
+    background-color: #f0f7ff;
+    color: #0056b3;
+    border: 1px solid #cce3ff;
+    text-transform: uppercase;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); /* Transição suave */
+}
+
+/* Tag de Etiqueta (Visual de Identificador) */
+.tag-etiqueta {
+    background-color: #0076a8;
+    color: #ffffff;
+    border: 1px solid #d1d5db;
+    font-family: 'Courier New', Courier, monospace; /* Dá cara de código/serial */
+    letter-spacing: 0.5px;
+}
+
+.btn-acoes-revisao {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    margin-left: 5px;
+    background-color: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-acoes-revisao:hover {
+    background-color: #f9fafb;
+    border-color: #3b82f6; /* Azul destaque ao passar o mouse */
+    color: #3b82f6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn-acoes-revisao svg {
+    color: #6b7280;
+    transition: color 0.2s ease;
+}
+
+.btn-acoes-revisao:hover svg {
+    color: #3b82f6;
+}
+
+.tag-setor:hover {
+    background-color: #0056b3; /* Inverte a cor no hover */
+    color: #ffffff;
+    border-color: #004494;
+    transform: translateY(-1px); /* Leve subida */
+    box-shadow: 0 4px 6px -1px rgba(0, 86, 179, 0.2); /* Sombra na cor da tag */
+}
+
+/* --- TAG DE ETIQUETA --- */
+.tag-etiqueta {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    transition: all 0.25s ease;
+    cursor: help; /* Indica que pode haver mais info ou é um ID */
+}
+
+.tag-etiqueta:hover {
+    background-color: #ffffff;
+    border-color: #3b82f6; /* Destaque em azul ao focar no ID */
+    color: #1d4ed8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn-acoes-revisao .fa-clock-rotate-left {
+    display: inline-block; /* Necessário para o transform funcionar bem */
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+    transform: rotate(0deg); /* Ponto de partida */
+}
+
+/* Efeito sutil no ícone de relógio/histórico */
+.btn-acoes-revisao:hover .fa-clock-rotate-left {
+    transform: rotate(-360deg); /* O reloginho dá uma leve inclinada */
+    color: #2563eb;
 }

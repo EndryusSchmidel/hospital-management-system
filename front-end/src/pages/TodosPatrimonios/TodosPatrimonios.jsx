@@ -39,7 +39,7 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
                 page: page,
                 size: 10,
                 status: statusFiltro || undefined,
-                nome: busca || undefined
+                busca: busca || undefined
             }
         })
             .then(response => {
