@@ -11,6 +11,15 @@ import api from "../../services/api";
 import { ImportIcon } from "lucide-react";
 
 const Dashboard = () => {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      window.location.href = "/";
+    }
+  }, []);
+
+  const [usuario, setUsuario] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [patrimonios, setPatrimonios] = useState([]);
   const carregarPatrimonios = async () => {
@@ -26,9 +35,30 @@ const Dashboard = () => {
       console.error("Erro ao carregar:", error);
     }
   };
+
   useEffect(() => {
-    carregarPatrimonios();
-  }, [])
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/";
+    return;
+  }
+
+  async function carregarUsuario() {
+    try {
+      const response = await api.get("/auth/me");
+      setUsuario(response.data);
+    } catch (error) {
+      localStorage.removeItem("token");
+      window.location.href = "/";
+    }
+  }
+
+  carregarUsuario();
+  carregarPatrimonios();
+
+}, []);
+
   const valorTotalGeral = patrimonios.reduce((acc, p) => acc + (p.valor || 0), 0);
 
   const [selectedHistoryId, setSelectedHistoryId] = useState(null);
@@ -86,7 +116,7 @@ const Dashboard = () => {
         data={patrimonios} 
         onVerHistorico={(id) => setSelectedHistoryId(id)}
         onEdit={handleEdit}
-        onDelete={handleDelete}
+        onDelete={usuario?.roles[0]?.authority === "ROLE_ADMIN" ? handleDelete : null}
         />
 
         {selectedHistoryId && (

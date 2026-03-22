@@ -11,6 +11,12 @@ const Header = () => {
                 <span>Feedbacks</span>
                 <span>Tarefas</span>
             </div>
+            <button onClick={() => {
+            localStorage.removeItem("token");
+            window.location.href = "/";
+            }}>
+            Logout
+            </button>
 
             {/* Lado Direito: Busca e Perfil */}
             <div className="header-right">

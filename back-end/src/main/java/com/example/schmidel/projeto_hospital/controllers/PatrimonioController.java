@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -104,6 +105,7 @@ public class PatrimonioController {
     }
 
     //Del
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
     public ResponseEntity<Object> deletePatrimonio(@PathVariable UUID id){
         boolean deleted = patrimonioService.deletePatrimonio(id);
@@ -114,4 +116,15 @@ public class PatrimonioController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @RestController
+    @RequestMapping("/login")
+    public class AuthController {
+
+        @PostMapping
+        public ResponseEntity<String> login() {
+            return ResponseEntity.ok("Login realizado com sucesso");
+        }
+    }
+
 }

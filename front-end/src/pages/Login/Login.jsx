@@ -2,6 +2,7 @@ import {FaUser, FaLock} from "react-icons/fa"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import "./Login.css"
+import api from "../../services/api";
 
 const Login = () => {
 
@@ -10,18 +11,30 @@ const Login = () => {
 
     const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // Aqui você faria a validação (ex: se o login está correto)
-    if (username.trim() !== "" && password.trim() !== "") {
-        console.log("Enviando dados:", { username, password });
 
-        // 3. O PULO DO GATO: Redireciona para a rota que você criou no App.jsx
-        navigate('/dashboard');
-    } else {
-        alert("Preencha todos os campos!");
-    }
-};
+        if (username.trim() === "" || password.trim() === "") {
+            alert("Preencha todos os campos!");
+            return;
+        }
+
+        try {
+            const response = await api.post("/auth/login", {
+                username: username,
+                password: password
+            });
+
+            // 🔐 salva token
+            localStorage.setItem("token", response.data.token);
+
+            // redireciona
+            navigate('/dashboard');
+
+        } catch (error) {
+            alert("Usuário ou senha inválidos", error);
+        }
+    };
 
 return (
     <div className="login-screen-wrapper">
