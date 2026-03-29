@@ -9,3 +9,34 @@ body, html {
   height: 100%;
   overflow-x: hidden; /* Evita a barra de rolagem horizontal */
 }
+
+/* Personalização do Toastify para visual Hospitalar */
+:root {
+  --toastify-color-success: #28a745; /* Verde Hospitalar */
+  --toastify-color-error: #dc3545;   /* Vermelho Alerta */
+  --toastify-color-info: #17a2b8;    /* Azul Médico */
+  --toastify-font-family: 'Inter', sans-serif;
+}
+
+.Toastify__toast {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+}
+
+.Toastify__toast--success {
+  background-color: #e6ffed !important; /* Fundo verde clarinho */
+  color: #155724 !important;
+  border-left: 6px solid #28a745;
+}
+
+.Toastify__toast--error {
+  background-color: #fff5f5 !important; /* Fundo vermelho clarinho */
+  color: #721c24 !important;
+  border-left: 6px solid #dc3545;
+}
+
+.Toastify__close-button {
+    color: #000;
+    opacity: 0.3;
+}

@@ -3,6 +3,7 @@ import Sidebar from '../../components/DashboardComponents/Sidebar/Sidebar';
 import Header from '../../components/DashboardComponents/Header/Header';
 import "./TodosPatrimonios.css";
 import api from '../../services/api';
+import { toast } from 'react-toastify';
 import { RefreshCw, FileText } from 'lucide-react';
 
 const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
@@ -87,6 +88,9 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
             .catch(err => {
                 console.error("Erro ao buscar patrimônios", err);
                 setLoading(false);
+                if(err.response?.status !== 401) {
+                toast.error("Erro ao carregar dados.");
+        }
             });
 
     };

@@ -3,6 +3,8 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import "./Login.css"
 import api from "../../services/api";
+import { toast } from 'react-toastify';
+
 
 const Login = () => {
     useEffect(() => {
@@ -22,7 +24,7 @@ const Login = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (username.trim() === "" || password.trim() === "") {
-            alert("Preencha todos os campos!");
+            toast.warn("Preencha todos os campos!");
             return;
         }
 
@@ -32,10 +34,11 @@ const Login = () => {
                 password: password
             });
             localStorage.setItem("token", response.data.token);
+            toast.info("Bem-vindo ao sistema!");
             navigate('/dashboard');
         } catch (error) {
-            console.error("DEBUG LOGIN:", error.response); // Olhe isso no F12 do navegador
-            alert("Erro ao acessar: " + (error.response?.data?.message || "Usuário ou senha inválidos"));
+            console.error("DEBUG LOGIN:", error.response);
+            toast.error("Erro ao acessar: " + (error.response?.data?.message || "Usuário ou senha inválidos"));
         }
     };
 

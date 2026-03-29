@@ -4,6 +4,9 @@ import Dashboard from './pages/Dashboard/Dashboard'
 import Historico from './pages/Historico/Historico'
 import TodosPatrimonios from './pages/TodosPatrimonios/TodosPatrimonios'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Footer from './pages/Footer/Footer'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   
@@ -24,6 +27,19 @@ function App() {
 
         <Route path='/manutencao' element={<TodosPatrimonios statusFiltro='manutencao' tituloPagina='Patrimônios em Manutenção'/>}/>
       </Routes>
+      <Footer />
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored" // 'colored' fica ótimo para sistemas hospitalares (verde/vermelho nítidos)
+      />
     </BrowserRouter>
   )
 }

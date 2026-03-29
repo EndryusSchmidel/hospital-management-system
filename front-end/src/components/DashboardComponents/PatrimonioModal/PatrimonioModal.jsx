@@ -40,7 +40,7 @@ const PatrimonioModal = ({ data, isOpen, onClose, onPatrimonioSalvo }) => {
         }
 
         if (response.status === 201 || response.status === 200) {
-            alert(formData.idPatrimonio ? "Alterações salvas!" : "Patrimônio cadastrado!");
+            // alert(formData.idPatrimonio ? "Alterações salvas!" : "Patrimônio cadastrado!");
             if (onPatrimonioSalvo) onPatrimonioSalvo();
             onClose();
             // Reset completo incluindo o valor

@@ -1,4 +1,6 @@
 import axios from "axios";
+import { toast } from 'react-toastify';
+
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL
@@ -17,23 +19,30 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-            const url = error.config.url || "";
+        const status = error.response ? error.response.status : null;
+        const url = error.config.url || "";
+        const isLoginRequest = url.includes('/auth/login');
 
-            // Se for login ou a rota de perfil inicial, NÃO fazemos o fluxo de "Sessão Expirada"
-            const isAuthRequest = url.includes('/auth/login') || url.includes('/auth/me');
+        if ((status === 401 || status === 403) && !isLoginRequest) {
+            // 1. Limpa o token imediatamente
+            localStorage.removeItem('token');
 
-            if (!isAuthRequest) {
-                console.warn("Sessão expirada em rota protegida.");
-                localStorage.removeItem('token');
-                alert("Sessão expirada. Por favor, faça login novamente.");
+            // 2. Mostra o aviso moderno
+            toast.error("Sua sessão expirou. Redirecionando para o login...", {
+                toastId: "session-expired", // Evita duplicar vários toasts se houver várias chamadas
+            });
+
+            // 3. Aguarda 2 segundos para o usuário ver o toast e então redireciona
+            setTimeout(() => {
                 window.location.href = '/';
-                return Promise.reject(error);
-            }
+            }, 1000);
+
+            // Importante: Retorna uma promise pendente para "travar" os catches dos componentes
+            return new Promise(() => {});
         }
         
-        // Se for erro de login, o erro "passa reto" por aqui e vai para o catch do Login.jsx
         return Promise.reject(error);
     }
 );
+
 export default api;

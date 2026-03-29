@@ -9,6 +9,8 @@ import DashboardCharts from "../../components/DashboardComponents/DashboardChart
 import HistoryModal from "../../components/DashboardComponents/HistoryModal/HistoryModal"
 import api from "../../services/api";
 import { ImportIcon } from "lucide-react";
+import { toast } from 'react-toastify';
+
 
 const Dashboard = () => {
   const [usuario, setUsuario] = useState(null);
@@ -32,9 +34,7 @@ const Dashboard = () => {
         const response = await api.get("/auth/me");
         setUsuario(response.data);
       } catch (error) {
-        localStorage.removeItem("token");
-        window.location.href = "/";
-        console.log(error)
+        console.log("Erro ao carregar usuário: ", error)
       }
     }
 
@@ -58,16 +58,22 @@ const Dashboard = () => {
     }
   };
 
-  
+  const handlePatrimonioSalvo = () => {
+    setIsModalOpen(false);
+    setPatrimonioParaEditar(null);
+    carregarPatrimonios();
+    toast.success("Dados salvos com sucesso!"); // <--- SUCESSO
+  };
 
 
   const handleDelete = async (id) => {
     if (window.confirm("Tem certeza que deseja excluir exte patrimônio?")) {
       try {
         await api.delete(`/patrimonios/${id}`);
+        toast.success("Patrimônio removido com sucesso!");
         carregarPatrimonios();
       } catch (error) {
-        alert("Erro ao excluir: " + error.response?.data?.message);
+        toast.error("Erro ao excluir: " + (error.response?.data?.message) || "Erro interno");
       }
     }
   };
@@ -131,7 +137,7 @@ const Dashboard = () => {
             setIsModalOpen(false);
             setPatrimonioParaEditar(null);
           }}
-          onPatrimonioSalvo={carregarPatrimonios}
+          onPatrimonioSalvo={handlePatrimonioSalvo}
         />
 
       </main>
