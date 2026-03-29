@@ -6,7 +6,6 @@ import TodosPatrimonios from './pages/TodosPatrimonios/TodosPatrimonios'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Footer from './pages/Footer/Footer'
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   
