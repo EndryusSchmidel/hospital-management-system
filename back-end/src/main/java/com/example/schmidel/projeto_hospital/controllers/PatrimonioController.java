@@ -51,18 +51,10 @@ public class PatrimonioController {
 
         return ResponseEntity.ok(page);
     }
-
-    //Get etiqueta
-    //public ResponseEntity<?> buscarPorEtiqueta(
-    //        @RequestParam String etiqueta) {
-    //    return patrimonioService.buscarPorEtiqueta(etiqueta)
-    //            .map(ResponseEntity::ok)
-    //           .orElse(ResponseEntity.notFound().build());
-    //}
-
     //Get historico da tabela aud do hibernate
     @GetMapping("/historico-geral")
     public ResponseEntity<Page<PatrimonioRecordDtoAuditoria>> obterHistoricoGeral(
+            @RequestParam(required = false) String busca,
             @PageableDefault(size = 10, sort = "dataRevisao", direction = Sort.Direction.DESC)
             Pageable pageable) {
 
@@ -72,18 +64,6 @@ public class PatrimonioController {
         return ResponseEntity.ok(historico);
     }
 
-
-
-    //Get id
-    //@GetMapping("/{id}")
-    // public ResponseEntity<Object> getOnePatrimonio(@PathVariable UUID id){
-        //    var p = patrimonioService.getOnePatrimonio(id);
-        //if(p.isEmpty()) {
-        //            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patrimônio não encontrado.");
-        //        }
-        //        return ResponseEntity.status(HttpStatus.OK).body(p.get());
-        ///    return p.<ResponseEntity<Object>>map(patrimonioModel -> ResponseEntity.status(HttpStatus.OK).body(patrimonioModel)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patrimônio não encontrado."));
-    //}
 
 
 

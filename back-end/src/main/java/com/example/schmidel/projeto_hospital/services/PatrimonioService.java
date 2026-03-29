@@ -43,22 +43,6 @@ public class PatrimonioService {
     }
 
 
-
-
-    //Get por id
-    //@Transactional(readOnly = true)
-    //public Optional<PatrimonioModel> getOnePatrimonio(UUID id) {
-    //    Optional<PatrimonioModel> patrimonioO = patrimonioRepository.findById(id);
-    //    patrimonioO.ifPresent(p -> p.add(linkTo(methodOn(PatrimonioController.class).getAllPatrimonios()).withRel("Lista de Patrimônios")));
-    //   return patrimonioO;
-    //}
-
-    //Get por etiqueta
-    //@Transactional(readOnly = true)
-    //public Optional<PatrimonioModel> buscarPorEtiqueta(String etiqueta) {
-    //    return patrimonioRepository.findByEtiqueta(etiqueta);
-    //}
-
     //Update no Service
     public Optional<PatrimonioModel> updatePatrimonio(UUID id, PatrimonioRecordDto dto) {
         return patrimonioRepository.findById(id)
@@ -141,7 +125,6 @@ public class PatrimonioService {
 
         Collections.reverse(historico);
 
-        // 🔥 AQUI ESTÁ A PAGINAÇÃO REAL
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), historico.size());
 

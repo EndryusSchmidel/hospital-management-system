@@ -61,9 +61,87 @@
     cursor: pointer;
 }
 
-.user-profile img {
+/* Essencial para o menu não quebrar o layout */
+.user-profile-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px; 
+    cursor: pointer;
+    object-fit: cover;
+    transition: transform 0.2s;
+    border: 2px solid transparent;
+}
+
+.profile-img:hover {
+    transform: scale(1.05);
+    border-color: #007bff;
+    filter: brightness(1.1);
+}
+
+.profile-img:active {
+    transform: scale(0.95); /* Efeito de "apertar" o botão */
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 50px; /* Distância da foto */
+    right: 0;
+    background: white;
+    width: 180px;
     border-radius: 8px;
-    /* Na imagem o avatar é um pouco quadrado com pontas redondas */
-    border: 2px solid #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #eee;
+    z-index: 999;
+    padding: 10px 0;
+}
+
+.dropdown-user-info {
+    padding: 5px 15px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-user-info strong {
+    font-size: 14px;
+    color: #333;
+}
+
+.dropdown-user-info small {
+    font-size: 11px;
+    color: #888;
+}
+
+.profile-dropdown hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 5px 0;
+}
+
+.profile-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-dropdown li {
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #555;
+}
+
+.profile-dropdown li:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+.logout-option {
+    color: #d9534f !important;
+    font-weight: 600;
 }

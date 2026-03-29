@@ -87,3 +87,45 @@
 .signup-link {
     margin: 7px;
 }
+
+.guest-access-card {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f0f7ff; /* Azul hospitalar bem claro */
+    border: 1px solid #cce3ff;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.guest-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #0056b3;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.guest-access-card p {
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.btn-auto-fill {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-auto-fill:hover {
+    background-color: #004494;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

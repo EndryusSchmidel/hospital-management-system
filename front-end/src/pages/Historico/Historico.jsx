@@ -6,37 +6,40 @@ import api from '../../services/api';
 import { RefreshCw } from 'lucide-react';
 
 const Historico = () => {
+    const [historicoPatrimonios, setHistoricoPatrimonios] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [busca, setBusca] = useState("");
+    
     const formatarMoeda = (valor) => {
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL'
         }).format(valor || 0);
     };
-    const [historicoPatrimonios, setHistoricoPatrimonios] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [page, setPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
     
     const carregarHistorico = (pagina = 0) => {
-        setLoading(true);
-
-        api.get(`/patrimonios/historico-geral?page=${pagina}&size=10`)
-            .then(response => {
-                setHistoricoPatrimonios(response.data.content);
-                setTotalPages(response.data.totalPages);
-                setPage(response.data.number);
-                
-                setLoading(false);
-                setTimeout(() => {
-                    document.documentElement.scrollTop = 0;
-                    document.body.scrollTop = 0;
-                }, 50);
-            })
-            .catch(err => {
-                console.error("Erro ao buscar histórico", err)
-                setLoading(false);
-            });
-        };
+    setLoading(true);
+    // Usando params do Axios para ficar mais limpo
+    api.get(`/patrimonios/historico-geral`, {
+        params: {
+            page: pagina,
+            size: 10,
+            busca: busca || undefined // Envia a busca se houver algo digitado
+        }
+    })
+    .then(response => {
+        setHistoricoPatrimonios(response.data.content);
+        setTotalPages(response.data.totalPages);
+        setPage(response.data.number);
+        setLoading(false);
+    })
+    .catch(err => {
+        console.error("Erro ao buscar histórico", err);
+        setLoading(false);
+    });
+};
 
     const getStatusConfig = (tipo) => {
         switch (tipo) {
@@ -48,8 +51,11 @@ const Historico = () => {
     };
 
     useEffect(() => {
+    const timeout = setTimeout(() => {
         carregarHistorico(0);
-    }, []);
+    }, 300); // 300ms é um tempo seguro
+    return () => clearTimeout(timeout);
+}, [busca]);
 
     useEffect(() => {
         if (!loading) {
@@ -75,6 +81,18 @@ const Historico = () => {
                         <RefreshCw size={20} />
                         {loading ? 'Atualizando...' : 'Atualizar'}
                     </button>
+                    {!busca && (
+                                <div className="marquee-container">
+                                    <span className="marquee-text">
+                                        Pesquisar por Nome, Marca, Etiqueta, Setor ou Status (Ativo/Inativo)...
+                                    </span>
+                                </div>
+                            )}
+                            <input 
+                                type="text" 
+                                value={busca}
+                                onChange={(e) => setBusca(e.target.value)}
+                            />
                 </div>
                 
                 <div className='historico-conteudo'>
