@@ -3,9 +3,45 @@ import Sidebar from '../../components/DashboardComponents/Sidebar/Sidebar';
 import Header from '../../components/DashboardComponents/Header/Header';
 import "./TodosPatrimonios.css";
 import api from '../../services/api';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, FileText } from 'lucide-react';
 
 const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
+    
+    const gerarRelatorioPDF = () => {
+    setLoading(true);
+    
+    // Chamamos o endpoint de relatório passando os mesmos filtros da busca atual
+    api.get('/patrimonios/relatorio', {
+        params: { 
+            busca: busca || undefined,
+            status: statusFiltro || undefined
+        },
+        responseType: 'blob'
+
+    })
+    .then((response) => {
+        // Cria um link temporário na memória do navegador
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        
+        // Define o nome do arquivo que será baixado
+        const dataAtual = new Date().toLocaleDateString('pt-BR').replaceAll('/', '-');
+        link.setAttribute('download', `Inventario_Geral_${dataAtual}.pdf`);         
+        document.body.appendChild(link);
+        link.click();
+        
+        // Limpeza
+        link.parentNode.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        setLoading(false);
+    })
+    .catch((err) => {
+        console.error("Erro ao gerar PDF", err);
+        setLoading(false);
+        alert("Erro ao gerar o relatório. Verifique o console.");
+    });
+};
     // Estados principais
     const formatarMoeda = (valor) => {
         return new Intl.NumberFormat('pt-BR', {
@@ -68,6 +104,8 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
     return () => clearTimeout(timeout);
 }, [busca]);
 
+
+
     return (
         <div className="dashboard-container">
             <Sidebar />
@@ -93,15 +131,26 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
                                 onChange={(e) => setBusca(e.target.value)}
                             />
                         </div>
-                        
-                        <button 
-                            className={`btn-atualizar ${loading ? 'girando' : ''}`} 
-                            onClick={carregarDados}
-                            disabled={loading}
-                        >
-                            <RefreshCw size={20} />
-                            {loading ? 'Carregando...' : 'Atualizar'}
-                        </button>
+                        <div className="button-group" style={{ display: 'flex', gap: '10px' }}>
+                            <button 
+                                className="btn-relatorio" // Crie um estilo azul ou cinza para este
+                                onClick={gerarRelatorioPDF}
+                                disabled={loading}
+                                title="Gerar Relatório PDF"
+                            >
+                                <FileText size={20} />
+                                {loading ? 'Processando...' : 'Relatório'}
+                            </button>
+
+                            <button 
+                                className={`btn-atualizar ${loading ? 'girando' : ''}`} 
+                                onClick={() => carregarDados(page)}
+                                disabled={loading}
+                            >
+                                <RefreshCw size={20} />
+                                {loading ? 'Atualizando...' : 'Atualizar'}
+                            </button>
+                        </div>
                     </div>
                 </div>
 

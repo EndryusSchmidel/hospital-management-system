@@ -4,8 +4,11 @@ import com.example.schmidel.projeto_hospital.dto_auditoria.PatrimonioRecordDtoAu
 import com.example.schmidel.projeto_hospital.dtos.PatrimonioRecordDto;
 import com.example.schmidel.projeto_hospital.models.PatrimonioModel;
 import com.example.schmidel.projeto_hospital.services.PatrimonioService;
+import io.jsonwebtoken.io.IOException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -59,7 +62,7 @@ public class PatrimonioController {
             Pageable pageable) {
 
         Page<PatrimonioRecordDtoAuditoria> historico =
-                patrimonioService.getHistoricoGeral(pageable);
+                patrimonioService.getHistoricoGeral(pageable, busca);
 
         return ResponseEntity.ok(historico);
     }
@@ -107,4 +110,37 @@ public class PatrimonioController {
         }
     }
 
+    @GetMapping("/relatorio")
+    public void gerarRelatorioGeral(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String busca,
+            HttpServletResponse response) throws IOException, java.io.IOException {
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=inventario_patrimonio.pdf");
+
+        // Buscamos todos os registros filtrados (sem paginação para o PDF sair completo)
+        Pageable total = PageRequest.of(0, Integer.MAX_VALUE);
+        List<PatrimonioModel> lista = patrimonioService.listarComFiltro(status, busca, total).getContent();
+
+        patrimonioService.exportarPatrimoniosPdf(response, lista);
+        response.flushBuffer();
+    }
+
+    @GetMapping("/relatorio-historico")
+    public void gerarRelatorioHistorico(
+            @RequestParam(required = false) String busca,
+            HttpServletResponse response) throws IOException, java.io.IOException {
+
+        response.setContentType("application/pdf");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=historico_patrimonio.pdf";
+        response.setHeader(headerKey, headerValue);
+
+        Pageable total = PageRequest.of(0, Integer.MAX_VALUE);
+        List<PatrimonioRecordDtoAuditoria> dadosFiltrados =
+                patrimonioService.getHistoricoGeral(total, busca).getContent();
+
+        patrimonioService.exportarHistoricoParaPdf(response, dadosFiltrados);
+    }
 }

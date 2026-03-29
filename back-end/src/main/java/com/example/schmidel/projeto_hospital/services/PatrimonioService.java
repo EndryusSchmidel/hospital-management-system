@@ -5,10 +5,18 @@ import com.example.schmidel.projeto_hospital.dto_auditoria.PatrimonioRecordDtoAu
 import com.example.schmidel.projeto_hospital.dtos.PatrimonioRecordDto;
 import com.example.schmidel.projeto_hospital.models.PatrimonioModel;
 import com.example.schmidel.projeto_hospital.repositories.PatrimonioRepository;
+import com.lowagie.text.*;
+import com.lowagie.text.Font;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import io.jsonwebtoken.io.IOException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.AuditQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,13 +24,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-
+import java.awt.*;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import java.util.List;
+import java.util.stream.Stream;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.*;
+import jakarta.servlet.http.HttpServletResponse;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 @Transactional
 @Service
@@ -77,37 +91,33 @@ public class PatrimonioService {
 
     // Get historico geral
     @Transactional(readOnly = true)
-    public Page<PatrimonioRecordDtoAuditoria> getHistoricoGeral(Pageable pageable) {
-
+    public Page<PatrimonioRecordDtoAuditoria> getHistoricoGeral(Pageable pageable, String busca) {
         AuditReader reader = AuditReaderFactory.get(entityManager);
 
-        List<Object[]> resultados = reader.createQuery()
-                .forRevisionsOfEntity(PatrimonioModel.class, false, true)
-                .getResultList();
+        // 1. Buscamos TODAS as revisões (sem filtrar o 'LIKE' aqui ainda para não perder os nulos do DEL)
+        AuditQuery query = reader.createQuery()
+                .forRevisionsOfEntity(PatrimonioModel.class, false, true);
 
-        List<PatrimonioRecordDtoAuditoria> historico = new ArrayList<>();
+        List<Object[]> resultados = query.getResultList();
+        List<PatrimonioRecordDtoAuditoria> historicoCompleto = new ArrayList<>();
 
         for (Object[] row : resultados) {
-
             PatrimonioModel p = (PatrimonioModel) row[0];
-            org.hibernate.envers.DefaultRevisionEntity revEntity =
-                    (org.hibernate.envers.DefaultRevisionEntity) row[1];
-            org.hibernate.envers.RevisionType tipo =
-                    (org.hibernate.envers.RevisionType) row[2];
+            org.hibernate.envers.DefaultRevisionEntity revEntity = (org.hibernate.envers.DefaultRevisionEntity) row[1];
+            org.hibernate.envers.RevisionType tipo = (org.hibernate.envers.RevisionType) row[2];
 
-            if (tipo == org.hibernate.envers.RevisionType.DEL && p != null) {
-                int revAnterior = revEntity.getId() - 1;
+            // Se for exclusão, recuperamos os dados de como o item era ANTES de sumir
+            if (tipo == org.hibernate.envers.RevisionType.DEL) {
                 try {
-                    PatrimonioModel estadoAnterior =
-                            reader.find(PatrimonioModel.class, p.getIdPatrimonio(), revAnterior);
-
-                    if (estadoAnterior != null) {
-                        p = estadoAnterior;
-                    }
+                    // Busca a versão imediatamente anterior (ID da revisão atual - 1)
+                    PatrimonioModel estadoAnterior = reader.find(PatrimonioModel.class,
+                            ((PatrimonioModel)row[0]).getIdPatrimonio(), revEntity.getId() - 1);
+                    if (estadoAnterior != null) p = estadoAnterior;
                 } catch (Exception ignored) {}
             }
 
-            historico.add(new PatrimonioRecordDtoAuditoria(
+            // Criamos o DTO
+            var dto = new PatrimonioRecordDtoAuditoria(
                     (p != null) ? p.getIdPatrimonio() : null,
                     (p != null) ? p.getName() : "Patrimônio Excluído",
                     (p != null) ? p.getMarca() : "---",
@@ -115,23 +125,35 @@ public class PatrimonioService {
                     (p != null) ? p.getSetor() : "---",
                     (p != null) ? p.getStatus() : "---",
                     (p != null) ? p.getValor() : BigDecimal.ZERO,
-                    reader.getRevisionDate(revEntity.getId())
-                            .toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDateTime(),
+                    reader.getRevisionDate(revEntity.getId()).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
                     tipo.ordinal()
-            ));
+            );
+
+            // 2. FILTRAGEM MANUAL (Aqui resolvemos o problema da busca)
+            if (busca == null || busca.isEmpty() || matchesBusca(dto, busca)) {
+                historicoCompleto.add(dto);
+            }
         }
 
-        Collections.reverse(historico);
+        // Ordenação (mais recentes primeiro)
+        historicoCompleto.sort((a, b) -> b.dataRevisao().compareTo(a.dataRevisao()));
 
+        // Paginação manual
         int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), historico.size());
+        int end = Math.min((start + pageable.getPageSize()), historicoCompleto.size());
 
-        List<PatrimonioRecordDtoAuditoria> pageContent =
-                historico.subList(start, end);
+        if (start > historicoCompleto.size()) return new PageImpl<>(new ArrayList<>(), pageable, 0);
 
-        return new PageImpl<>(pageContent, pageable, historico.size());
+        return new PageImpl<>(historicoCompleto.subList(start, end), pageable, historicoCompleto.size());
+    }
+
+    // Método auxiliar para a busca ignorar maiúsculas/minúsculas
+    private boolean matchesBusca(PatrimonioRecordDtoAuditoria dto, String busca) {
+        String b = busca.toLowerCase();
+        return (dto.name() != null && dto.name().toLowerCase().contains(b)) ||
+                (dto.etiqueta() != null && dto.etiqueta().toLowerCase().contains(b)) ||
+                (dto.setor() != null && dto.setor().toLowerCase().contains(b)) ||
+                (dto.marca() != null && dto.marca().toLowerCase().contains(b));
     }
 
 
@@ -164,5 +186,123 @@ public class PatrimonioService {
             ));
         }
         return historicoUnico;
+    }
+
+    public void exportarPatrimoniosPdf(HttpServletResponse response, List<PatrimonioModel> lista) throws IOException, java.io.IOException {
+        // Documento em formato A4 Paisagem (Landscape) para caber todas as colunas
+        Document document = new Document(PageSize.A4.rotate());
+        PdfWriter.getInstance(document, response.getOutputStream());
+
+        document.open();
+
+        // Cabeçalho Profissional
+        Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16);
+        Paragraph titulo = new Paragraph("INVENTÁRIO ATUAL DE PATRIMÔNIOS", fontTitulo);
+        titulo.setAlignment(Element.ALIGN_CENTER);
+        titulo.setSpacingAfter(20);
+        document.add(titulo);
+
+        // Tabela com 6 colunas: Nome, Marca, Etiqueta, Setor, Status, Valor
+        PdfPTable table = new PdfPTable(new float[]{3f, 2f, 2f, 2f, 2f, 2f});
+        table.setWidthPercentage(100);
+
+        // Estilo do Cabeçalho
+        Stream.of("Nome", "Marca", "Etiqueta", "Setor", "Status", "Valor").forEach(col -> {
+            PdfPCell cell = new PdfPCell(new Phrase(col, FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            cell.setBackgroundColor(Color.LIGHT_GRAY);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setPadding(5);
+            table.addCell(cell);
+        });
+
+        // Formatador de Moeda
+        NumberFormat moeda = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+        BigDecimal totalGeral = BigDecimal.ZERO;
+
+        // Preenchendo os dados
+        for (PatrimonioModel p : lista) {
+            table.addCell(new Phrase(p.getName(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            table.addCell(new Phrase(p.getMarca(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            table.addCell(new Phrase(p.getEtiqueta(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            table.addCell(new Phrase(p.getSetor(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            table.addCell(new Phrase(p.getStatus(), FontFactory.getFont(FontFactory.HELVETICA, 10)));
+
+            // Valor alinhado à direita
+            String valorFormatado = (p.getValor() != null) ? moeda.format(p.getValor()) : "R$ 0,00";
+            PdfPCell cellValor = new PdfPCell(new Phrase(valorFormatado, FontFactory.getFont(FontFactory.HELVETICA, 10)));
+            cellValor.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            table.addCell(cellValor);
+
+            if (p.getValor() != null) {
+                totalGeral = totalGeral.add(p.getValor());
+            }
+        }
+
+        document.add(table);
+
+        // Adicionando o Total Geral no fim do relatório (O "pulo do gato" para o gestor)
+        Paragraph resumo = new Paragraph("\nTotal acumulado dos itens listados: " + moeda.format(totalGeral),
+                FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
+        resumo.setAlignment(Element.ALIGN_RIGHT);
+        document.add(resumo);
+
+        document.close();
+    }
+
+    public void exportarHistoricoParaPdf(HttpServletResponse response, List<PatrimonioRecordDtoAuditoria> dados) throws IOException, java.io.IOException {
+        Document document = new Document(PageSize.A4.rotate()); // Horizontal para caber mais colunas
+        PdfWriter.getInstance(document, response.getOutputStream());
+
+        document.open();
+
+        // Cabeçalho do Relatório
+        Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+        Paragraph titulo = new Paragraph("Relatório de Movimentações de Patrimônio", fontTitulo);
+        titulo.setAlignment(Element.ALIGN_CENTER);
+        titulo.setSpacingAfter(20);
+        document.add(titulo);
+
+        // Criar Tabela (7 colunas para bater com seu DTO)
+        PdfPTable table = new PdfPTable(new float[]{3f, 2f, 2f, 2f, 2f, 2f, 3f, 2f});
+        table.setWidthPercentage(100);
+
+        // Estilo do Cabeçalho da Tabela
+        Stream.of("Nome", "Marca", "Etiqueta", "Setor", "Status", "Valor", "Data/Hora", "Ação").forEach(col -> {
+            PdfPCell cell = new PdfPCell(new Phrase(col, FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            cell.setBackgroundColor(Color.LIGHT_GRAY);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setPadding(7);
+            table.addCell(cell);
+        });
+
+        NumberFormat formatadorMoeda = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+
+        // Preencher Dados
+        for (PatrimonioRecordDtoAuditoria p : dados) {
+            table.addCell(p.name());
+            table.addCell(p.marca());
+            table.addCell(p.etiqueta());
+            table.addCell(p.setor());
+            table.addCell(p.status());
+
+            String valorFormatado = (p.valor() != null) ? formatadorMoeda.format(p.valor()) : "R$ 0,00";
+            PdfPCell cellValor = new PdfPCell(new Phrase(valorFormatado));
+            cellValor.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            table.addCell(cellValor);
+
+            table.addCell(p.dataRevisao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+
+            // Tradução do tipo de ação (0, 1, 2)
+            String acao = switch(p.revisaoNumero()) {
+                case 0 -> "Adicionado";
+                case 1 -> "Editado";
+                case 2 -> "Removido";
+                default -> "Outro";
+            };
+            table.addCell(acao);
+        }
+
+        document.add(table);
+        document.close();
     }
 }
