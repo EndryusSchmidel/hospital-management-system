@@ -1,145 +1,57 @@
-
-.historico-conteudo {
-    padding: 20px;
-    border-radius: 20px;
-    border: 1px solid #e0e0e0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
+/* O Grid específico da Tela de Histórico */
+.historico-grid-layout {
+    display: grid;
+    /* Ação(160px) | Nome(flex) | Setor(150px) | Valor(150px) | Status(130px) */
+    grid-template-columns: 160px 1fr 150px 150px 130px;
+    align-items: center;
+    gap: 20px;
 }
 
-.historico-lista {
+/* =========================================
+    BORDAS E CORES DE AUDITORIA (ENVERS)
+========================================= */
+.rev-border-adicionado { border-left: 6px solid #10b981; } /* Verde */
+.rev-border-editado { border-left: 6px solid #f59e0b; }    /* Âmbar */
+.rev-border-removido { border-left: 6px solid #ef4444; }   /* Vermelho */
+
+.row-historico-acao {
     display: flex;
     flex-direction: column;
-    list-style: none;
+    gap: 6px;
 }
 
-.historico-item {
-    padding: 10px;
-    margin: 10px;
-    background-color: rgba(245, 222, 179, 0.389);
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-}
-
-.historico-item:hover {
-    transform: translateY(-4px); /* Eleva o card levemente */
-    border-color: #007bff; /* Muda a cor da borda para o azul padrão */
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* Sombra mais profunda ao "subir" */
-    background-color: #f8fbff; /* Um fundo azulado bem sutil */
-}
-
-/* Destaque para os títulos dentro do card no hover */
-.historico-item:hover strong {
-    color: #007bff;
-    transition: color 0.3s ease;
-}
-
-.historico-detalhe {
-    margin: 10px;
-}
-
-.titulo-secao {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.btn-atualizar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
+.badge-acao {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 10px;
     border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s ease;
+    display: inline-block;
+    width: fit-content;
+    letter-spacing: 0.5px;
 }
 
-.btn-atualizar:hover {
-    background-color: #e2e6ea;
-}
+.rev-bg-adicionado { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
+.rev-bg-editado { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.rev-bg-removido { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
 
-.btn-atualizar:disabled {
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-/* Animação de Giro */
-.girando svg {
-    animation: rodar 1s linear infinite;
-}
-
-@keyframes rodar {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-/* Container da Paginação */
-.paginacao-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-    font-family: sans-serif;
-    color: #444;
-}
-
-/* Estilo dos Botões */
-.paginacao-btn {
-    padding: 8px 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background-color: white;
-    color: #374151;
-    cursor: pointer;
+.historico-data {
+    font-size: 0.8rem;
+    color: var(--text-muted); 
     font-weight: 500;
-    transition: all 0.2s ease;
 }
 
-.paginacao-btn:hover:not(:disabled) {
-    background-color: #f3f4f6;
-    border-color: #9ca3af;
-}
-
-/* Estado Desabilitado (Quando não há página anterior/próxima) */
-.paginacao-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: #f9fafb;
-}
-
-/* Texto "Página X de Y" */
-.paginacao-texto {
-    font-size: 0.9rem;
-    color: #6b7280;
-    margin: 10px;
-}
-
-.btn-relatorio {
+.row-status-auditoria {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background-color: #4b5563; /* Um tom de cinza profissional */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    justify-content: flex-end;
 }
 
-.btn-relatorio:hover {
-    background-color: #374151;
-    transform: translateY(-2px);
-}
-
-.btn-relatorio:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+@media (max-width: 900px) {
+    .historico-grid-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
 }

@@ -1,214 +1,118 @@
-.patrimonios-container {
-    padding: 20px;
-    border-radius: 20px;
-    border: 1px solid #e0e0e0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
+/* Traz as variáveis globais se necessário (certifique-se de importar o GlobalStyles no projeto) */
+
+/* O Grid específico da Tela Principal */
+.patrimonio-grid-layout {
+    display: grid;
+    /* Coluna 1: flexível (1fr) | Coluna 2: 200px | Coluna 3: 150px | Coluna 4: 180px */
+    grid-template-columns: 1fr 200px 150px 180px;
+    align-items: center;
+    gap: 20px;
 }
 
-.patrimonio-item {
-    background-color: rgba(245, 222, 179, 0.389);
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 12px;
-    list-style: none;
-    transition: all 0.3s ease; /* Faz a transição ser suave */
+.row-actions-principal {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+/* =========================================
+    AÇÕES E DROPDOWN (Específico da Principal)
+========================================= */
+.action-menu-container {
+    position: relative; 
+}
+
+.action-menu-container:focus-within {
+    z-index: 100;
+}
+
+.btn-more-actions {
+    background: transparent;
+    border: none;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    color: var(--text-muted); 
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* O Efeito de Hover */
-.patrimonio-item:hover {
-    transform: translateY(-4px); /* Eleva o card levemente */
-    border-color: #007bff; /* Muda a cor da borda para o azul padrão */
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* Sombra mais profunda ao "subir" */
-    background-color: #f8fbff; /* Um fundo azulado bem sutil */
+.btn-more-actions:hover {
+    /* 🌙 Fundo sutil ao passar o mouse */
+    background-color: var(--hover-bg); 
+    color: var(--text-main);
 }
 
-/* Destaque para os títulos dentro do card no hover */
-.patrimonio-item:hover strong {
-    color: #007bff;
-    transition: color 0.3s ease;
+.smart-row-base:focus-within {
+    z-index: 100 !important;
 }
 
-.patrimonios-lista {
+.dropdown-menu {
+    position: absolute;
+    top: 35px;
+    right: 0;
+    background-color: var(--bg-card); 
+    border: 1px solid var(--border-color); 
+    box-shadow: var(--shadow-sm); 
+    border-radius: 8px;
+    width: 140px;
+    z-index: 1000;
     display: flex;
     flex-direction: column;
-    list-style: none;
+    overflow: visible;
+    animation: fadeInDown 0.15s ease-out;
+    z-index: 9999 !important;
 }
 
-.patrimonio-detalhe {
-    margin: 10px;
-}
-
-.titulo-secao {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.btn-atualizar {
+.dropdown-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s ease;
-}
-
-.btn-atualizar:hover {
-    background-color: #e2e6ea;
-}
-
-.btn-atualizar:disabled {
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-/* Animação de Giro */
-.girando svg {
-    animation: rodar 1s linear infinite;
-}
-
-@keyframes rodar {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.not-found {
-    font-size: 2em;
-    text-align: center;
-}
-
-.status-ativo { border-left: 5px solid #28a745; }      /* Verde */
-.status-manutencao { border-left: 5px solid #ffc107; } /* Amarelo */
-.status-inativo { border-left: 5px solid #dc3545; }    /* Vermelho */
-
-/* Estilização das etiquetas (Badges) em cima do nome */
-.badge-status {
-    font-size: 0.75rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-bottom: 5px;
-    display: inline-block;
-}
-
-.badge-ativo { background-color: #e8f5e9; color: #2e7d32; }
-.badge-manutencao { background-color: #fff8e1; color: #f57f17; }
-.badge-inativo { background-color: #ffebee; color: #c62828; }
-
-.search-bar {
-    position: relative;
-    display: flex;
-    align-items: center;
-    overflow: hidden; /* Esconde o texto que sai da barra */
-    background: white;
-    border-radius: 20px;
-    padding: 5px 15px;
-    border: 1px solid #ccc;
-}
-
-.marquee-container {
-    position: absolute;
-    left: 40px; /* Distância do ícone de lupa */
-    right: 10px;
-    overflow: hidden;
-    pointer-events: none; /* Deixa clicar no input através do texto */
-    white-space: nowrap;
-}
-
-.marquee-text {
-    display: inline-block;
-    color: #999;
-    font-size: 14px;
-    padding-left: 100%; /* Começa fora da visualização */
-    animation: marquee-animation 10s linear infinite;
-}
-
-@keyframes marquee-animation {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-}
-
-.search-bar input {
-    background: transparent; /* Importante para ver o texto atrás */
-    border: none;
-    outline: none;
+    gap: 10px;
     width: 100%;
-    z-index: 2; /* Fica por cima para você conseguir digitar */
-    position: relative;
-    margin-left: 10px;
-}
-
-/* Classe Utilitária para dados do Patrimônio */
-.dado-destaque {
-    text-transform: uppercase;
-    font-weight: 400;
-    color: #000000; /* Um cinza escuro profissional */
-    font-family: 'monospace'; /* Opcional: dá um ar de "código de etiqueta" */
-    font-size: 0.95rem;
-}
-
-/* Estilo dos Botões */
-.paginacao-btn {
-    padding: 8px 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background-color: white;
-    color: #374151;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.paginacao-btn:hover:not(:disabled) {
-    background-color: #f3f4f6;
-    border-color: #9ca3af;
-}
-
-/* Estado Desabilitado (Quando não há página anterior/próxima) */
-.paginacao-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: #f9fafb;
-}
-
-/* Texto "Página X de Y" */
-.paginacao-texto {
-    font-size: 0.9rem;
-    color: #6b7280;
-    margin: 10px;
-}
-
-.btn-relatorio {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background-color: #4b5563; /* Um tom de cinza profissional */
-    color: white;
+    padding: 10px 15px;
+    background: transparent;
     border: none;
-    border-radius: 8px;
+    text-align: left;
+    font-size: 0.9rem;
+    color: var(--text-muted); 
     cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.btn-relatorio:hover {
-    background-color: #374151;
-    transform: translateY(-2px);
+.dropdown-item:hover {
+    background-color: #f8fafc;
+    color: #0f172a;
 }
 
-.btn-relatorio:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.dropdown-item.delete:hover {
+    /* Vermelho de exclusão fica bem em ambos os temas, mas pode usar um vermelho suave no hover */
+    background-color: rgba(239, 68, 68, 0.1); 
+    color: #ef4444; 
+}
+
+.dropdown-item.delete:hover svg {
+    color: #dc2626;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+    .patrimonio-grid-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .row-actions-principal {
+        width: 100%;
+        justify-content: space-between;
+    }
 }

@@ -1,12 +1,17 @@
 package com.example.schmidel.projeto_hospital.services;
 
-import com.example.schmidel.projeto_hospital.controllers.PatrimonioController;
 import com.example.schmidel.projeto_hospital.dto_auditoria.PatrimonioRecordDtoAuditoria;
 import com.example.schmidel.projeto_hospital.dtos.PatrimonioRecordDto;
 import com.example.schmidel.projeto_hospital.models.PatrimonioModel;
 import com.example.schmidel.projeto_hospital.repositories.PatrimonioRepository;
-import com.lowagie.text.*;
+import com.lowagie.text.Document;
+import com.lowagie.text.Element;
 import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import io.jsonwebtoken.io.IOException;
@@ -15,7 +20,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
-import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -23,20 +27,19 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import java.awt.*;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Stream;
-import com.lowagie.text.*;
-import com.lowagie.text.pdf.*;
-import jakarta.servlet.http.HttpServletResponse;
-import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 @Transactional
 @Service

@@ -1,6 +1,8 @@
 import "./PatrimonioModal.css";
 import React, { useEffect, useState } from 'react';
 import api from "../../../services/api";
+import { toast } from 'react-toastify';
+
 
 const PatrimonioModal = ({ data, isOpen, onClose, onPatrimonioSalvo }) => {
     // Estado inicial do formulário (vazio)
@@ -26,31 +28,49 @@ const PatrimonioModal = ({ data, isOpen, onClose, onPatrimonioSalvo }) => {
     };
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    try {
-        let response;
+        e.preventDefault();
         
-        // Se existe idPatrimonio, usamos o método PUT (Editar)
-        if (formData.idPatrimonio) {
-            response = await api.put(`/patrimonios/${formData.idPatrimonio}`, formData);
-        } else {
-            // Se não tem ID, é um novo cadastro (Criar)
-            response = await api.post(`/patrimonios`, formData);
-        }
+        try {
+            let response;
+            
+            if (formData.idPatrimonio) {
+                response = await api.put(`/patrimonios/${formData.idPatrimonio}`, formData);
+            } else {
+                response = await api.post(`/patrimonios`, formData);
+            }
 
-        if (response.status === 201 || response.status === 200) {
-            // alert(formData.idPatrimonio ? "Alterações salvas!" : "Patrimônio cadastrado!");
-            if (onPatrimonioSalvo) onPatrimonioSalvo();
-            onClose();
-            // Reset completo incluindo o valor
-            setFormData({ name: '', marca: '', etiqueta: '', setor: '', status: 'ativo', valor: '' });
+            // Sucesso!
+            if (response.status === 201 || response.status === 200) {
+                if (onPatrimonioSalvo) onPatrimonioSalvo();
+                onClose();
+                // Reset completo
+                setFormData({ name: '', marca: '', etiqueta: '', setor: '', status: 'ativo', valor: '' });
+            }
+
+        } catch (error) {
+            console.error("DEBUG Backend Error: ", error.response); // Útil para você olhar no F12
+
+            // Captura a mensagem exata que o Spring Boot enviou
+            let mensagemBackend = "Erro ao conectar com o servidor.";
+
+            if (error.response && error.response.data) {
+                // Verifica se o Spring enviou como { message: "Etiqueta duplicada" }
+                if (error.response.data.message) {
+                    mensagemBackend = error.response.data.message;
+                } 
+                // Verifica se o Spring enviou apenas a string direta "Etiqueta duplicada"
+                else if (typeof error.response.data === 'string') {
+                    mensagemBackend = error.response.data;
+                }
+            }
+
+            // Exibe o erro focado e real
+            toast.error(mensagemBackend);
+            
+            // NOTA: Não chamamos onClose() aqui. 
+            // O modal continua aberto com os dados preenchidos para o usuário corrigir a etiqueta e tentar salvar de novo.
         }
-    } catch (error) {
-        console.error("Erro na operação: ", error);
-        alert(error.response?.data?.message || "Erro ao conectar com o servidor");
-    }
-};
+    };
 
     return (
         <div className="modal-overlay">

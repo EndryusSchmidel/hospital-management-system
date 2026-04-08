@@ -1,142 +1,274 @@
+/* Fonte global moderna (Inter ou Segoe UI) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* Remove qualquer espaço padrão que o navegador coloca */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  
 }
 
+/* =========================================
+    ESTRUTURA PRINCIPAL (Sincronizada com Sidebar)
+========================================= */
 .dashboard-container {
-  display: flex;             /* Sidebar e Main ficam um ao lado do outro */
-  min-height: 100vh;         /* Ocupa a altura toda da tela */
-  background-color: #f4f7f6; /* O cinza claro idêntico ao da imagem */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    min-height: 100vh;
+    align-items: stretch; /* Isso força a sidebar a ter a mesma altura do conteúdo */
+    background-color: var(--bg-body); 
+    font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
+    color: var(--text-main); 
+    overflow-x: hidden; /* Evita que a página role para os lados no mobile */
 }
-
 
 .main-content {
-  flex: 1;                   /* Ocupa todo o resto do espaço disponível */
-  padding: 25px;             /* Espaço para o conteúdo não grudar nas bordas */
-  display: flex;
-  flex-direction: column;    /* Coloca Header, Cards e Gráficos um embaixo do outro */
-  gap: 20px;                 /* Espaço entre os blocos de conteúdo */
+    flex: 1; 
+    width: 0; 
+    padding: 32px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    overflow-y: auto;
 }
 
-.logo-area {
-  padding: 20px;
+.fade-in {
+  animation: contentFadeIn 0.5s ease-out;
+}
+
+@keyframes contentFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+    MEDIA QUERIES - RESPONSIVIDADE DO MAIN
+========================================= */
+@media (max-width: 900px) {
+    .main-content {
+        padding: 80px 20px 20px 20px; /* Topo maior (80px) para dar espaço ao botão Hambúrguer fixo no mobile */
+        gap: 20px;
+        width: 100%; /* No mobile, a Sidebar sai do fluxo (fixed), então o main pega 100% */
+    }
+
+    /* O cabeçalho interno da página que contém Título e Botão Adicionar */
+    .dashboard-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .btn-add-patrimonio {
+        width: 100%; /* Botão ocupa a largura toda no celular para facilitar clique */
+        justify-content: center;
+    }
+
+    /* Os KPI Cards viram 2 colunas no tablet e 1 no celular */
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .kpi-grid {
+        grid-template-columns: 1fr !important; /* 1 card por linha no celular */
+    }
+    
+    .charts-grid {
+        grid-template-columns: 1fr !important; /* Gráficos ficam empilhados */
+    }
+}
+
+/* Animação suave de entrada */
+.fade-in {
+  animation: contentFadeIn 0.5s ease-out;
+}
+
+@keyframes contentFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+    CABEÇALHO DA PÁGINA E BOTÃO (NOVO)
+========================================= */
+.dashboard-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main); 
+  letter-spacing: -0.025em;
+}
+
+.page-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted); 
+  margin-top: 4px;
+}
+
+.btn-add-patrimonio {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: #0076a8; /* Azul escuro */
-  font-size: 22px;
+  gap: 8px;
+  padding: 12px 20px;
+  background-color: #0ea5e9; /* Azul Premium (Sky Blue 500) */
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 12px; /* Arredondamento SaaS */
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.2), 0 2px 4px -2px rgba(14, 165, 233, 0.2);
+  transition: all 0.2s ease;
 }
 
-.logo-area i {
-  color: #00acc1; /* Azul claro do ícone */
+.btn-add-patrimonio:hover {
+  background-color: #0284c7; /* Azul um tom mais escuro */
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.3), 0 4px 6px -4px rgba(14, 165, 233, 0.3);
 }
 
-.logo-text {
-  font-weight: bold;
-}
-
-/* Fundo escurecido atrás do modal */
+/* =========================================
+    MODAL PREMIUM (GLASSMORPHISM SUAVE)
+========================================= */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Efeito de sombra */
+  background: rgba(15, 23, 42, 0.4); /* Backdrop blur ficaria lindo aqui: backdrop-filter: blur(4px); */
+  backdrop-filter: blur(4px); /* Efeito de vidro desfocado */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 
-/* Caixa do Modal */
 .modal-content {
-  background: white;
-  width: 500px;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease;
+  background: #ffffff;
+  width: 100%;
+  max-width: 550px;
+  padding: 32px;
+  border-radius: 16px; /* Borda bem arredondada */
+  /* Sombra profunda para destacar do fundo */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScaleUp {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f3f4f6; /* Linha ultra suave */
+  padding-bottom: 16px;
+}
+
+.modal-header h3 {
+  font-size: 1.25rem;
+  color: #111827;
+  font-weight: 600;
 }
 
 .close-btn {
-  background: none;
+  background: #f3f4f6;
   border: none;
-  font-size: 24px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
   cursor: pointer;
-  color: #888;
+  color: #6B7280;
+  transition: all 0.2s ease;
 }
 
-/* Formulário */
-.modal-form { display: flex; flex-direction: column; gap: 15px; }
+.close-btn:hover {
+  background: #fee2e2;
+  color: #ef4444; /* Fica vermelho suave ao passar o mouse */
+}
 
-.form-group { display: flex; flex-direction: column; gap: 5px; }
+/* =========================================
+    INPUTS DO FORMULÁRIO (SaaS)
+========================================= */
+.modal-form { display: flex; flex-direction: column; gap: 18px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; flex: 1;}
+.form-group-row { display: flex; gap: 16px; }
 
-.form-group-row { display: flex; gap: 15px; }
-
-.form-group label { font-size: 13px; font-weight: 600; color: #444; }
+.form-group label { 
+  font-size: 0.85rem; 
+  font-weight: 600; 
+  color: #4b5563; 
+}
 
 .form-group input, .form-group select {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  border-radius: 8px;
   outline: none;
+  font-size: 0.95rem;
+  color: #111827;
+  transition: all 0.2s ease;
 }
 
-/* Rodapé e Botões */
+/* Efeito Glow azul quando o usuário foca no input */
+.form-group input:focus, .form-group select:focus {
+  border-color: #0ea5e9;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+}
+
+/* =========================================
+    RODAPÉ E BOTÕES DO MODAL
+========================================= */
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #f3f4f6;
 }
 
 .btn-save { 
-  background: #0076a8;
+  background: #0ea5e9;
   color: white; 
+  font-weight: 600;
   border: none; 
-  padding: 10px 20px; 
-  border-radius: 6px; 
+  padding: 10px 24px; 
+  border-radius: 8px; 
   cursor: pointer; 
+  transition: background-color 0.2s ease;
 }
+
+.btn-save:hover { background: #0284c7; }
+
 .btn-cancel { 
-  background: #eee; 
-  color: #555; 
-  border: none; 
-  padding: 10px 20px; 
-  border-radius: 6px; 
+  background: #ffffff; 
+  color: #4b5563; 
+  font-weight: 600;
+  border: 1px solid #d1d5db; 
+  padding: 10px 24px; 
+  border-radius: 8px; 
   cursor: pointer; 
+  transition: all 0.2s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.btn-add-patrimonio {
-  padding: 10px 15px;
-  background-color: #0076a8;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn-add-patrimonio:hover {
-    transform: translateY(-5px);
-    /* Dá um pulinho para cima */
-    filter: brightness(1.2);
+.btn-cancel:hover { 
+  background: #f3f4f6; 
+  color: #111827;
 }

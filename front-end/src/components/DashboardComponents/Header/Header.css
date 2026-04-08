@@ -1,10 +1,26 @@
 .main-header {
     display: flex;
     justify-content: space-between;
-    /* Links de um lado, busca do outro */
     align-items: center;
     padding: 10px 0;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Botão Mobile escondido no Desktop */
+.header-mobile-menu {
+    display: none;
+    background: transparent;
+    border: none;
+    color: #475569;
+    cursor: pointer;
+    padding: 5px;
 }
 
 /* Links do Header */
@@ -15,23 +31,15 @@
     font-size: 14px;
 }
 
-.header-menu span {
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.header-menu span:hover {
-    color: #0076a8;
-}
-
+.header-menu span { cursor: pointer; transition: 0.2s; }
+.header-menu span:hover { color: #0076a8; }
 .active-link {
     color: #444;
     font-weight: 600;
     border-bottom: 2px solid #0076a8;
-    /* Aquela linha embaixo do "Gestão" */
 }
 
-/* Lado Direito (Busca e Avatar) */
+/* Lado Direito */
 .header-right {
     display: flex;
     align-items: center;
@@ -39,26 +47,86 @@
 }
 
 .search-box {
-    background-color: #eee;
+    background-color: #f1f5f9;
     padding: 8px 15px;
     border-radius: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
+    border: 1px solid #e2e8f0;
 }
 
 .search-box input {
     border: none;
     background: transparent;
     outline: none;
-    color: #666;
-    width: 200px;
+    color: #64748b;
+    width: 180px;
 }
 
-.icon-btn {
-    color: #888;
+.icon-btn { 
+    color: var(--text-main); 
     font-size: 18px;
     cursor: pointer;
+}
+
+.search-box {
+    background-color: var(--bg-card);
+    color: var(--text-main); 
+}
+
+/* ... (Mantenha o CSS do profile-img e profile-dropdown originais aqui) ... */
+
+/* =========================================
+    RESPONSIVIDADE HEADER (Mobile)
+========================================= */
+@media (max-width: 900px) {
+
+    .main-content {
+        padding-top: 10px;
+    }
+
+    .main-header {
+        padding: 15px 10px; /* Mais respiro nas laterais no mobile */
+        margin-bottom: 10px;
+    }
+
+    .header-mobile-menu {
+        display: block; /* Mantém o Hambúrguer para o Sidebar */
+        font-size: 24px;
+        background: #0095ff15; /* Um leve fundo azul para o botão */
+        color: #0095ff;
+        border-radius: 8px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .header-menu {
+        display: none; /* Esconde os links (Feed, Agenda...) */
+    }
+
+    /* ESCONDE A BUSCA DO HEADER NO MOBILE */
+    /* Como você já tem uma busca na página (veja sua imagem 5), 
+       duas buscas na mesma tela mobile poluem o visual. */
+    .search-box {
+        display: none !important; 
+    }
+
+    .header-right {
+        gap: 12px;
+    }
+
+    /* Ajuste do Sino de Notificação */
+    .icon-btn {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .profile-dropdown {
+        right: -10px; /* Ajusta para não colar na borda da tela */
+        width: 160px; /* Um pouco mais estreito para telas pequenas */
+    }
 }
 
 /* Essencial para o menu não quebrar o layout */
@@ -96,7 +164,7 @@
     width: 180px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 1px solid #eee;
+    border: 1px solid var(--border-color);
     z-index: 999;
     padding: 10px 0;
 }
@@ -144,4 +212,20 @@
 .logout-option {
     color: #d9534f !important;
     font-weight: 600;
+}
+
+/* Darkmode */
+
+.profile-dropdown {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+.dropdown-user-info strong {
+    color: var(--text-main);
+}
+.dropdown-user-info small, .header-menu {
+    color: var(--text-muted);
+}
+.profile-dropdown li:hover {
+    background-color: var(--hover-bg);
 }

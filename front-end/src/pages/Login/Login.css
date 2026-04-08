@@ -1,10 +1,9 @@
 .login-screen-wrapper {
-    /* Faz a div ocupar a tela toda */
     width: 100vw;
     min-height: 100vh;
     
     /* Aplica o fundo aqui */
-    background-image: url(../../assets/hospital.jpg);
+    background-image: url(../../assets/login.png);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -23,18 +22,23 @@
     border-radius: 30px 30px 30px 30px;
     padding: 40px;
     border: 2px rgba(0, 0, 0, 0.211) solid;
-    box-shadow: 1px 0px 20px 13px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 0px 10px 5px rgba(0, 0, 0, 0.35);
 }
 
 
-.titulo {
+.titulo{
     display: block;
     margin: 10px auto;
     text-align: center;
+        color: var(--text-main); 
+
 }
 
 .input-email {
     padding: 10px;
+    background-color: var(--bg-body); 
+    border: 1px solid var(--border-color);
+    color: var(--text-main); 
     margin: 7px 10px 10px 5px;
     border-radius: 5px;
     border-style: none;
@@ -47,12 +51,42 @@
     border-radius: 5px;
     border-style: none;
     width: 100%;
+    background-color: var(--bg-body); 
+    border: 1px solid var(--border-color);
+    color: var(--text-main); 
 }
+
+.container input:focus {
+    border-color: #0ea5e9;
+    background-color: var(--bg-card);
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+}
+
+.lembrar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.forget-password {
+    color: #0ea5e9;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.forget-password:hover { text-decoration: underline; }
+
 
 .recall-forget {
     display: flex;
     justify-content: space-between;
-    padding: 5px;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    /* 🌙 Cor dos links menores */
+    color: var(--text-muted); 
 }
 /* 
 .forget-password {
@@ -80,6 +114,7 @@
     transform: scale(1.03); /* Aumenta o tamanho em 3% */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Adiciona uma sombra suave */
     filter: brightness(1.5); /* Dá um brilho leve na cor */
+    background-color: #0285c796;
 }
 
 
@@ -91,8 +126,7 @@
 .guest-access-card {
     margin-top: 20px;
     padding: 15px;
-    background-color: #f0f7ff; /* Azul hospitalar bem claro */
-    border: 1px solid #cce3ff;
+    background-color: #f0f7ff00; /* Azul hospitalar bem claro */
     border-radius: 8px;
     text-align: center;
 }
@@ -128,4 +162,39 @@
 .btn-auto-fill:hover {
     background-color: #004494;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Container da mensagem de erro */
+.error-message-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #dc3545; /* Vermelho padrão de erro */
+    background-color: #fff5f5; /* Fundo levemente avermelhado */
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: -5px; /* Aproxima dos inputs */
+    margin-bottom: 15px;
+    margin-left: 15px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid #ffcccc;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Feedback visual nos inputs quando houver erro */
+.input-error {
+    border-color: #dc3545 !important;
+    background-color: #fffafa !important;
+}
+
+/* Animação suave para o erro aparecer */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ajuste no botão entrar para dar espaço */
+.button-enter {
+    margin-top: 10px;
 }

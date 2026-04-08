@@ -1,74 +1,79 @@
-.kpi-container-bg {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    margin-bottom: 25px;
-}
-
-/* O container que segura os 4 cards */
+/* O grid agora cuida de todo o espaçamento */
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    /* Divide em 4 colunas iguais */
-    gap: 15px;
-    /* Espaço entre os cards */
+    gap: 24px; /* Mais respiro entre os cards */
+    margin-bottom: 24px;
 }
 
-/* Estilo base de todos os cards */
+/* Novo visual do Card (SaaS Premium) */
 .kpi-card {
-    padding: 15px;
-    border-radius: 4px;
-    /* Pontas levemente arredondadas como na imagem */
-    color: white;
+    background-color: var(--bg-card); 
+    padding: 24px;
+    border-radius: 16px; /* Bordas bem arredondadas */
+    box-shadow: var(--shadow-sm); 
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 90px;
-    transition: transform 0.2s;
-    cursor: pointer;
+    border: 1px solid var(--border-color); 
+    transition: all 0.3s ease;
 }
 
-/* Efeito de hover profissional nos cards */
+
+.shadow-md {
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
 .kpi-card:hover {
-    transform: translateY(-5px);
-    /* Dá um pulinho para cima */
-    filter: brightness(1.1);
+    transform: translateY(-4px);
 }
 
-/* Variações de cores idênticas à imagem */
-.kpi-card.total {
-    background-color: #003e8a;
-}
-
-.kpi-card.valor-total {
-    background-color: #119600;
-}
-
-.kpi-card.inativos {
-    background-color: #8a0000;
-}
-
-.kpi-card.ativos {
-    background-color: #0076a8;
-}
-
-/* Textos dentro do card */
-.kpi-content h2 {
-    font-size: 22px;
-    margin-bottom: 2px;
-}
-
+/* A Regra: "O Número é Rei" */
 .kpi-content p {
-    font-size: 11px;
-    opacity: 0.9;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted); 
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    margin-bottom: 6px;
 }
 
-/* Ícones dentro do card */
-.kpi-card i {
-    font-size: 24px;
-    opacity: 0.8;
-    /* Deixa o ícone mais discreto no fundo */
+.kpi-content h2 {
+    font-size: 2rem; /* Número Gigante */
+    font-weight: 700;
+    color: var(--text-main); 
+    line-height: 1;
+}
+
+/* Base do fundo do ícone */
+.kpi-icon-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Cores específicas com fundo translúcido e ícone forte */
+.total-icon {
+    background-color: #e0f2fe; /* Azul clarinho */
+    color: #0ea5e9; /* Azul forte */
+}
+
+.ativos-icon {
+    background-color: #d1fae5; /* Verde clarinho */
+    color: #10b981; /* Verde forte */
+}
+
+.inativos-icon {
+    background-color: #fee2e2; /* Vermelho clarinho */
+    color: #ef4444; /* Vermelho forte */
+}
+
+.valor-icon {
+    background-color: #e0e7ff; /* Indigo/Roxo clarinho */
+    color: #6366f1; /* Indigo forte */
 }

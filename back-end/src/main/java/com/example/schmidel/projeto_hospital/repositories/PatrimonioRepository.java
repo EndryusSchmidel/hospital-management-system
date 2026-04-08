@@ -9,14 +9,13 @@ import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface PatrimonioRepository extends
         JpaRepository<PatrimonioModel, UUID>,
         RevisionRepository<PatrimonioModel, UUID, Integer> {
+
     @Query("""
     SELECT p FROM PatrimonioModel p
     WHERE (:status IS NULL OR :status = '' OR LOWER(p.status) = LOWER(:status))
@@ -25,11 +24,12 @@ public interface PatrimonioRepository extends
         LOWER(p.name) LIKE LOWER(CONCAT('%', :busca, '%')) OR
         LOWER(p.marca) LIKE LOWER(CONCAT('%', :busca, '%')) OR
         LOWER(p.etiqueta) LIKE LOWER(CONCAT('%', :busca, '%')) OR
-        LOWER(p.setor) LIKE LOWER(CONCAT('%', :busca, '%'))
+        LOWER(REPLACE(p.setor, '_', ' ')) LIKE LOWER(CONCAT('%', REPLACE(:busca, '_', ' '), '%'))
     )
-""")
+    """)
     Page<PatrimonioModel> buscarComFiltro(
             @Param("status") String status,
             @Param("busca") String busca,
             Pageable pageable
-    );}
+    );
+}

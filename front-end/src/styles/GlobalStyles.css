@@ -1,0 +1,565 @@
+/* =========================================
+    SISTEMA DE TEMAS (LIGHT / DARK)
+========================================= */
+:root {
+    /* TEMA CLARO (Padrão) */
+    --bg-body: #F9FAFB;        /* Fundo da tela */
+    --bg-card: #ffffff;        /* Fundo dos cards, tabelas, modais, sidebar */
+    --text-main: #111827;      /* Textos principais (Títulos, Nomes) */
+    --text-muted: #6b7280;     /* Textos secundários (Labels, Subtítulos) */
+    --border-color: #e5e7eb;   /* Linhas de divisão */
+    --hover-bg: #f1f5f9;       /* Fundo ao passar o mouse */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.dark {
+    /* TEMA ESCURO (SaaS Premium) */
+    --bg-body: #0f172a;        /* Azul bem escuro (Slate 900) */
+    --bg-card: #1e293b;        /* Azul escuro pros cards (Slate 800) */
+    --text-main: #f8fafc;      /* Texto quase branco (Slate 50) */
+    --text-muted: #94a3b8;     /* Texto cinza claro (Slate 400) */
+    --border-color: #334155;   /* Bordas escuras (Slate 700) */
+    --hover-bg: #334155;       /* Fundo hover escuro */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Aplica as variáveis globalmente na raiz da página */
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Força os títulos principais a seguirem a cor do tema */
+h1, h2, h3, h4, h5, h6, strong {
+    color: var(--text-main);
+}
+
+/* =========================================
+    ESTRUTURAS GERAIS DE LISTA
+========================================= */
+.list-container {
+    padding: 0;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    margin-top: 10px;
+    overflow: visible !important;
+}
+
+.smart-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; 
+    list-style: none;
+    padding: 0;
+    overflow: visible !important;
+}
+
+/* Base da Linha (Sem o Grid, pois o Grid muda por tela) */
+.smart-row-base {
+    background-color: var(--bg-card);
+    border-bottom: var(--border-color);
+    border-radius: 12px;
+    padding: 16px 24px;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    position: relative; 
+    overflow: visible !important; 
+    z-index: 1;
+}
+
+.smart-row-base:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+    border-color: var(--border-color);
+    transform: translateY(-2px);
+    z-index: 10;
+}
+
+/* =========================================
+    TIPOGRAFIA E DADOS DA LINHA
+========================================= */
+.row-main-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.item-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.item-sub-info {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.item-etiqueta {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #f3f4f6;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #4b5563;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.meta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.meta-label {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
+}
+
+.meta-value {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+/* Colunas fixas genéricas */
+.campo-setor .meta-value {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.campo-valor {
+    text-align: right;
+    justify-self: end;
+}
+
+.highlight-valor {
+    color: #0284c7;
+    font-weight: 700;
+}
+
+/* =========================================
+    BADGES DE STATUS E BORDAS LATERAIS
+========================================= */
+.badge-pill {
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    text-align: center;
+}
+
+/* Cores universais de Status */
+.status-ativo { border-left: 6px solid #10b981; }      
+.status-manutencao { border-left: 6px solid #f59e0b; } 
+.status-inativo { border-left: 6px solid #ef4444; }    
+
+.badge-ativo { background-color: #d1fae5; color: #065f46; }
+.badge-manutencao { background-color: #fef3c7; color: #92400e; }
+.badge-inativo { background-color: #fee2e2; color: #991b1b; }
+
+/* =========================================
+    CABEÇALHO DA SEÇÃO E BOTÕES GERAIS
+========================================= */
+.titulo-secao {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 24px; /* Aumentado para dar mais respiro */
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color); 
+
+}
+
+.titulo-secao h1, 
+.titulo-secao h2 {
+    font-size: 1.75rem; /* 🚀 TÍTULO GRANDE E IMPONENTE */
+    font-weight: 700;
+    /* 🌙 Cor do texto adapta ao tema (Preto no Claro, Branco no Escuro) */
+    color: var(--text-main); 
+    letter-spacing: -0.025em; /* Deixa a fonte mais unida e moderna */
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+/* Padronização dos Botões de Ação do Header */
+.btn-relatorio, .btn-atualizar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+/* Relatório (Ação Principal da Lista) */
+.btn-relatorio {
+    background-color: #4b5563;
+    color: white;
+}
+.btn-relatorio:hover {
+    background-color: #374151;
+    transform: translateY(-2px);
+}
+
+/* Atualizar (Ação Secundária) */
+.btn-atualizar {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+.btn-atualizar:hover {
+    background-color: #e2e8f0;
+    color: #1e293b;
+    transform: translateY(-2px);
+}
+.btn-atualizar:disabled, .btn-relatorio:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.girando svg {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* =========================================
+    SEARCH BAR
+========================================= */
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: white;
+    border-radius: 20px;
+    padding: 8px 16px;
+    margin-bottom: 10px;
+    border: 1px solid #e2e8f0;
+    width: 200px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    z-index: 2;
+    position: relative;
+    margin-left: 10px;
+    color: #1e293b;
+}
+
+.marquee-container {
+    position: absolute;
+    left: 40px;
+    right: 10px;
+    overflow: hidden;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.marquee-text {
+    display: inline-block;
+    color: #94a3b8;
+    font-size: 14px;
+    padding-left: 100%;
+    animation: marquee-animation 12s linear infinite;
+}
+
+@keyframes marquee-animation {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+/* =========================================
+    PAGINAÇÃO E EMPTY STATE
+========================================= */
+.paginacao {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.paginacao-btn {
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: white;
+    color: #374151;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.paginacao-btn:hover:not(:disabled) {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+}
+.paginacao-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f9fafb;
+}
+.paginacao-texto {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0 15px;
+    font-weight: 500;
+}
+
+.empty-state-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    background-color: var(--bg-card);
+    border: 2px dashed #e2e8f0;
+    border-color: var(--border-color);
+    border-radius: 12px;
+    margin: 20px 0;
+    color: #64748b;
+}
+
+.empty-state-icon {
+    color: #cbd5e1;
+    margin-bottom: 20px;
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-state-container h3 {
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.empty-state-container p {
+    font-size: 0.95rem;
+    max-width: 300px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+.btn-empty-state {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-empty-state:hover {
+    background-color: #e2e8f0;
+    color: #1e293b;
+}
+
+/* =========================================
+    TRANSFORMAÇÃO DE LINHA PARA CARD (MOBILE)
+========================================= */
+@media (max-width: 900px) {
+    /* Ajusta o Cabeçalho da Seção e a Busca */
+    .titulo-secao {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        border-bottom: none; /* Remove a linha no mobile para poupar espaço */
+    }
+
+    .titulo-secao h1, 
+    .titulo-secao h2 {
+        font-size: 1.5rem; /* Ajusta levemente para não quebrar a tela no celular */
+    }
+
+    .inventory-actions {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* A barra de pesquisa ocupa 100% da tela */
+    .search-bar {
+        width: 100%;
+    }
+
+    /* Botões Atualizar e Relatório dividem a tela 50/50 */
+    .button-group {
+        display: flex;
+        width: 100%;
+        gap: 10px;
+    }
+    .btn-relatorio, .btn-atualizar {
+        flex: 1;
+        justify-content: center; /* Centraliza o texto e o ícone */
+    }
+
+    /* Quebra o Grid das Tabelas (Patrimônio e Histórico) */
+    .patrimonio-grid-layout, 
+    .historico-grid-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+        gap: 12px;
+        overflow: visible !important; /* Permite que o menu "saia" do card */
+        position: relative; /* Mantém o alinhamento do dropdown */
+    }
+
+    /* Campos de metadados viram linhas de detalhes no card */
+    .campo-setor, .campo-valor {
+        width: 100%;
+        display: flex;
+        flex-direction: row; /* Coloca Lado a Lado */
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px dashed #f1f5f9;
+        padding-bottom: 8px;
+    }
+
+    /* Tira o alinhamento à direita do desktop e ajusta a fonte */
+    .campo-valor {
+        text-align: right;
+    }
+
+    /* Linha divisória antes dos botões de ação e status */
+    .row-actions-principal, 
+    .row-status-auditoria {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 8px;
+        padding-top: 12px;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    /* Coluna de Ação do Histórico (Adicionado/Removido) */
+    .row-historico-acao {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+}
+
+/* --- AJUSTE GLOBAL DO TOAST PARA MOBILE --- */
+@media (max-width: 768px) {
+    /* Container que envolve todos os toasts */
+    .Toastify__toast-container {
+        width: 70% !important;
+        max-width: 380px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        top: 15px !important;
+        padding: 0 !important; /* Remove excesso de lateral */
+    }
+
+    /* O card do Toast individual */
+    .Toastify__toast {
+        min-height: 50px !important; /* Menos altura */
+        margin-bottom: 10px !important;
+        border-radius: 12px !important; /* Bordas mais suaves */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* O corpo do texto dentro do Toast */
+    .Toastify__toast-body {
+        padding: 8px 12px !important;
+        font-size: 0.85rem !important; /* Fonte legível mas compacta */
+        font-weight: 600 !important;
+        align-items: center !important;
+    }
+
+    /* Ajuste do ícone (Check/Erro) */
+    .Toastify__toast-icon {
+        width: 18px !important;
+        margin-inline-end: 8px !important;
+    }
+}
+
+/* darkmode */
+/* Onde estava background-color: #ffffff; Mude para: */
+.smart-row-base, .empty-state-container, .search-bar {
+}
+
+/* Onde estava color: #111827; Mude para: */
+.item-name, .meta-value {
+    color: var(--text-main);
+}
+
+/* Onde estava color: #6b7280; Mude para: */
+.item-sub-info, .meta-label, .paginacao-texto {
+    color: var(--text-muted);
+}
+
+/* =========================================
+    CORREÇÃO SWEETALERT2 (BOTÕES INVISÍVEIS)
+========================================= */
+
+/* Força a cor do texto e fundo da modal */
+.swal2-popup {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border-radius: 15px !important;
+}
+
+/* Garante que o texto de confirmação apareça */
+.swal2-title, .swal2-html-container {
+    color: var(--text-main) !important;
+}
+
+/* ESTILIZAÇÃO DOS BOTÕES */
+.swal2-confirm {
+    background-color: #3b82f6 !important; /* Azul padrão */
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 10px 24px !important;
+}
+
+.swal2-cancel {
+    background-color: #ef4444 !important; /* Vermelho para cancelar/excluir */
+    color: white !important;
+    font-weight: 600 !important;
+    margin-right: 10px !important;
+}
+
+.swal2-cancel:hover {
+    filter: brightness(0.9);
+}
+
+/* Hover para os botões não ficarem "mortos" */
+.swal2-confirm:hover {
+    filter: brightness(0.9);
+}

@@ -26,6 +26,13 @@ const InventoryTable = ({ data, onEdit, onDelete, onVerHistorico}) => {
         return "#666";
     };
 
+    const formatarTexto = (str) => {
+    if (!str) return "";
+    return str
+        .replace(/_/g, ' ') // Troca underline por espaço
+        .replace(/\b\w/g, (l) => l.toUpperCase()); // Primeira letra de cada palavra em Maiúsculo
+    };
+
     return (
         <section className="inventory-section">
             <div className="inventory-header">
@@ -48,54 +55,55 @@ const InventoryTable = ({ data, onEdit, onDelete, onVerHistorico}) => {
                     </div>
                 </div>
             </div>
-
-            <table className="inventory-table">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Marca</th>
-                        <th>Etiqueta</th>
-                        <th>Setor</th>
-                        <th>Status</th>
-                        <th style={{ paddingLeft: '20px'}}>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {/* Pegamos os filtrados, invertemos para ver os últimos e limitamos a 5 */}
-                    {dadosFiltrados.slice().reverse().slice(0, 5).map((p) => (
-                        <tr key={p.idPatrimonio}>
-                            <td className="patrimonio-destaque">{p.name}</td>
-                            <td className="patrimonio-destaque">{p.marca}</td>
-                            <td className="col-etiqueta">
-                                <span className="tag-patrimonio tag-etiqueta">{p.etiqueta}</span>
-                            </td>
-                            <td className="col-setor" >
-                                <span className="tag-patrimonio tag-setor">{p.setor}</span>
-                            </td>
-                            <td>
-                                <strong style={{ color: getStatusColor(p.status), 
-                                textTransform: "capitalize"
-                                }}>
-                                    {p.status || "Ativo"}
-                                </strong>
-                            </td>
-                            <td>
-                                <div className="action-buttons">
-                                    <button className="btn-acoes-revisao" onClick={() => onVerHistorico(p.idPatrimonio)} title="Ver Histórico">
-                                        <i className="fa-solid fa-clock-rotate-left"></i>
-                                    </button>
-                                    <button className="btn-edit" title="Editar" onClick={() => onEdit(p)}>
-                                        <i className="fa-solid fa-pen"></i>
-                                    </button>
-                                    <button className="btn-delete" title="Excluir" onClick={() => onDelete(p.idPatrimonio)}>
-                                        <i className="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
+            <div className="table-responsive-wrapper">
+                <table className="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Marca</th>
+                            <th>Etiqueta</th>
+                            <th>Setor</th>
+                            <th>Status</th>
+                            <th style={{ paddingLeft: '25px'}}>Ações</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {/* Pegamos os filtrados, invertemos para ver os últimos e limitamos a 5 */}
+                        {dadosFiltrados.slice().reverse().slice(0, 5).map((p) => (
+                            <tr key={p.idPatrimonio}>
+                                <td className="patrimonio-destaque">{p.name}</td>
+                                <td className="patrimonio-destaque">{p.marca}</td>
+                                <td className="col-etiqueta">
+                                    <span className="tag-patrimonio tag-etiqueta">{p.etiqueta}</span>
+                                </td>
+                                <td className="col-setor" >
+                                    <span className="tag-patrimonio tag-setor">{formatarTexto(p.setor)}</span>
+                                </td>
+                                <td>
+                                    <strong style={{ color: getStatusColor(p.status), 
+                                    textTransform: "capitalize"
+                                    }}>
+                                        {p.status || "Ativo"}
+                                    </strong>
+                                </td>
+                                <td>
+                                    <div className="action-buttons">
+                                        <button className="btn-acoes-revisao" onClick={() => onVerHistorico(p.idPatrimonio)} title="Ver Histórico">
+                                            <i className="fa-solid fa-clock-rotate-left"></i>
+                                        </button>
+                                        <button className="btn-edit" title="Editar" onClick={() => onEdit(p)}>
+                                            <i className="fa-solid fa-pen"></i>
+                                        </button>
+                                        <button className="btn-delete" title="Excluir" onClick={() => onDelete(p.idPatrimonio)}>
+                                            <i className="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
             {dadosFiltrados.length === 0 && (
                 <p style={{ textAlign: 'center', padding: '20px', color: '#666' }}>Nenhum resultado encontrado.</p>
             )}

@@ -11,84 +11,91 @@ import {
     ArcElement,
 } from "chart.js";
 
-
-// Registrar as ferramentas do gráfico
 ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    ArcElement,
-    Title,
-    Tooltip,
-    Legend,
+    CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend
 );
 
-
-
-const donutData = {
-    labels: ["Ativos", "Inativos", "Manutenção"],
-    datasets: [
-        {
-            data: [10, 10, 5],
-            backgroundColor: ["#0076a8", "#8a0000", "#ffd900"], // Verde água e Vermelho
-            borderWidth: 0,
-        },
-    ],
-};
-
 const DashboardCharts = ({ data }) => {
+    // 1. DADOS DINÂMICOS PARA O GRÁFICO DE BARRA
     const setoresConfig = [
-        { id: "cti", label: "CTI - Terapia Intensiva"},
-        { id: "sala_vermelha", label: "Sala Vermelha"},
-        { id: "sala_amarela", label: "Sala Amarela"},
-        { id: "centro_cirurgico", label: "Centro Cirúrgico"}
+        { id: "cti", label: "CTI" },
+        { id: "sala_vermelha", label: "S. Vermelha" },
+        { id: "sala_amarela", label: "S. Amarela" },
+        { id: "centro_cirurgico", label: "C. Cirúrgico" }
     ];
 
-    const labelsExibicao = setoresConfig.map(s => s.label);
-
-    const contagemPorSetor = setoresConfig.map(setor => {
-        return data.filter(p => p.setor === setor.id).length;
-    });
-
     const barData = {
-        labels: labelsExibicao,
-        datasets: [
-            {
-                label: "Quantidade",
-                data: contagemPorSetor,
-                backgroundColor: "#0076a8",
-                borderRadius: 5,
-            }
-        ]
-    }
+        labels: setoresConfig.map(s => s.label),
+        datasets: [{
+            label: "Patrimônios",
+            data: setoresConfig.map(s => data.filter(p => p.setor === s.id).length),
+            backgroundColor: "#0ea5e9", // Azul SaaS
+            borderRadius: 6, // Arredonda o topo das barras
+            barThickness: 40, // Deixa as barras mais finas e elegantes
+        }]
+    };
 
     const barOptions = {
-    responsive: true,
-    maintainAspectRatio: false, // Permite que o gráfico respeite o tamanho da div
-    plugins: {
-      legend: { display: false }, // Esconde a legenda igual na imagem
-    },
-};
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+        },
+        scales: {
+            x: {
+                grid: { display: false }, // Remove as linhas verticais do fundo
+                border: { display: false } // Remove a linha dura do eixo X
+            },
+            y: {
+                grid: { 
+                    color: '#f3f4f652', // Linhas horizontais ultra finas e claras
+                    drawBorder: false,
+                },
+                border: { display: false }
+            }
+        }
+    };
+
+    // 2. DADOS DINÂMICOS PARA O GRÁFICO DE ROSCA
+    const contagemAtivos = data.filter(p => p.status === 'ativo').length;
+    const contagemInativos = data.filter(p => p.status === 'inativo').length;
+    const contagemManutencao = data.filter(p => p.status === 'manutencao').length;
+
+    const donutData = {
+        labels: ["Ativos", "Inativos", "Manutenção"],
+        datasets: [{
+            data: [contagemAtivos, contagemInativos, contagemManutencao],
+            backgroundColor: ["#10b981", "#ef4444", "#f59e0b"], // Verde, Vermelho, Laranja/Amarelo SaaS
+            borderWidth: 4, // Espaço entre as fatias
+            borderColor: '#ffffff', // A cor do fundo da página para o efeito de recorte
+            hoverOffset: 10
+        }],
+    };
+
+    const donutOptions = {
+        maintainAspectRatio: false,
+        cutout: '75%', // Deixa a 'rosca' mais fina
+        plugins: {
+            legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } }
+        }
+    };
 
     return (
         <section className="charts-grid">
-                <div className="chart-card">
-                    <h3>Distribuição por Setor</h3>
-                    <div style={{ flex: 1 }}>
+            <div className="chart-card">
+                <h3>Distribuição por Setor</h3>
+                <div className="chart-wrapper">
                     <Bar data={barData} options={barOptions} />
-                    </div>
                 </div>
+            </div>
 
-                <div className="chart-card">
-                    <h3>Status do Inventário</h3>
-                    <div style={{ flex: 1 }}>
-                    <Doughnut
-                        data={donutData}
-                        options={{ maintainAspectRatio: false }}
-                    />
-                    </div>
+            <div className="chart-card">
+                <h3>Status do Inventário</h3>
+                <div className="chart-wrapper">
+                    <Doughnut data={donutData} options={donutOptions} />
                 </div>
-                </section>
+            </div>
+        </section>
     );
 };
 

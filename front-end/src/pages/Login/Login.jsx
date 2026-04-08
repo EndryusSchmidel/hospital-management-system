@@ -1,4 +1,4 @@
-import { FaUser, FaLock, FaInfoCircle } from "react-icons/fa" // Adicionei o FaInfoCircle
+import { FaUser, FaLock, FaInfoCircle, FaExclamationCircle } from "react-icons/fa" // Adicionei o FaInfoCircle
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import "./Login.css"
@@ -12,6 +12,7 @@ const Login = () => {
     }, []);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [loginError, setLoginError] = useState("");
 
     const navigate = useNavigate();
 
@@ -19,10 +20,13 @@ const Login = () => {
     const preencherVisitante = () => {
         setUsername("teste@teste.com");
         setPassword("1234");
+        setLoginError("");
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLoginError("");
+
         if (username.trim() === "" || password.trim() === "") {
             toast.warn("Preencha todos os campos!");
             return;
@@ -38,7 +42,7 @@ const Login = () => {
             navigate('/dashboard');
         } catch (error) {
             console.error("DEBUG LOGIN:", error.response);
-            toast.error("Erro ao acessar: " + (error.response?.data?.message || "Usuário ou senha inválidos"));
+            setLoginError("E-mail ou senha incorretos. Tente novamente.");
         }
     };
 
@@ -57,7 +61,10 @@ const Login = () => {
                             placeholder='E-mail' 
                             className="input-email" 
                             value={username} // Importante para o preenchimento automático funcionar
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={(e) => {
+                                setUsername(e.target.value);
+                                if(loginError) setLoginError("");
+                            }}
                         />
                     </div>
                     
@@ -68,9 +75,18 @@ const Login = () => {
                             placeholder='Senha' 
                             className="input-password" 
                             value={password} // Importante para o preenchimento automático funcionar
-                            onChange={(e) => setPassword(e.target.value)} 
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                if(loginError) setLoginError("");
+                            }} 
                         />
                     </div>
+                    {loginError && (
+                        <div className="error-message-container">
+                            <FaExclamationCircle size={14} />
+                            <span>{loginError}</span>
+                        </div>
+                    )}
 
                     <div className="recall-forget">
                         <label className="lembrar">

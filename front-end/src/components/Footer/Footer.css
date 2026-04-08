@@ -1,0 +1,119 @@
+/* =========================================
+    ESTRUTURA BASE DO FOOTER (FIXO)
+========================================= */
+.fixed-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    /* 🌙 Fundo com transparência que se adapta ao tema claro/escuro */
+    background-color: rgba(255, 255, 255, 0.85); 
+    backdrop-filter: blur(8px); /* Efeito de vidro moderno */
+    border-top: 1px solid var(--border-color);
+    padding: 12px 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* No Dark Mode, ajustamos a transparência para não ficar um borrão branco */
+.dark .fixed-footer {
+    background-color: rgba(30, 41, 59, 0.85); /* rgba do Slate 800 */
+}
+
+/* O container interno que segura as 3 partes (Esquerda, Centro, Direita) */
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 40px;
+}
+
+/* Div fantasma para forçar o centro a ficar realmente no centro */
+.footer-left {
+    flex: 1;
+}
+
+/* =========================================
+    TEXTO CENTRAL
+========================================= */
+.footer-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 1;
+    white-space: nowrap;
+    /* 🌙 Cor do texto */
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.footer-center strong {
+    color: var(--text-main); /* Seu nome em destaque */
+    font-weight: 600;
+}
+
+.footer-icon {
+    font-size: 16px;
+}
+
+/* =========================================
+    ÍCONES DA DIREITA (GITHUB E LINKEDIN)
+========================================= */
+.footer-right {
+    display: flex;       /* 🚀 Isso garante que fiquem lado a lado */
+    align-items: center; /* 🚀 Alinha verticalmente */
+    justify-content: flex-end;
+    gap: 20px;           /* 🚀 Espaço entre os ícones */
+    flex: 1;
+}
+
+.footer-right a {
+    /* 🌙 Cor dos ícones */
+    color: var(--text-muted);
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Efeito ao passar o mouse */
+.footer-right a:hover {
+    color: #0ea5e9; /* Fica azulzinho SaaS no hover */
+    transform: translateY(-3px);
+}
+
+/* =========================================
+    RESPONSIVIDADE (MOBILE / TABLETS)
+========================================= */
+@media (max-width: 768px) {
+    /* No celular, o footer deixa de ser fixo para não "comer" espaço da tela */
+    .fixed-footer {
+        position: relative; 
+        padding: 20px 0;
+        background-color: var(--bg-card); /* Remove a transparência no mobile */
+    }
+
+    .footer-container {
+        flex-direction: column; /* Coloca um embaixo do outro */
+        gap: 16px;
+        padding: 0 20px;
+    }
+
+    .footer-left {
+        display: none; /* Esconde a div fantasma */
+    }
+
+    .footer-center {
+        font-size: 0.85rem;
+    }
+
+    /* Ajusta os ícones para ficarem no centro, bem espaçados */
+    .footer-right {
+        justify-content: center;
+        width: 100%;
+        gap: 24px; /* Mais espaço para não errar o clique com o dedo */
+    }
+}

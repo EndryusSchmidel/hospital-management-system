@@ -9,7 +9,7 @@ const Footer = () => {
                 <div className="footer-left"></div>
 
                 <div className="footer-center">
-                    <p><FaCode className="footer-icon"/>Desenvolvido por <strong>Endryus Schmidel</strong> &copy; {new Date().getFullYear()}</p>
+                    <FaCode className="footer-icon"/>Desenvolvido por <strong>Endryus Schmidel</strong> &copy; {new Date().getFullYear()}
                 </div>
 
                 <div className="footer-right">

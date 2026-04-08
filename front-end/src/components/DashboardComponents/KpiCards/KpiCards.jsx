@@ -1,4 +1,6 @@
-import "./KpiCards.css"
+import "./KpiCards.css";
+import "../../../styles/GlobalStyles.css"
+import { Package, CheckCircle2, XCircle, DollarSign } from "lucide-react"; // Ícones Premium
 
 const Kpicards = ({ dados }) => {
     if (!dados) return null;
@@ -11,45 +13,54 @@ const Kpicards = ({ dados }) => {
     };
 
     return (
-        <div className="kpi-container-bg">
-                <section className="kpi-grid">
-                    {/* Card 1: p Total / Azul escuro */}
-                    <div className="kpi-card total">
-                    <div className="kpi-content">
-                        <h2>{dados.total}</h2>
-                        <p>Total de patrimônios</p>
-                    </div>
-                    <i className="fa-solid fa-chart-simple"></i>
-                    </div>
-
-                    {/* Card 2: P Ativos / Azul ciano */}
-                    <div className="kpi-card ativos">
-                    <div className="kpi-content">
-                        <h2>{dados.ativos}</h2>
-                        <p>Patrimônios Ativos</p>
-                    </div>
-                    <i className="fa-solid fa-check"></i>
-                    </div>
-
-                    {/* Card 3: P Inativos / vermelho*/}
-                    <div className="kpi-card inativos">
-                    <div className="kpi-content">
-                        <h2>{dados.inativos}</h2>
-                        <p>Patrimônios Inativos</p>
-                    </div>
-                    <i className="fa-solid fa-xmark"></i>
-                    </div>
-
-                    {/* Card 4: p Valor / verde */}
-                    <div className="kpi-card valor-total">
-                    <div className="kpi-content">
-                        <h2>{formatarMoeda(dados.valorTotal)}</h2>
-                        <p>Valor total de Patrimônios</p>
-                    </div>
-                    <i className="fa-solid fa-money-bill-wave"></i>
-                    </div>
-                </section>
+        // Removemos a caixa cinza em volta, deixamos apenas o grid flutuante
+        <section className="kpi-grid">
+            
+            {/* Card 1: Total */}
+            <div className="kpi-card shadow-md">
+                <div className="kpi-content">
+                    <p>Total de patrimônios</p>
+                    <h2>{dados.total}</h2>
                 </div>
+                <div className="kpi-icon-wrapper total-icon">
+                    <Package size={28} />
+                </div>
+            </div>
+
+            {/* Card 2: Ativos */}
+            <div className="kpi-card shadow-md">
+                <div className="kpi-content">
+                    <p>Patrimônios Ativos</p>
+                    <h2>{dados.ativos}</h2>
+                </div>
+                <div className="kpi-icon-wrapper ativos-icon">
+                    <CheckCircle2 size={28} />
+                </div>
+            </div>
+
+            {/* Card 3: Inativos */}
+            <div className="kpi-card shadow-md">
+                <div className="kpi-content">
+                    <p>Patrimônios Inativos</p>
+                    <h2>{dados.inativos}</h2>
+                </div>
+                <div className="kpi-icon-wrapper inativos-icon">
+                    <XCircle size={28} />
+                </div>
+            </div>
+
+            {/* Card 4: Valor */}
+            <div className="kpi-card shadow-md">
+                <div className="kpi-content">
+                    <p>Valor Total</p>
+                    <h2>{formatarMoeda(dados.valorTotal)}</h2>
+                </div>
+                <div className="kpi-icon-wrapper valor-icon">
+                    <DollarSign size={28} />
+                </div>
+            </div>
+
+        </section>
     );
 };
 

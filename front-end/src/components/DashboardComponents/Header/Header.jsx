@@ -1,49 +1,45 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { Menu, Moon, Sun } from "lucide-react"; 
 import profileIMG from "../../../assets/profilePicture.jpeg";
 import "./Header.css";
+import { ThemeToggle } from "../../ThemeToggle";
 
 const Header = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const menuRef = useRef()
-
+    const menuRef = useRef();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const handleLogout = () => {
         localStorage.removeItem("token");
         window.location.href = "/"; 
     };
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setIsMenuOpen(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
 
     return (
         <header className="main-header">
-            {/* Links da Esquerda */}
-            <div className="header-menu">
-                <span>Feed</span>
-                <span>Agenda</span>
-                <span className="active-link">Gestão</span>
-                <span>Feedbacks</span>
-                <span>Tarefas</span>
+            {/* Lado Esquerdo: Hambúrguer (Mobile) + Links (Desktop) */}
+            <div className="header-left">
+                <div className="header-menu">
+                    <span>Feed</span>
+                    <span>Agenda</span>
+                    <span className="active-link">Gestão</span>
+                    <span>Feedbacks</span>
+                    <span>Tarefas</span>
+                </div>
             </div>
 
-            {/* Lado Direito: Busca e Perfil */}
+            {/* Lado Direito: Busca, Sino e Perfil */}
+            
             <div className="header-right">
+                <ThemeToggle/>
                 <div className="search-box">
                     <i className="fas fa-search"></i>
-                    <input type="text" placeholder="Encontre alguma conexão" />
+                    <input type="text" placeholder="Encontre conexões" />
                 </div>
                 
-                <i className="far fa-bell icon-btn"></i>
+                <i className="far fa-bell icon-btn notification-icon"></i>
 
-                {/* Container do Perfil com Menu */}
+                
                 <div className="user-profile-container" ref={menuRef}>
                     <img 
                         onClick={() => setIsMenuOpen(!isMenuOpen)} 
@@ -51,12 +47,13 @@ const Header = () => {
                         alt="Foto do usuário"
                         className="profile-img"
                     />
+                    
 
                     {isMenuOpen && (
                         <div className="profile-dropdown">
                             <div className="dropdown-user-info">
                                 <strong>Endryus Schmidel</strong>
-                                <small>Visualizando Hospital</small>
+                                <small>Visualizando Dashboard</small>
                             </div>
                             <hr />
                             <ul>

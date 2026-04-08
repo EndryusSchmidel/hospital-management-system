@@ -1,44 +1,77 @@
 .inventory-section {
-    background: white;
+    background-color: var(--bg-card); 
     padding: 20px;
     border-radius: 8px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color); 
+    box-shadow: var(--shadow-sm);
+
 }
 
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+}
+
+/* O header da seção de inventário (Título + Busca) */
 .inventory-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    gap: 15px;
+    flex-wrap: wrap; /* Se não couber, empurra a busca pra baixo */
 }
 
-.inventory-actions {
-    display: flex;
-    gap: 10px;
-    height: 30px;
+.inventory-header h3 {
+    color: var(--text-main); 
+    font-size: 1.2rem;
+}
+
+.inventory-actions .search-bar {
+    width: 100%;
+    min-width: 250px;
+}
+
+@media (max-width: 768px) {
+    .inventory-header {
+        flex-direction: column;
+        align-items: stretch; 
+    }
+    
+    .inventory-actions {
+        height: auto; 
+    }
+
+    .search-bar {
+        width: 70% !important;
+    }
 }
 
 
-/* Tabela */
 .inventory-table {
     width: 100%;
+    min-width: 800px; /* Força a tabela a ter pelo menos 800px. Se a tela for menor que isso, a div em volta cria a barra de rolagem! */
     border-collapse: collapse;
     text-align: left;
 }
 
 .inventory-table th {
-    padding: 12px;
-    border-bottom: 2px solid #f4f7f6;
-    color: #000000;
+    padding: 15px 12px;
+    border-bottom: 2px solid var(--border-color); 
+    color: var(--text-main); 
     font-size: 14px;
     text-decoration: underline;
 }
 
 .inventory-table td {
-    padding: 12px;
-    border-bottom: 1px solid #f4f7f6;
+    padding: 15px 12px;
+    border-bottom: 1px solid var(--border-color); 
     font-size: 14px;
-    color: #444;
+    color: var(--text-muted); 
+    white-space: nowrap;
+
 }
 
 .status {
@@ -85,7 +118,6 @@
 .inventory-table th,
 .inventory-table td {
     white-space: nowrap;
-    /* Impede que o texto quebre linha e bagunce o alinhamento */
     padding: 15px 12px;
 }
 
@@ -107,6 +139,8 @@
 
 .patrimonio-destaque {
     text-transform: capitalize;
+    color: var(--text-main) !important;
+    font-weight: 500;
 }
 
 /* Estilo geral para as Tags */
@@ -122,77 +156,52 @@
 
 /* Tag de Setor (Visual Clean/Hospitalar) */
 .tag-setor {
-    background-color: #f0f7ff;
-    color: #0056b3;
-    border: 1px solid #cce3ff;
+    background-color: #0ea5e9; 
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
     text-transform: uppercase;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); /* Transição suave */
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
 }
 
 /* Tag de Etiqueta (Visual de Identificador) */
 .tag-etiqueta {
-    background-color: #0076a8;
-    color: #ffffff;
-    border: 1px solid #d1d5db;
-    font-family: 'Courier New', Courier, monospace; /* Dá cara de código/serial */
+    background-color: var(--bg-card); 
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    font-family: 'Courier New', Courier, monospace;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
     letter-spacing: 0.5px;
 }
 
 .btn-acoes-revisao {
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    margin-left: 5px;
-    background-color: #ffffff;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 8px;
+    background-color: transparent;
+    border: none;
     cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
+    padding: 6px;
+    color: var(--text-muted);
 }
+.btn-acoes-revisao:hover .fa-clock-rotate-left {
+    transform: rotate(-360deg);
+    color: #0ea5e9;
+}
+.btn-acoes-revisao .fa-clock-rotate-left {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+    color: var(--text-muted);
 
-.btn-acoes-revisao:hover {
-    background-color: #f9fafb;
-    border-color: #3b82f6; /* Azul destaque ao passar o mouse */
-    color: #3b82f6;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .btn-acoes-revisao svg {
-    color: #6b7280;
+    color: var(--text-main);
     transition: color 0.2s ease;
 }
 
 .btn-acoes-revisao:hover svg {
-    color: #3b82f6;
-}
-
-.tag-setor:hover {
-    background-color: #0056b3; /* Inverte a cor no hover */
-    color: #ffffff;
-    border-color: #004494;
-    transform: translateY(-1px); /* Leve subida */
-    box-shadow: 0 4px 6px -1px rgba(0, 86, 179, 0.2); /* Sombra na cor da tag */
-}
-
-/* --- TAG DE ETIQUETA --- */
-.tag-etiqueta {
-    background-color: #f3f4f6;
-    color: #374151;
-    border: 1px solid #d1d5db;
-    transition: all 0.25s ease;
-    cursor: help; /* Indica que pode haver mais info ou é um ID */
-}
-
-.tag-etiqueta:hover {
-    background-color: #ffffff;
-    border-color: #3b82f6; /* Destaque em azul ao focar no ID */
-    color: #1d4ed8;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    color: var(--text-muted);
 }
 
 .btn-acoes-revisao .fa-clock-rotate-left {

@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import "./Historico.css";
 import Sidebar from '../../components/DashboardComponents/Sidebar/Sidebar';
 import Header from '../../components/DashboardComponents/Header/Header';
 import api from '../../services/api';
-import { RefreshCw, FileText } from 'lucide-react';
+import { RefreshCw, FileText, PackageOpen, SearchX, PlusCircle  } from 'lucide-react';
+
+
 
 const Historico = () => {
     const [historicoPatrimonios, setHistoricoPatrimonios] = useState([]);
@@ -11,6 +13,7 @@ const Historico = () => {
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [busca, setBusca] = useState("");
+    const topoDaListaRef = useRef(null);
 
     const gerarRelatorioPDF = () => {
     setLoading(true);
@@ -52,6 +55,13 @@ const Historico = () => {
         }).format(valor || 0);
     };
 
+    const formatarTexto = (str) => {
+    if (!str) return "";
+    return str
+        .replace(/_/g, ' ') // Troca underline por espaço
+        .replace(/\b\w/g, (l) => l.toUpperCase()); // Primeira letra de cada palavra em Maiúsculo
+    };
+
     const carregarHistorico = (pagina = 0) => {
         setLoading(true);
         api.get(`/patrimonios/historico-geral`, {
@@ -72,15 +82,23 @@ const Historico = () => {
                 setLoading(false);
             });
     };
+    const getAcaoConfig = (tipo) => {
+    switch (tipo) {
+        case 0: return { label: "ADICIONADO", classe: "adicionado" };
+        case 1: return { label: "EDITADO", classe: "editado" };
+        case 2: return { label: "REMOVIDO", classe: "removido" };
+        default: return { label: "DESCONHECIDO", classe: "desconhecido" };
+    }
+};
 
-    const getStatusConfig = (tipo) => {
-        switch (tipo) {
-            case 0: return { label: "ADICIONADO", color: "#28a745", bg: "#e6ffed" };
-            case 1: return { label: "EDITADO", color: "#eab308", bg: "#fffbe6" };
-            case 2: return { label: "REMOVIDO", color: "#dc3545", bg: "#ffeef0" };
-            default: return { label: "DESCONHECIDO", color: "#6c757d", bg: "#f8f9fa" };
-        }
-    };
+// Função para o STATUS DO EQUIPAMENTO (Igual ao TodosPatrimonios)
+const getClasseStatus = (status) => {
+    const s = status ? status.toLowerCase() : "";
+    if (s === "ativo") return "ativo";
+    if (s === "em manutenção" || s === "manutencao") return "manutencao";
+    if (s === "inativo") return "inativo";
+    return "";
+};
 
     // Debounce para a busca: espera o usuário parar de digitar por 300ms
     useEffect(() => {
@@ -90,25 +108,22 @@ const Historico = () => {
         return () => clearTimeout(timeout);
     }, [busca]);
 
-    // Scroll suave ao trocar de página ou carregar
     useEffect(() => {
-        if (!loading) {
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
+        if (!loading && topoDaListaRef.current) {
+            topoDaListaRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
             });
         }
-    }, [loading, page]);
+    }, [page, loading]);
 
     return (
         <div className="dashboard-container">
             <Sidebar />
-            <main className="main-content">
+            <main className="main-content"  ref={topoDaListaRef}>
                 <Header />
                 <div className='titulo-secao'>
                     <h1>Histórico de movimentações</h1>
-
-                    {/* Container de ações identico ao TodosPatrimonios */}
                     <div className="inventory-actions">
                         <div className="search-bar">
                             <i className="fa-solid fa-magnifying-glass"></i>
@@ -148,65 +163,94 @@ const Historico = () => {
                     </div>
                 </div>
 
-                <div className='historico-conteudo'>
-                    <ul className='historico-lista'>
+                <div className='list-container'>
+                    <ul className='smart-list'>
                         {historicoPatrimonios.length > 0 ? (
                             historicoPatrimonios.map((p, index) => {
-                                const config = getStatusConfig(p.revisaoNumero);
+                const acaoConfig = getAcaoConfig(p.revisaoNumero);
+                const classeStatus = getClasseStatus(p.status);
 
-                                return (
-                                    <li key={index} className='historico-item' style={{ borderLeft: `6px solid ${config.color}` }}>
-                                        <div style={{
-                                            backgroundColor: config.bg,
-                                            color: config.color,
-                                            padding: '5px 10px',
-                                            borderRadius: '5px',
-                                            display: 'inline-block',
-                                            fontSize: '0.8rem',
-                                            fontWeight: 'bold',
-                                            marginBottom: '10px'
-                                        }}>
-                                            {config.label}
-                                        </div>
+                return (
+                    <li key={index} className={`smart-row-base historico-grid-layout rev-border-${acaoConfig.classe}`}>
+                        {/* COLUNA 1: AÇÃO E DATA */}
+                        <div className="row-historico-acao">
+                            <span className={`badge-acao rev-bg-${acaoConfig.classe}`}>
+                                {acaoConfig.label}
+                            </span>
+                            <span className="historico-data">
+                                {new Date(p.dataRevisao).toLocaleDateString('pt-BR')} às {new Date(p.dataRevisao).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}
+                            </span>
+                        </div>
 
-                                        <div className='historico-detalhe'>
-                                            <strong>Nome: </strong>{p.name} <br />
-                                            <strong>Marca: </strong>{p.marca} <br />
-                                            <strong>Etiqueta: </strong>{p.etiqueta} <br />
-                                            <strong>Setor: </strong>{p.setor} <br />
-                                            <strong>Status: </strong>{p.status} <br />
-                                            <strong>Valor: </strong>{formatarMoeda(p.valor)} <br />
-                                            <small style={{ color: '#666' }}>
-                                                Data: {new Date(p.dataRevisao).toLocaleString('pt-BR')}
-                                            </small>
-                                        </div>
-                                    </li>
-                                );
-                            })
-                        ) : (
-                            <p className="not-found">Nenhuma movimentação encontrada para "{busca}"</p>
-                        )}
-                    </ul>
+                        {/* COLUNA 2: NOME E DETALHES */}
+                        <div className="row-main-info">
+                            <span className="item-name">{p.name}</span>
+                            <span className="item-sub-info">
+                                {p.marca} • <span className="item-etiqueta">{p.etiqueta}</span>
+                            </span>
+                        </div>
 
-                    <div className="paginacao">
-                        <button 
-                            className='paginacao-btn' 
-                            disabled={page === 0}
-                            onClick={() => carregarHistorico(page - 1)}
-                        >
-                            Anterior
-                        </button>
+                        {/* COLUNA 3: SETOR */}
+                        <div className="meta-group campo-setor">
+                            <span className="meta-label">Setor</span>
+                            <span className="meta-value">{formatarTexto(p.setor)}</span>
+                        </div>
 
-                        <span className='paginacao-texto'>Página {page + 1} de {totalPages}</span>
+                        {/* COLUNA 4: VALOR */}
+                        <div className="meta-group campo-valor">
+                            <span className="meta-label">Valor</span>
+                            <span className="meta-value highlight-valor">
+                                {formatarMoeda(p.valor)}
+                            </span>
+                        </div>
 
-                        <button 
-                            className='paginacao-btn' 
-                            disabled={page + 1 >= totalPages}
-                            onClick={() => carregarHistorico(page + 1)}
-                        >
-                            Próxima
-                        </button>
-                    </div>
+                        {/* COLUNA 5: STATUS DO EQUIPAMENTO */}
+                        <div className="row-status-auditoria">
+                            <span className={`badge-pill badge-${classeStatus}`}>
+                                {p.status || 'Não definido'}
+                            </span>
+                        </div>
+                    </li>
+                );
+            })
+        ) : (
+            /* Empty State Premium (Idêntico ao TodosPatrimonios) */
+            <div className="empty-state-container">
+                <div className="empty-state-icon">
+                    {busca ? <SearchX size={60} strokeWidth={1.5} /> : <PackageOpen size={60} strokeWidth={1.5} />}
+                </div>
+                <h3>{busca ? `Nenhuma movimentação para "${busca}"` : "Histórico vazio"}</h3>
+                <p>Nenhum registro de auditoria foi encontrado no sistema.</p>
+                {!busca && (
+                    <button className="btn-empty-state" onClick={() => carregarHistorico(0)}>
+                        Atualizar Histórico
+                    </button>
+                )}
+            </div>
+        )}
+    </ul>
+                    
+                    {historicoPatrimonios.length > 0 && (
+                        <div className="paginacao">
+                            <button 
+                                className='paginacao-btn' 
+                                disabled={page === 0}
+                                onClick={() => carregarHistorico(page - 1)}
+                            >
+                                Anterior
+                            </button>
+
+                            <span className='paginacao-texto'>Página {page + 1} de {totalPages}</span>
+
+                            <button 
+                                className='paginacao-btn' 
+                                disabled={page + 1 >= totalPages}
+                                onClick={() => carregarHistorico(page + 1)}
+                            >
+                                Próxima
+                            </button>
+                        </div>
+                    )}
                 </div>
             </main>
         </div>

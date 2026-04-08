@@ -1,7 +1,6 @@
 package com.example.schmidel.projeto_hospital.dtos;
 
 import jakarta.validation.constraints.NotBlank;
-import org.aspectj.weaver.ast.Not;
 
 import java.math.BigDecimal;
 
