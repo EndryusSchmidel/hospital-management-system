@@ -38,7 +38,7 @@ Em ambientes críticos de saúde, a perda ou falta de manutenção de um ativo (
 - **Axios Interceptors:** Tratamento centralizado de erros (401, 403), direcionando o usuário sem flashes na tela ou perda de contexto.
 - **UX Feedback:** Integração com `React Toastify`, `SweetAlert2` e ícones `Lucide React` para interações elegantes.
 
-### ⚙️ Back-end (Java 17 + Spring Boot 3)
+### ⚙️ Back-end (Java 21 + Spring Boot 3)
 - **Documentação Interativa (Swagger/OpenAPI):** Interface gráfica gerada automaticamente (`/swagger-ui.html`) para exploração e teste de todos os endpoints REST, com suporte nativo à injeção de tokens JWT para simulação de requisições autenticadas.
 - **Hibernate Envers (Auditoria de Dados):** Rastreabilidade total! Cada criação, edição ou deleção lógica gera uma trilha de auditoria inalterável, exibida em uma bela "Timeline" no front-end.
 - **Padrão DTO e Java Records:** Transferência de dados imutável e segura entre as camadas.
