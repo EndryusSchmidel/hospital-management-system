@@ -1,5 +1,9 @@
 # 🏥 Hospital Asset Management System - Sistema de Gestão de Patrimônio Hospitalar (Full Stack) (v1.0)
 
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/36f46be1-51b5-471c-a8a5-7f84e7e7a92d" alt="Dashboard do Sistema de Gestão Hospitalar" width="100%">
+</div>
+
 
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
@@ -75,7 +79,8 @@ Bash
 npm run dev
 Acesse http://localhost:5173 no seu navegador.
 
-👨‍💻 Autor
-[Endryus Schmidel]
-Desenvolvedor Full-Stack focado em criar soluções limpas, seguras e escaláveis.
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5...Colors)](https://linkedin.com/in/endryus-schmidel).
+👨‍💻 **Autor**
+
+**Endryus Schmidel** Desenvolvedor Full-Stack focado em criar soluções limpas, seguras e escaláveis.
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/endryus-schmidel)
