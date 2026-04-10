@@ -1,72 +1,161 @@
+/* =========================================
+   BACKGROUND E OVERLAY
+========================================= */
 .login-screen-wrapper {
     width: 100vw;
     min-height: 100vh;
-    
-    /* Aplica o fundo aqui */
     background-image: url(../../assets/login.png);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-
-    /* Centraliza o formulário (o menuzinho) no meio da tela */
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    font-family: 'Inter', sans-serif;
 }
 
-
-.container {
-    width: 450px;
-    background-color: rgba(255, 255, 255, 0.1); /* Ajustei levemente para o vidro aparecer melhor */
-    backdrop-filter: blur(50px);
-    border-radius: 30px 30px 30px 30px;
-    padding: 40px;
-    border: 2px rgba(0, 0, 0, 0.211) solid;
-    box-shadow: 1px 0px 10px 5px rgba(0, 0, 0, 0.35);
-}
-
-
-.titulo{
-    display: block;
-    margin: 10px auto;
-    text-align: center;
-        color: var(--text-main); 
-
-}
-
-.input-email {
-    padding: 10px;
-    background-color: var(--bg-body); 
-    border: 1px solid var(--border-color);
-    color: var(--text-main); 
-    margin: 7px 10px 10px 5px;
-    border-radius: 5px;
-    border-style: none;
+/* Escurece a imagem de fundo para o Card brilhar */
+.login-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.6); /* Slate 900 com transparência */
+    z-index: 1;
 }
 
-.input-password {
-    padding: 10px;
-    margin: 7px 10px 10px 5px;
-    border-radius: 5px;
-    border-style: none;
+/* =========================================
+   O CARD DE LOGIN (GLASSMORPHISM)
+========================================= */
+.login-glass-card {
+    position: relative;
+    z-index: 2;
     width: 100%;
-    background-color: var(--bg-body); 
-    border: 1px solid var(--border-color);
-    color: var(--text-main); 
-}
-
-.container input:focus {
-    border-color: #0ea5e9;
+    max-width: 440px;
+    /* 🌙 Fundo do card herda a variável, mas adicionamos transparência para o efeito vidro */
     background-color: var(--bg-card);
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+    backdrop-filter: blur(16px);
+    border-radius: 24px;
+    padding: 40px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    margin: 20px;
 }
 
-.lembrar {
+/* =========================================
+   CABEÇALHO DO LOGIN
+========================================= */
+.login-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.login-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 8px;
+    letter-spacing: -0.025em;
+}
+
+.login-header p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+/* =========================================
+   FORMULÁRIO E INPUTS
+========================================= */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Alinhamento matemático perfeito */
+}
+
+.input-group {
+    position: relative;
+    width: 100%;
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none; /* O clique passa pelo ícone e foca no input */
+}
+
+.modern-input {
+    width: 100%;
+    /* Padding esquerdo maior para caber o ícone */
+    padding: 14px 14px 14px 44px;
+    background-color: var(--bg-body);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.modern-input:focus {
+    border-color: #0ea5e9;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+    background-color: var(--bg-card);
+}
+
+/* =========================================
+   MENSAGEM DE ERRO
+========================================= */
+.error-message-container {
     display: flex;
     align-items: center;
     gap: 8px;
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.1);
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    animation: shake 0.4s ease-in-out;
+}
+
+.input-error {
+    border-color: #ef4444 !important;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* =========================================
+   OPÇÕES (LEMBRAR / ESQUECI A SENHA)
+========================================= */
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.custom-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: #0ea5e9;
     cursor: pointer;
 }
 
@@ -74,127 +163,136 @@
     color: #0ea5e9;
     text-decoration: none;
     font-weight: 600;
+    transition: color 0.2s;
 }
 
-.forget-password:hover { text-decoration: underline; }
+.forget-password:hover {
+    color: #0284c7;
+    text-decoration: underline;
+}
 
-
-.recall-forget {
+/* =========================================
+   BOTÃO PRINCIPAL
+========================================= */
+.btn-primary {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
-    font-size: 0.9rem;
-    /* 🌙 Cor dos links menores */
-    color: var(--text-muted); 
-}
-/* 
-.forget-password {
-    margin-left: 55px;
-} */
-
-.checkbox {
-    margin-right: 5px;
-}
-.button-enter {
-    display: block;
+    gap: 10px;
     width: 100%;
-    background-color: #015fa3cb;
-    color: white;
-    cursor: pointer;
+    background-color: #0ea5e9;
+    color: #ffffff;
     border: none;
-    padding: 10px;
-    margin: 10px 0px 10px 5px;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 8px;
 }
 
-.button-enter:hover{
-    transform: scale(1.03); /* Aumenta o tamanho em 3% */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Adiciona uma sombra suave */
-    filter: brightness(1.5); /* Dá um brilho leve na cor */
-    background-color: #0285c796;
+.btn-primary:hover:not(:disabled) {
+    background-color: #0284c7;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.3);
 }
 
+.btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
 
+/* =========================================
+   DIVISOR E CARD DE VISITANTE
+========================================= */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 24px 0;
+    color: var(--border-color);
+}
 
-.signup-link {
-    margin: 7px;
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.divider span {
+    padding: 0 10px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
 }
 
 .guest-access-card {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f0f7ff00; /* Azul hospitalar bem claro */
-    border-radius: 8px;
-    text-align: center;
+    background-color: var(--hover-bg);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    border-radius: 12px;
+    text-align: left;
 }
 
 .guest-header {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
-    color: #0056b3;
-    font-weight: bold;
-    margin-bottom: 5px;
+    color: #0ea5e9;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
 .guest-access-card p {
-    font-size: 0.8rem;
-    color: #555;
-    margin-bottom: 10px;
-}
-
-.btn-auto-fill {
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
     font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.3s ease;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    line-height: 1.4;
 }
 
-.btn-auto-fill:hover {
-    background-color: #004494;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* Container da mensagem de erro */
-.error-message-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #dc3545; /* Vermelho padrão de erro */
-    background-color: #fff5f5; /* Fundo levemente avermelhado */
+.btn-guest {
+    width: 100%;
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
     padding: 10px;
-    border-radius: 6px;
-    margin-top: -5px; /* Aproxima dos inputs */
-    margin-bottom: 15px;
-    margin-left: 15px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    border: 1px solid #ffcccc;
-    animation: fadeIn 0.3s ease;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-/* Feedback visual nos inputs quando houver erro */
-.input-error {
-    border-color: #dc3545 !important;
-    background-color: #fffafa !important;
+.btn-guest:hover {
+    border-color: #0ea5e9;
+    color: #0ea5e9;
 }
 
-/* Animação suave para o erro aparecer */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+/* =========================================
+    RODAPÉ (SOLICITAR ACESSO)
+========================================= */
+.signup-link {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
 }
 
-/* Ajuste no botão entrar para dar espaço */
-.button-enter {
-    margin-top: 10px;
+.signup-link a {
+    color: #0ea5e9;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+/* Responsividade Mobile */
+@media (max-width: 480px) {
+    .login-glass-card {
+        padding: 30px 20px;
+        border-radius: 16px;
+    }
 }
