@@ -68,16 +68,16 @@ Para acessar a documentação da API, visite https://hospital-management-system-
 
    
 ### 2. Frontend (React)
-Abra um novo terminal na pasta /front-end.
-Instale as dependências:
+1. Abra um novo terminal na pasta /front-end.
+2. Instale as dependências:
 code
 Bash
 npm install
-Inicie o servidor de desenvolvimento:
+3. Inicie o servidor de desenvolvimento:
 code
 Bash
 npm run dev
-Acesse http://localhost:5173 no seu navegador.
+4. Acesse http://localhost:5173 no seu navegador.
 
 👨‍💻 **Autor**
 
