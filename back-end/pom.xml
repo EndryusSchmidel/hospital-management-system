@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example.schmidel</groupId>
-	<artifactId>projeto-hospital</artifactId>
+	<artifactId>hospital-asset-management</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>projeto-hospital</name>
-	<description>Projeto hospitalar de gerenciamento de patrimonios</description>
+	<name>hospital-asset-management</name>
+	<description>Sistema de Gestão de Patrimônio Hospitalar</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -75,7 +75,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.8.5</version> <!-- Atualize de 2.5.0 para 2.8.5 -->
+			<version>2.8.5</version>
 		</dependency>
 
 		<dependency>
