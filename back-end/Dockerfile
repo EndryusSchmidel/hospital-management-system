@@ -22,7 +22,7 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 # Configuração de performance para containers
-ENV JAVA_OPTS="-Xmx512M -Xms256M"
+ENV JAVA_OPTS="-Xmx384M -Xms128M -XX:+UseSerialGC"
 
 EXPOSE 8080
 
