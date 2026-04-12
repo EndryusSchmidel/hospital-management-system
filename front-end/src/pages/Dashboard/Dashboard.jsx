@@ -60,19 +60,38 @@ const Dashboard = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Tem certeza que deseja excluir este patrimônio?")) {
+    // 1. Dispara o SweetAlert de Confirmação (Substituindo o window.confirm feio)
+    const resultado = await Swal.fire({
+        title: 'Tem certeza?',
+        text: "Esta ação não poderá ser revertida!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444', // Vermelho Rose (Ação de Destruição)
+        cancelButtonColor: '#64748b',  // Cinza Discreto (Ação Segura)
+        confirmButtonText: 'Sim, excluir!',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true, // Coloca o Cancelar na esquerda e Excluir na direita (Melhor UX)
+        background: 'var(--bg-card)', // 🌙 Fundo adapta ao Dark Mode
+        color: 'var(--text-main)'     // 🌙 Texto adapta ao Dark Mode
+    });
+
+    // 2. Se o usuário clicou no botão vermelho de confirmar...
+    if (resultado.isConfirmed) {
       try {
         await api.delete(`/patrimonios/${id}`);
         toast.success("Patrimônio removido com sucesso!");
         carregarPatrimonios();
       } catch (error) {
         const msgErro = error.response?.data?.message || "Erro interno ou acesso negado.";
+        
+        // 3. SweetAlert de Erro (Também adaptado pro Dark Mode)
         Swal.fire({
             title: 'Erro!',
             text: msgErro,
             icon: 'error',
-            showCancelButton: true,
-            confirmButtonColor: '#0284c7' // Azul SaaS
+            confirmButtonColor: '#0ea5e9', // Azul SaaS para o botão "OK"
+            background: 'var(--bg-card)', 
+            color: 'var(--text-main)'
         });
       }
     }

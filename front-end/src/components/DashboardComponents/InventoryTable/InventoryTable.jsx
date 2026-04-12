@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { History, Search } from 'lucide-react'; // Ícones modernos
+import React, { useState } from "react";
+import { History, Search, ChevronDown, Edit2, Trash2, PackageOpen, MapPin, Tag, Activity } from 'lucide-react'; 
+
 import "./InventoryTable.css";
 
-const InventoryTable = ({ data, onEdit, onDelete, onVerHistorico}) => {
+const InventoryTable = ({ data, onEdit, onDelete, onVerHistorico }) => {
     const [busca, setBusca] = useState("");
+    // 🚀 Estado para controlar qual card está aberto (Accordion)
+    const [expandedCard, setExpandedCard] = useState(null);
 
-    // Mesma lógica de filtro inteligente que usamos na outra página
     const dadosFiltrados = data.filter((item) => {
         const termo = busca.toLowerCase();
         return (
@@ -17,20 +19,25 @@ const InventoryTable = ({ data, onEdit, onDelete, onVerHistorico}) => {
         );
     });
 
-    // Função para definir a cor do texto do status na tabela
-    const getStatusColor = (status) => {
+    // Função para definir a classe CSS da borda lateral
+    const getStatusClass = (status) => {
         const s = status ? status.toLowerCase() : "";
-        if (s === "ativo") return "#2e7d32"; // Verde
-        if (s === "em manutenção" || s === "manutencao") return "#f57f17"; // Amarelo/Laranja
-        if (s === "inativo") return "#c62828"; // Vermelho
-        return "#666";
+        if (s === "ativo") return "ativo";
+        if (s === "em manutenção" || s === "manutencao") return "manutencao";
+        if (s === "inativo") return "inativo";
+        return "default";
     };
 
     const formatarTexto = (str) => {
-    if (!str) return "";
-    return str
-        .replace(/_/g, ' ') // Troca underline por espaço
-        .replace(/\b\w/g, (l) => l.toUpperCase()); // Primeira letra de cada palavra em Maiúsculo
+        if (!str) return "";
+        return str
+            .replace(/_/g, ' ')
+            .replace(/\b\w/g, (l) => l.toUpperCase());
+    };
+
+    // Função de Toggle do Accordion
+    const toggleCard = (id) => {
+        setExpandedCard(expandedCard === id ? null : id);
     };
 
     return (
@@ -41,12 +48,12 @@ const InventoryTable = ({ data, onEdit, onDelete, onVerHistorico}) => {
                     <div className="search-bar">
                         <i className="fa-solid fa-magnifying-glass"></i>
                         {!busca && (
-                                <div className="marquee-container">
-                                    <span className="marquee-text">
-                                        Pesquisar por Nome, Marca, Etiqueta, Setor ou Status (Ativo/Inativo)...
-                                    </span>
-                                </div>
-                            )}
+                            <div className="marquee-container">
+                                <span className="marquee-text">
+                                    Pesquisar por Nome, Marca, Etiqueta, Setor...
+                                </span>
+                            </div>
+                        )}
                         <input 
                             type="text" 
                             value={busca}
@@ -55,57 +62,98 @@ const InventoryTable = ({ data, onEdit, onDelete, onVerHistorico}) => {
                     </div>
                 </div>
             </div>
-            <div className="table-responsive-wrapper">
-                <table className="inventory-table">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Marca</th>
-                            <th>Etiqueta</th>
-                            <th>Setor</th>
-                            <th>Status</th>
-                            <th style={{ paddingLeft: '25px'}}>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {/* Pegamos os filtrados, invertemos para ver os últimos e limitamos a 5 */}
-                        {dadosFiltrados.slice().reverse().slice(0, 5).map((p) => (
-                            <tr key={p.idPatrimonio}>
-                                <td className="patrimonio-destaque">{p.name}</td>
-                                <td className="patrimonio-destaque">{p.marca}</td>
-                                <td className="col-etiqueta">
-                                    <span className="tag-patrimonio tag-etiqueta">{p.etiqueta}</span>
-                                </td>
-                                <td className="col-setor" >
-                                    <span className="tag-patrimonio tag-setor">{formatarTexto(p.setor)}</span>
-                                </td>
-                                <td>
-                                    <strong style={{ color: getStatusColor(p.status), 
-                                    textTransform: "capitalize"
-                                    }}>
-                                        {p.status || "Ativo"}
-                                    </strong>
-                                </td>
-                                <td>
-                                    <div className="action-buttons">
-                                        <button className="btn-acoes-revisao" onClick={() => onVerHistorico(p.idPatrimonio)} title="Ver Histórico">
-                                            <i className="fa-solid fa-clock-rotate-left"></i>
-                                        </button>
-                                        <button className="btn-edit" title="Editar" onClick={() => onEdit(p)}>
-                                            <i className="fa-solid fa-pen"></i>
-                                        </button>
-                                        <button className="btn-delete" title="Excluir" onClick={() => onDelete(p.idPatrimonio)}>
-                                            <i className="fa-solid fa-trash"></i>
-                                        </button>
+
+            {/* 🚀 NOVA ESTRUTURA: Lista de Cards Expansíveis */}
+            <div className="inventory-list">
+                {dadosFiltrados.slice().reverse().slice(0, 5).map((p) => {
+                    const isExpanded = expandedCard === p.idPatrimonio;
+                    const statusClass = getStatusClass(p.status);
+
+                    return (
+                        <div 
+                            key={p.idPatrimonio} 
+                            className={`inventory-card status-${statusClass} ${isExpanded ? 'expanded' : ''}`}
+                            onClick={() => toggleCard(p.idPatrimonio)}
+                        >
+                            {/* PARTE SEMPRE VISÍVEL (Retraído) */}
+                            <div className="card-visible-header">
+                                <div className="card-main-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                    <span className="card-title">{p.name}</span>
+                                    
+                                    {/* 🚀 Etiqueta com Ícone alinhado */}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                                        <Tag size={14} /> 
+                                        <span style={{ fontFamily: 'monospace', fontWeight: '600' }}>{p.etiqueta}</span>
                                     </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                </div>
+                                <div className="card-indicator">
+                                    <ChevronDown className="chevron-icon" size={20} />
+                                </div>
+                            </div>
+
+                            {/* PARTE EXPANSÍVEL (Oculta por padrão) */}
+                            <div className="card-expandable-wrapper">
+                                <div className="card-expandable-content">
+                                    <div className="card-expandable-inner">
+                                        
+                                        {/* 🚀 Detalhes Ocultos com Ícones (Sem labels de texto) */}
+                                        <div className="card-details-grid" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+                                            
+                                            <div className="detail-item" title="Marca" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)' }}>
+                                                <PackageOpen size={16} /> 
+                                                <span style={{ color: 'var(--text-main)', fontWeight: '500' }}>{p.marca}</span>
+                                            </div>
+                                            
+                                            <div className="detail-item" title="Setor" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)' }}>
+                                                <MapPin size={16} /> 
+                                                <span className="tag-setor">{formatarTexto(p.setor)}</span>
+                                            </div>
+                                            
+                                            <div className="detail-item" title="Status" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)' }}>
+                                                <Activity size={16} /> 
+                                                <span className={`status-text color-${statusClass}`}>
+                                                    {formatarTexto(p.status || "Ativo")}
+                                                </span>
+                                            </div>
+                                            
+                                        </div>
+
+                                        {/* Botões de Ação */}
+                                        <div className="card-action-group">
+                                            <button 
+                                                className="btn-action btn-history" 
+                                                onClick={(e) => { e.stopPropagation(); onVerHistorico(p.idPatrimonio); }}
+                                            >
+                                                <History size={16} /> Histórico
+                                            </button>
+                                            <button 
+                                                className="btn-action btn-edit" 
+                                                onClick={(e) => { e.stopPropagation(); onEdit(p); }}
+                                            >
+                                                <Edit2 size={16} /> Editar
+                                            </button>
+                                            {onDelete && (
+                                                <button 
+                                                    className="btn-action btn-delete" 
+                                                    onClick={(e) => { e.stopPropagation(); onDelete(p.idPatrimonio); }}
+                                                >
+                                                    <Trash2 size={16} /> Excluir
+                                                </button>
+                                            )}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
+
             {dadosFiltrados.length === 0 && (
-                <p style={{ textAlign: 'center', padding: '20px', color: '#666' }}>Nenhum resultado encontrado.</p>
+                <p style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
+                    Nenhum resultado encontrado.
+                </p>
             )}
         </section>
     );

@@ -3,9 +3,7 @@ import "./Historico.css";
 import Sidebar from '../../components/DashboardComponents/Sidebar/Sidebar';
 import Header from '../../components/DashboardComponents/Header/Header';
 import api from '../../services/api';
-import { RefreshCw, FileText, PackageOpen, SearchX, PlusCircle  } from 'lucide-react';
-
-
+import { RefreshCw, FileText, PackageOpen, SearchX, ChevronDown, MapPin, DollarSign, Tag, Activity } from 'lucide-react';
 
 const Historico = () => {
     const [historicoPatrimonios, setHistoricoPatrimonios] = useState([]);
@@ -15,38 +13,37 @@ const Historico = () => {
     const [busca, setBusca] = useState("");
     const topoDaListaRef = useRef(null);
 
+    // 🚀 ESTADO DO ACCORDION: Controla qual card está aberto
+    const [expandedId, setExpandedId] = useState(null);
+
+    const toggleCard = (id) => {
+        setExpandedId(expandedId === id ? null : id);
+    };
+
     const gerarRelatorioPDF = () => {
-    setLoading(true);
-    
-    // Chamamos o endpoint de relatório passando os mesmos filtros da busca atual
-    api.get('/patrimonios/relatorio-historico', {
-        params: { busca: busca || undefined },
-        responseType: 'blob' // CRUCIAL: avisa o Axios que o retorno é um arquivo
-    })
-    .then((response) => {
-        // Cria um link temporário na memória do navegador
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        
-        // Define o nome do arquivo que será baixado
-        const dataAtual = new Date().toLocaleDateString('pt-BR').replaceAll('/', '-');
-        link.setAttribute('download', `Historico_Patrimonio_${dataAtual}.pdf`);
-        
-        document.body.appendChild(link);
-        link.click();
-        
-        // Limpeza
-        link.parentNode.removeChild(link);
-        window.URL.revokeObjectURL(url);
-        setLoading(false);
-    })
-    .catch((err) => {
-        console.error("Erro ao gerar PDF", err);
-        setLoading(false);
-        alert("Erro ao gerar o relatório. Verifique o console.");
-    });
-};
+        setLoading(true);
+        api.get('/patrimonios/relatorio-historico', {
+            params: { busca: busca || undefined },
+            responseType: 'blob' 
+        })
+        .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            const dataAtual = new Date().toLocaleDateString('pt-BR').replaceAll('/', '-');
+            link.setAttribute('download', `Historico_Patrimonio_${dataAtual}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            setLoading(false);
+        })
+        .catch((err) => {
+            console.error("Erro ao gerar PDF", err);
+            setLoading(false);
+            alert("Erro ao gerar o relatório. Verifique o console.");
+        });
+    };
 
     const formatarMoeda = (valor) => {
         return new Intl.NumberFormat('pt-BR', {
@@ -56,10 +53,10 @@ const Historico = () => {
     };
 
     const formatarTexto = (str) => {
-    if (!str) return "";
-    return str
-        .replace(/_/g, ' ') // Troca underline por espaço
-        .replace(/\b\w/g, (l) => l.toUpperCase()); // Primeira letra de cada palavra em Maiúsculo
+        if (!str) return "";
+        return str
+            .replace(/_/g, ' ') 
+            .replace(/\b\w/g, (l) => l.toUpperCase()); 
     };
 
     const carregarHistorico = (pagina = 0) => {
@@ -71,36 +68,35 @@ const Historico = () => {
                 busca: busca || undefined
             }
         })
-            .then(response => {
-                setHistoricoPatrimonios(response.data.content);
-                setTotalPages(response.data.totalPages);
-                setPage(response.data.number);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Erro ao buscar histórico", err);
-                setLoading(false);
-            });
+        .then(response => {
+            setHistoricoPatrimonios(response.data.content);
+            setTotalPages(response.data.totalPages);
+            setPage(response.data.number);
+            setLoading(false);
+        })
+        .catch(err => {
+            console.error("Erro ao buscar histórico", err);
+            setLoading(false);
+        });
     };
+
     const getAcaoConfig = (tipo) => {
-    switch (tipo) {
-        case 0: return { label: "ADICIONADO", classe: "adicionado" };
-        case 1: return { label: "EDITADO", classe: "editado" };
-        case 2: return { label: "REMOVIDO", classe: "removido" };
-        default: return { label: "DESCONHECIDO", classe: "desconhecido" };
-    }
-};
+        switch (tipo) {
+            case 0: return { label: "ADICIONADO", classe: "adicionado" };
+            case 1: return { label: "EDITADO", classe: "editado" };
+            case 2: return { label: "REMOVIDO", classe: "removido" };
+            default: return { label: "DESCONHECIDO", classe: "desconhecido" };
+        }
+    };
 
-// Função para o STATUS DO EQUIPAMENTO (Igual ao TodosPatrimonios)
-const getClasseStatus = (status) => {
-    const s = status ? status.toLowerCase() : "";
-    if (s === "ativo") return "ativo";
-    if (s === "em manutenção" || s === "manutencao") return "manutencao";
-    if (s === "inativo") return "inativo";
-    return "";
-};
+    const getClasseStatus = (status) => {
+        const s = status ? status.toLowerCase() : "";
+        if (s === "ativo") return "ativo";
+        if (s === "em manutenção" || s === "manutencao") return "manutencao";
+        if (s === "inativo") return "inativo";
+        return "";
+    };
 
-    // Debounce para a busca: espera o usuário parar de digitar por 300ms
     useEffect(() => {
         const timeout = setTimeout(() => {
             carregarHistorico(0);
@@ -120,7 +116,7 @@ const getClasseStatus = (status) => {
     return (
         <div className="dashboard-container">
             <Sidebar />
-            <main className="main-content"  ref={topoDaListaRef}>
+            <main className="main-content" ref={topoDaListaRef}>
                 <Header />
                 <div className='titulo-secao'>
                     <h1>Histórico de movimentações</h1>
@@ -140,9 +136,9 @@ const getClasseStatus = (status) => {
                                 onChange={(e) => setBusca(e.target.value)}
                             />
                         </div>
-                    <div className="button-group" style={{ display: 'flex', gap: '10px' }}>
+                        <div className="button-group" style={{ display: 'flex', gap: '10px' }}>
                             <button 
-                                className="btn-relatorio" // Crie um estilo azul ou cinza para este
+                                className="btn-relatorio" 
                                 onClick={gerarRelatorioPDF}
                                 disabled={loading}
                                 title="Gerar Relatório PDF"
@@ -167,68 +163,81 @@ const getClasseStatus = (status) => {
                     <ul className='smart-list'>
                         {historicoPatrimonios.length > 0 ? (
                             historicoPatrimonios.map((p, index) => {
-                const acaoConfig = getAcaoConfig(p.revisaoNumero);
-                const classeStatus = getClasseStatus(p.status);
+                                const acaoConfig = getAcaoConfig(p.revisaoNumero);
+                                const classeStatus = getClasseStatus(p.status);
+                                const isExpanded = expandedId === index;
 
-                return (
-                    <li key={index} className={`smart-row-base historico-grid-layout rev-border-${acaoConfig.classe}`}>
-                        {/* COLUNA 1: AÇÃO E DATA */}
-                        <div className="row-historico-acao">
-                            <span className={`badge-acao rev-bg-${acaoConfig.classe}`}>
-                                {acaoConfig.label}
-                            </span>
-                            <span className="historico-data">
-                                {new Date(p.dataRevisao).toLocaleDateString('pt-BR')} às {new Date(p.dataRevisao).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}
-                            </span>
-                        </div>
+                                return (
+                                    // 🚀 O NOVO CARD DE HISTÓRICO EXPANSÍVEL
+                                    <li 
+                                        key={index} 
+                                        className={`modern-card rev-border-${acaoConfig.classe} ${isExpanded ? 'expanded' : ''}`} 
+                                        onClick={() => toggleCard(index)}
+                                    >
+                                        
+                                        {/* CABEÇALHO DO CARD (Sempre Visível) */}
+                                        <div className="card-header-visible">
+                                            <div className="card-main-info">
+                                                <div className="history-meta-top" style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '4px' }}>
+                                                    
+                                                    <span className={`badge-acao rev-bg-${acaoConfig.classe}`}>
+                                                        {acaoConfig.label}
+                                                    </span>
+                                                    
+                                                    
+                                                    <span className="historico-data">
+                                                        {new Date(p.dataRevisao).toLocaleDateString('pt-BR')} às {new Date(p.dataRevisao).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}
+                                                    </span>
+                                                </div>
+                                                <span className="item-name">{p.name}</span>
+                                                <div className="detail-item" title="Etiqueta">
+                                                        <Tag size={16} /> <span>{p.etiqueta}</span>
+                                                    </div>
+                                            </div>
+                                            
+                                            <ChevronDown className="expand-icon" size={24} />
+                                        </div>
 
-                        {/* COLUNA 2: NOME E DETALHES */}
-                        <div className="row-main-info">
-                            <span className="item-name">{p.name}</span>
-                            <span className="item-sub-info">
-                                {p.marca} • <span className="item-etiqueta">{p.etiqueta}</span>
-                            </span>
-                        </div>
-
-                        {/* COLUNA 3: SETOR */}
-                        <div className="meta-group campo-setor">
-                            <span className="meta-label">Setor</span>
-                            <span className="meta-value">{formatarTexto(p.setor)}</span>
-                        </div>
-
-                        {/* COLUNA 4: VALOR */}
-                        <div className="meta-group campo-valor">
-                            <span className="meta-label">Valor</span>
-                            <span className="meta-value highlight-valor">
-                                {formatarMoeda(p.valor)}
-                            </span>
-                        </div>
-
-                        {/* COLUNA 5: STATUS DO EQUIPAMENTO */}
-                        <div className="row-status-auditoria">
-                            <span className={`badge-pill badge-${classeStatus}`}>
-                                {p.status || 'Não definido'}
-                            </span>
-                        </div>
-                    </li>
-                );
-            })
-        ) : (
-            /* Empty State Premium (Idêntico ao TodosPatrimonios) */
-            <div className="empty-state-container">
-                <div className="empty-state-icon">
-                    {busca ? <SearchX size={60} strokeWidth={1.5} /> : <PackageOpen size={60} strokeWidth={1.5} />}
-                </div>
-                <h3>{busca ? `Nenhuma movimentação para "${busca}"` : "Histórico vazio"}</h3>
-                <p>Nenhum registro de auditoria foi encontrado no sistema.</p>
-                {!busca && (
-                    <button className="btn-empty-state" onClick={() => carregarHistorico(0)}>
-                        Atualizar Histórico
-                    </button>
-                )}
-            </div>
-        )}
-    </ul>
+                                        {/* CORPO EXPANSÍVEL (Detalhes do Patrimônio na época) */}
+                                        <div className="card-expandable-area">
+                                            <div className="card-expandable-content">
+                                                <div className="card-details-row">
+                                                    <div className="detail-item" title="Marca">
+                                                        <PackageOpen size={16} /> <span>{p.marca}</span>
+                                                    </div>
+                                                    <div className="detail-item" title="Setor">
+                                                        <MapPin size={16} /> <span>{formatarTexto(p.setor)}</span>
+                                                    </div>
+                                                    <div className="detail-item highlight-valor" title="Valor">
+                                                        <DollarSign size={16} /> <span>{formatarMoeda(p.valor)}</span>
+                                                    </div>
+                                                    <div className="detail-item" title="Status do Equipamento">
+                                                        <Activity size={16} /> 
+                                                        <span className={`status-text color-${classeStatus}`}>
+                                                            {formatarTexto(p.status)}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                );
+                            })
+                        ) : (
+                            <div className="empty-state-container">
+                                <div className="empty-state-icon">
+                                    {busca ? <SearchX size={60} strokeWidth={1.5} /> : <PackageOpen size={60} strokeWidth={1.5} />}
+                                </div>
+                                <h3>{busca ? `Nenhuma movimentação para "${busca}"` : "Histórico vazio"}</h3>
+                                <p>Nenhum registro de auditoria foi encontrado no sistema.</p>
+                                {!busca && (
+                                    <button className="btn-empty-state" onClick={() => carregarHistorico(0)}>
+                                        Atualizar Histórico
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </ul>
                     
                     {historicoPatrimonios.length > 0 && (
                         <div className="paginacao">

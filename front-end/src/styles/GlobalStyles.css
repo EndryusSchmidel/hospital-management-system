@@ -214,6 +214,7 @@ h1, h2, h3, h4, h5, h6, strong {
 .btn-relatorio {
     background-color: #4b5563;
     color: white;
+    border: 1px solid #e2e8f082;
 }
 .btn-relatorio:hover {
     background-color: #374151;
@@ -222,9 +223,9 @@ h1, h2, h3, h4, h5, h6, strong {
 
 /* Atualizar (Ação Secundária) */
 .btn-atualizar {
-    background-color: #f1f5f9;
-    color: #475569;
-    border: 1px solid #e2e8f0;
+    background-color: var(--bg-card); 
+    color: var(--text-main); 
+    border: 1px solid #e2e8f082;
 }
 .btn-atualizar:hover {
     background-color: #e2e8f0;
@@ -254,11 +255,11 @@ h1, h2, h3, h4, h5, h6, strong {
     display: flex;
     align-items: center;
     overflow: hidden;
-    background: white;
+    background-color: var(--bg-card); 
     border-radius: 20px;
     padding: 8px 16px;
     margin-bottom: 10px;
-    border: 1px solid #e2e8f0;
+    border: 2px solid var(--border-color);
     width: 200px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
 }
@@ -445,7 +446,6 @@ h1, h2, h3, h4, h5, h6, strong {
         flex-direction: row; /* Coloca Lado a Lado */
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px dashed #f1f5f9;
         padding-bottom: 8px;
     }
 

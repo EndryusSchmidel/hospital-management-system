@@ -1,5 +1,6 @@
+/* Fundo escurecido atrás do modal (Backdrop blur) */
 .modal-overlay {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(15, 23, 42, 0.6); /* Ajustado para um tom mais sofisticado (Slate) */
     backdrop-filter: blur(4px);
     position: fixed;
     top: 0;
@@ -13,12 +14,15 @@
 }
 
 .history-modal-container {
-    background: #fff;
+    /* 🌙 Fundo do Modal */
+    background: var(--bg-card); 
     width: 90%;
     max-width: 550px;
     max-height: 80vh;
     border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    /* 🌙 Sombra e borda adaptáveis */
+    box-shadow: var(--shadow-sm); 
+    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -32,27 +36,31 @@
 
 .history-header {
     padding: 20px 24px;
-    border-bottom: 1px solid #f1f5f9;
+    /* 🌙 Linha de baixo e fundo */
+    border-bottom: 1px solid var(--border-color); 
+    background: var(--bg-card); 
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #fafcfd;
 }
 
 .header-title {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #1e293b;
+    /* 🌙 Cor do ícone e do texto */
+    color: var(--text-main); 
 }
 
 .header-title h3 { margin: 0; font-size: 1.2rem; font-weight: 700; }
 
 .close-btn {
-    background: #f1f5f9;
+    /* 🌙 Fundo do botão fechar */
+    background: var(--hover-bg); 
     border: none;
     font-size: 24px;
-    color: #64748b;
+    /* 🌙 Cor do X */
+    color: var(--text-muted); 
     cursor: pointer;
     width: 32px;
     height: 32px;
@@ -63,13 +71,21 @@
     transition: 0.2s;
 }
 
-.close-btn:hover { background: #e2e8f0; color: #0f172a; }
+.close-btn:hover { 
+    background: rgba(239, 68, 68, 0.1); 
+    color: #ef4444; /* Vermelho padrão de fechar */
+}
 
 .modal-body {
     padding: 24px;
     overflow-y: auto;
-    background: #fff;
+    /* 🌙 Fundo do corpo do modal */
+    background: var(--bg-card); 
 }
+
+/* Customização da barra de rolagem para o Dark Mode */
+.modal-body::-webkit-scrollbar { width: 6px; }
+.modal-body::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 4px; }
 
 /* --- Estilo Timeline --- */
 .timeline {
@@ -84,7 +100,8 @@
     top: 0;
     width: 2px;
     height: 100%;
-    background: #e2e8f0;
+    /* 🌙 A linha vertical da timeline */
+    background: var(--border-color); 
 }
 
 .timeline-item {
@@ -101,25 +118,28 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #0076a8;
-    border: 2px solid #fff;
-    box-shadow: 0 0 0 3px rgba(0, 118, 168, 0.1);
+    background: #0ea5e9; /* Azul padrão do sistema */
+    /* 🌙 A borda da bolinha tem a mesma cor do fundo do modal para dar efeito de recorte */
+    border: 2px solid var(--bg-card); 
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
     z-index: 1;
 }
 
 .timeline-content {
-    background: #f8fafc;
-    border: 1px solid #f1f5f9;
+    /* 🌙 Fundo do cardzinho da timeline */
+    background: var(--bg-body); 
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 16px;
     transition: 0.2s;
 }
 
 .timeline-content:hover {
-    border-color: #cbd5e1;
+    border-color: #0ea5e9; /* Borda fica azul no hover */
     transform: translateX(5px);
-    background: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    /* 🌙 Fundo clareia/escurece no hover */
+    background: var(--bg-card); 
+    box-shadow: var(--shadow-sm);
 }
 
 .timeline-header {
@@ -131,8 +151,8 @@
 
 .rev-number {
     font-weight: 700;
-    color: #0076a8;
-    background: rgba(0, 118, 168, 0.08);
+    color: #0ea5e9;
+    background: rgba(14, 165, 233, 0.1);
     padding: 4px 10px;
     border-radius: 6px;
     font-size: 0.85rem;
@@ -140,7 +160,8 @@
 
 .rev-date {
     font-size: 0.8rem;
-    color: #94a3b8;
+    /* 🌙 Cor da data */
+    color: var(--text-muted); 
 }
 
 .timeline-details {
@@ -148,18 +169,25 @@
     flex-wrap: wrap;
     gap: 15px;
     font-size: 0.9rem;
-    color: #475569;
+    /* 🌙 Cor dos valores normais (ex: Ativo, CTI) */
+    color: var(--text-muted); 
 }
 
 .detail-tag strong {
-    color: #64748b;
-    font-weight: 500;
+    /* 🌙 Cor das palavras fortes (Status, Setor, Valor) */
+    color: var(--text-main); 
+    font-weight: 600;
     margin-right: 4px;
 }
 
 .detail-tag.highlight span {
-    color: #059669; /* Verde para valores */
+    color: #10b981; /* Verde Emerald (Fica perfeito no Dark e Light) */
     font-weight: 600;
 }
 
-.no-data { text-align: center; color: #94a3b8; padding: 40px 0; }
+.no-data { 
+    text-align: center; 
+    /* 🌙 Cor do texto vazio */
+    color: var(--text-muted); 
+    padding: 40px 0; 
+}

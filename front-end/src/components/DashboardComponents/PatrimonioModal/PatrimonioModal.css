@@ -11,6 +11,8 @@
     justify-content: center;
     align-items: center;
     z-index: 2000; /* Tem que ficar acima da Sidebar (1000) */
+    /* 🚀 Adicionado padding para o modal não colar na borda do celular */
+    padding: 20px; 
 }
 
 /* Caixa do Modal */
@@ -25,7 +27,15 @@
     box-shadow: var(--shadow-sm); 
     border: 1px solid var(--border-color); /* Adiciona uma bordinha sutil pro Dark Mode */
     animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    /* 🚀 Previne que o modal fique maior que a tela verticalmente */
+    max-height: 90vh; 
+    overflow-y: auto;
 }
+
+/* Customiza a barra de rolagem interna do modal (se a tela for muito pequena) */
+.modal-content::-webkit-scrollbar { width: 6px; }
+.modal-content::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 4px; }
 
 @keyframes modalScaleUp {
     from { opacity: 0; transform: scale(0.95) translateY(10px); }
@@ -151,4 +161,44 @@ button.close-btn:hover {
     /* 🌙 Hover do cancelar */
     background: var(--hover-bg); 
     color: var(--text-main);
+}
+
+/* =========================================
+    🚀 RESPONSIVIDADE PARA CELULARES
+========================================= */
+@media (max-width: 600px) {
+
+    .modal-content {
+        padding: 24px 20px; /* Reduz o padding interno para ganhar espaço */
+        border-radius: 12px; /* Arredondamento menor no celular */
+    }
+
+    .modal-header h3 {
+        font-size: 1.15rem; /* Diminui o título levemente */
+    }
+
+    /* Quebra os inputs que estavam lado a lado (ex: Marca e Etiqueta) */
+    .form-group-row {
+        flex-direction: column;
+        gap: 18px; /* Mantém o mesmo gap do resto do formulário */
+    }
+
+    /* Ajuste dos botões do rodapé */
+    .modal-footer {
+        flex-direction: column; /* Coloca um em cima do outro */
+        gap: 10px;
+    }
+
+    /* Inverte a ordem: Salvar fica em cima (mais acessível), Cancelar embaixo */
+    .btn-save {
+        order: 1;
+        width: 100%;
+        padding: 14px; /* Botões maiores para o toque do dedo */
+    }
+
+    .btn-cancel {
+        order: 2;
+        width: 100%;
+        padding: 14px;
+    }
 }

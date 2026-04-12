@@ -116,3 +116,160 @@
         justify-content: space-between;
     }
 }
+/* =========================================
+    MODERN CARDS (ACCORDION STYLE)
+========================================= */
+.modern-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    overflow: hidden; /* Importante para a animação do accordion não vazar */
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 12px; /* Espaço entre os cards */
+}
+
+.modern-card:hover {
+    border-color: #64748b; /* Realce sutil no hover */
+}
+
+/* 🚀 Borda lateral colorida de 4px conforme o status */
+.status-ativo { border-left: 4px solid #10b981; }      /* Emerald */
+.status-manutencao { border-left: 4px solid #f59e0b; } /* Amber */
+.status-inativo { border-left: 4px solid #f43f5e; }    /* Rose */
+
+/* --- CABEÇALHO DO CARD (Sempre Visível) --- */
+.card-header-visible {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    
+}
+
+.card-main-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Força tudo a começar na esquerda */
+    text-align: left; /* Garante o alinhamento do texto */
+    gap: 6px;
+}
+
+.item-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.2;
+}
+
+.card-badges {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.expand-icon {
+    color: var(--text-muted);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+/* Gira a setinha quando o card está expandido */
+.modern-card.expanded .expand-icon {
+    transform: rotate(180deg);
+    color: #0ea5e9;
+}
+
+/* --- ÁREA EXPANSÍVEL (A Mágica do Accordion) --- */
+.card-expandable-area {
+    display: grid;
+    grid-template-rows: 0fr; /* Fechado por padrão */
+    transition: grid-template-rows 0.3s ease-out;
+}
+
+.modern-card.expanded .card-expandable-area {
+    grid-template-rows: 1fr; /* Abre quando a classe .expanded é adicionada */
+}
+
+.card-expandable-content {
+    overflow: hidden;
+}
+
+/* Conteúdo interno da área expandida */
+.card-details-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 0 20px 16px 20px;
+    border-top: 1px dashed var(--border-color);
+    margin-top: 8px;
+    padding-top: 16px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.detail-item svg {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+.highlight-valor {
+    color: #0ea5e9;
+    font-weight: 700;
+}
+.highlight-valor svg { color: #0ea5e9; opacity: 1; }
+
+/* --- BOTÕES DE AÇÃO --- */
+.card-actions-group {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px 20px 20px;
+}
+
+.btn-card-action {
+    flex: 1; /* Estica os botões igualmente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-body);
+    color: var(--text-main);
+}
+
+.btn-card-action:hover {
+    background-color: var(--hover-bg);
+}
+
+.btn-card-action.edit:hover {
+    border-color: #f59e0b; 
+    color: #f59e0b;
+}
+
+.btn-card-action.delete:hover {
+    background-color: rgba(244, 63, 94, 0.1); 
+    border-color: #f43f5e; 
+    color: #f43f5e;
+}
+
+/* Responsividade Mobile Extrema */
+@media (max-width: 480px) {
+    .card-actions-group {
+        flex-direction: column; /* Empilha os botões em telas muito finas */
+    }
+}

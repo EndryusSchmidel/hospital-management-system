@@ -1,32 +1,36 @@
 /* =========================================
     ESTILO BASE (DESKTOP)
 ========================================= */
-
-
-
 .sidebar {
     width: 240px;
-    background-color: #ffffff;
-    border-right: 1px solid #e0e0e0;
-
-    /* MUDANÇA AQUI: */
-    min-height: 100vh;
-    /* Garante que comece com o tamanho da tela */
-    height: auto;
-    /* Permite que ela cresça se o conteúdo ao lado crescer */
-
-    position: sticky;
+    background-color: var(--bg-card);
+    border-right: 1px solid var(--border-color);
+    
+    /* 🚀 A SOLUÇÃO DEFINITIVA: */
+    height: 100vh;
+    position: fixed; /* Prega a barra na tela */
     top: 0;
+    left: 0;
+    
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease;
     z-index: 1000;
+    
+    /* Garante que se você tiver muitos menus no futuro, 
+       só a barra lateral tenha rolagem, sem afetar a página */
+    overflow-y: auto; 
 }
+
+/* Esconde a barra de rolagem feia da sidebar no Windows */
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 
 .sidebar-nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    
 }
 
 .sidebar-nav li {
@@ -130,7 +134,7 @@
 }
 
 /* =========================================
-   ELEMENTOS EXCLUSIVOS DO MOBILE
+    ELEMENTOS EXCLUSIVOS DO MOBILE
 ========================================= */
 
 /* Botão Hambúrguer (Escondido no Desktop) */
@@ -183,7 +187,7 @@
 /* =========================================
     MEDIA QUERIES (Telas Menores / Mobile)
 ========================================= */
-@media (max-width: 900px) {
+@media (max-width: 1400px) {
 
     /* Exibe o botão Hambúrguer */
     .mobile-menu-btn {

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { RefreshCw, FileText, PackageOpen, SearchX, PlusCircle, MoreVertical, Edit2, Trash2 } from 'lucide-react';
-
+import { RefreshCw, FileText, PackageOpen, SearchX, PlusCircle, MoreVertical, Edit2, Trash2, ChevronDown, MapPin, DollarSign, Tag } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
@@ -12,9 +11,6 @@ import Sidebar from '../../components/DashboardComponents/Sidebar/Sidebar';
 import "./TodosPatrimonios.css";
 import "../../styles/GlobalStyles.css";
 
-
-
-
 const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
     const [patrimonios, setPatrimonios] = useState([]);
     const [busca, setBusca] = useState("");
@@ -22,49 +18,39 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const topoDaListaRef = useRef(null);
-    const [activeDropdown, setActiveDropdown] = useState(null);
-    const dropdownRef = useRef(null);
+    
+    // 🚀 NOVO ESTADO: Controla qual Card está expandido (Accordion)
+    const [expandedId, setExpandedId] = useState(null);
+    
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [patrimonioParaEditar, setPatrimonioParaEditar] = useState(null);
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setActiveDropdown(null);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
-    const toggleDropdown = (id, event) => {
-        event.stopPropagation(); // Evita que o clique acione outros eventos da lista
-        // Se clicar no mesmo que já está aberto, fecha. Se for outro, abre o novo.
-        setActiveDropdown(activeDropdown === id ? null : id); 
+    // Função de Toggle do Accordion
+    const toggleCard = (id) => {
+        setExpandedId(expandedId === id ? null : id);
     };
 
     const handleEdit = (patrimonio) => {
-        setActiveDropdown(null);
         setPatrimonioParaEditar(patrimonio);
         setIsModalOpen(true);
     };
 
     const handleDelete = async (idPatrimonio) => {
-        setActiveDropdown(null);
+        // 🚀 SWEET ALERT 2 ADAPTADO PARA DARK MODE
         const resultado = await Swal.fire({
-        title: 'Tem certeza?',
-        text: "Esta ação não poderá ser revertida!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Sim, excluir!',
-        cancelButtonText: 'Cancelar',
-        reverseButtons: true
-    });
+            title: 'Tem certeza?',
+            text: "Esta ação não poderá ser revertida!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444', // Vermelho Rose (Destruição)
+            cancelButtonColor: '#64748b',  // Cinza Discreto (Cancelar)
+            confirmButtonText: 'Sim, excluir!',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true,
+            background: 'var(--bg-card)', // Herda o fundo do tema
+            color: 'var(--text-main)'     // Herda o texto do tema
+        });
+
         if (resultado.isConfirmed) {
             try {
                 await api.delete(`/patrimonios/${idPatrimonio}`);
@@ -73,7 +59,9 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
                     text: 'O patrimônio foi removido com sucesso.',
                     icon: 'success',
                     timer: 2000,
-                    showConfirmButton: false
+                    showConfirmButton: false,
+                    background: 'var(--bg-card)',
+                    color: 'var(--text-main)'
                 });
                 carregarDados(page);
             } catch (error) {
@@ -85,45 +73,39 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
                 Swal.fire({
                     title: 'Erro!',
                     text: msgErro,
-                    icon: 'error'
+                    icon: 'error',
+                    background: 'var(--bg-card)',
+                    color: 'var(--text-main)'
                 });
             }
         }
     };
 
     const gerarRelatorioPDF = () => {
-    setLoading(true);
-    
-    // Chamamos o endpoint de relatório passando os mesmos filtros da busca atual
-    api.get('/patrimonios/relatorio', {
-        params: { 
-            busca: busca || undefined,
-            status: statusFiltro || undefined
-        },
-        responseType: 'blob'
-
-    })
-    .then((response) => {
-        // Cria um link temporário na memória do navegador
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        
-        // Define o nome do arquivo que será baixado
-        const dataAtual = new Date().toLocaleDateString('pt-BR').replaceAll('/', '-');
-        link.setAttribute('download', `Inventario_Geral_${dataAtual}.pdf`);         
-        document.body.appendChild(link);
-        link.click();
-        
-        // Limpeza
-        link.parentNode.removeChild(link);
-        window.URL.revokeObjectURL(url);
-        setLoading(false);
-    })
-    .catch((err) => {
-        console.error("Erro ao gerar PDF", err);
-        setLoading(false);
-        alert("Erro ao gerar o relatório. Verifique o console.");
+        setLoading(true);
+        api.get('/patrimonios/relatorio', {
+            params: { 
+                busca: busca || undefined,
+                status: statusFiltro || undefined
+            },
+            responseType: 'blob'
+        })
+        .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            const dataAtual = new Date().toLocaleDateString('pt-BR').replaceAll('/', '-');
+            link.setAttribute('download', `Inventario_Geral_${dataAtual}.pdf`);         
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            setLoading(false);
+        })
+        .catch((err) => {
+            console.error("Erro ao gerar PDF", err);
+            setLoading(false);
+            alert("Erro ao gerar o relatório. Verifique o console.");
         });
     };
 
@@ -135,13 +117,12 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
     };
     
     const formatarTexto = (str) => {
-    if (!str) return "";
-    return str
-        .replace(/_/g, ' ') 
-        .replace(/\b\w/g, (l) => l.toUpperCase()); 
-};  
+        if (!str) return "";
+        return str
+            .replace(/_/g, ' ') 
+            .replace(/\b\w/g, (l) => l.toUpperCase()); 
+    };  
 
-    // Função auxiliar para definir a cor baseada no Status
     const getClasseStatus = (status) => {
         const s = status ? status.toLowerCase() : "";
         if (s === "ativo") return "ativo";
@@ -150,11 +131,8 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
         return "";
     };
 
-    // 2. Função para carregar os dados do Back-end
     const carregarDados = () => {
         setLoading(true);
-
-
         api.get("/patrimonios", {
             params: {
                 page: page,
@@ -163,20 +141,19 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
                 busca: busca || undefined
             }
         })
-            .then(response => {
-                setPatrimonios(response.data.content);
-                setTotalPages(response.data.totalPages);
-                setPage(response.data.number);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Erro ao buscar patrimônios", err);
-                setLoading(false);
-                if(err.response?.status !== 401) {
+        .then(response => {
+            setPatrimonios(response.data.content);
+            setTotalPages(response.data.totalPages);
+            setPage(response.data.number);
+            setLoading(false);
+        })
+        .catch(err => {
+            console.error("Erro ao buscar patrimônios", err);
+            setLoading(false);
+            if(err.response?.status !== 401) {
                 toast.error("Erro ao carregar dados.");
-        }
-            });
-
+            }
+        });
     };
 
     useEffect(() => {
@@ -192,20 +169,18 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
     }, [page, statusFiltro, busca]);
 
     useEffect(() => {
-            if (!loading && topoDaListaRef.current) {
-                topoDaListaRef.current.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-            }
-        }, [page, loading]);
-
-
+        if (!loading && topoDaListaRef.current) {
+            topoDaListaRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+    }, [page, loading]);
 
     return (
         <div className="dashboard-container">
             <Sidebar />
-            <main className="main-content"  ref={topoDaListaRef}>
+            <main className="main-content" ref={topoDaListaRef}>
                 <Header />
                 <div className='titulo-secao'>
                     <h1>{tituloPagina || "Todos os patrimônios"} </h1>
@@ -245,110 +220,107 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
                                 {loading ? 'Atualizando...' : 'Atualizar'}
                             </button>
                         </div>
-                        
                     </div>
                 </div>
 
                 <div className='list-container'>
                     {patrimonios.length > 9 && (
                         <div className="paginacao">
-                            <button className='paginacao-btn'
-                                disabled={page === 0}
-                                onClick={() => setPage(prev => prev - 1)}
-                            >
+                            <button className='paginacao-btn' disabled={page === 0} onClick={() => setPage(prev => prev - 1)}>
                                 Anterior
                             </button>
-
                             <span className='paginacao-texto'>Página {page + 1} de {totalPages}</span>
-
-                            <button className='paginacao-btn'
-                                disabled={page >= totalPages - 1}
-                                onClick={() => setPage(prev => prev + 1)}
-                            >
+                            <button className='paginacao-btn' disabled={page >= totalPages - 1} onClick={() => setPage(prev => prev + 1)}>
                                 Próxima
                             </button>
                         </div>
                     )}
+                    
                     <ul className="smart-list">
                         {patrimonios.length > 0 ? (
                             [...patrimonios].reverse().map((p, index) => {
                                 const classeStatus = getClasseStatus(p.status);
                                 const itemId = p.idPatrimonio || index;
+                                const isExpanded = expandedId === itemId;
             
                                 return (
-                                    <li key={itemId} className={`smart-row-base patrimonio-grid-layout status-${classeStatus}`}>
-                                        {/* COLUNA 1: Nome e Detalhes (Ocupa mais espaço) */}
-                                        <div className="row-main-info">
-                                            <span className="item-name">{p.name}</span>
-                                            <span className="item-sub-info">
-                                                {p.marca} • <span className="item-etiqueta">{p.etiqueta}</span>
-                                            </span>
-                                        </div>
+                                    // 🚀 O NOVO CARD MOBILE-FIRST (ACCORDION)
+                                    <li key={itemId} className={`modern-card status-${classeStatus} ${isExpanded ? 'expanded' : ''}`} onClick={() => toggleCard(itemId)}>
+    
+    {/* CABEÇALHO DO CARD (Sempre Visível) */}
+    <div className="card-header-visible">
+        <div className="card-main-info">
+            <span className="item-name">{p.name}</span>
+            <div className="card-badges">
+                {/* Removemos a tag-etiqueta daqui e deixamos apenas o Status brilhando */}
+                <div className="detail-item" title="Etiqueta">
+                    <Tag size={16} /> <span>{p.etiqueta}</span>
+                </div>
+                <span className={`badge-pill badge-${classeStatus}`}>
+                    {p.status || 'Indefinido'}
+                </span>
+            </div>
+            
+        </div>
+        <ChevronDown className="expand-icon" size={24} />
+    </div>
 
-                                        {/* COLUNA 2: Setor (Fixo no centro) */}
-                                        <div className="meta-group campo-setor">
-                                            <span className="meta-label">Setor</span>
-                                            <span className="meta-value">{formatarTexto(p.setor)}</span>
-                                        </div>
+    {/* CORPO EXPANSÍVEL (Detalhes e Ações) */}
+    <div className="card-expandable-area">
+        <div className="card-expandable-content">
+            
+            {/* Detalhes com Ícones (Padronizado com o Histórico) */}
+            <div className="card-details-row">
+                
+                <div className="detail-item" title="Marca">
+                    <PackageOpen size={16} /> <span>{p.marca}</span>
+                </div>
+                <div className="detail-item" title="Setor">
+                    <MapPin size={16} /> <span>{formatarTexto(p.setor)}</span>
+                </div>
+                <div className="detail-item highlight-valor" title="Valor">
+                    <DollarSign size={16} /> <span>{formatarMoeda(p.valor)}</span>
+                </div>
+            </div>
 
-                                        {/* COLUNA 3: Valor (Fixo antes das ações) */}
-                                        <div className="meta-group campo-valor">
-                                            <span className="meta-label">Valor</span>
-                                            <span className="meta-value highlight-valor">
-                                                {formatarMoeda(p.valor)}
-                                            </span>
-                                        </div>
+            {/* Botões de Ação Grandes e Clicáveis */}
+            <div className="card-actions-group">
+                <button className="btn-card-action edit" onClick={(e) => { e.stopPropagation(); handleEdit(p); }}>
+                    <Edit2 size={18} /> Editar
+                </button>
+                <button className="btn-card-action delete" onClick={(e) => { e.stopPropagation(); handleDelete(itemId); }}>
+                    <Trash2 size={18} /> Excluir
+                </button>
+            </div>
 
-                                        {/* COLUNA 4: Status e Ações (Direita) */}
-                                        <div className="row-actions-principal">
-                                            <span className={`badge-pill badge-${classeStatus}`}>
-                                                {p.status || 'Não definido'}
-                                            </span>
-
-                                        <div className="action-menu-container">
-                                            <button 
-                                                className="btn-more-actions" 
-                                                onClick={(e) => toggleDropdown(itemId, e)}
-                                                title="Opções"
-                                            >
-                                                <MoreVertical size={20} color="#64748b" />
-                                            </button>
-
-                                        {activeDropdown === itemId && (
-                                            <div className="dropdown-menu" ref={dropdownRef}>
-                                                <button className="dropdown-item" onClick={() => handleEdit(p)}>
-                                                    <Edit2 size={16} /> Editar
-                                                </button>
-                                                <button className="dropdown-item delete" onClick={() => handleDelete(itemId)}>
-                                                    <Trash2 size={16} /> Excluir
-                                                </button>
-                                            </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </li>
-                            );
-                        })
-                    ) : (
-                        /* Seu empty state continua aqui normalmente... */
-                        <div className="empty-state-container">...</div>
+        </div>
+    </div>
+</li>
+                                );
+                            })
+                        ) : (
+                            <div className="empty-state-container">
+                                <div className="empty-state-icon">
+                                    {busca ? <SearchX size={60} strokeWidth={1.5} /> : <PackageOpen size={60} strokeWidth={1.5} />}
+                                </div>
+                                <h3>{busca ? `Nenhum resultado para "${busca}"` : "Nenhum patrimônio encontrado"}</h3>
+                                <p>{busca ? "Verifique a ortografia ou tente termos mais genéricos." : `Atualmente não existem itens registrados com o status "${statusFiltro || 'Geral'}".`}</p>
+                                {!busca && (
+                                    <button className="btn-empty-state" onClick={() => window.location.reload()}>
+                                        Atualizar Lista
+                                    </button>
+                                )}
+                            </div>
                         )}
                     </ul>
+
                     {patrimonios.length > 0 && (
                         <div className="paginacao">
-                            <button className='paginacao-btn'
-                                disabled={page === 0}
-                                onClick={() => setPage(prev => prev - 1)}
-                            >
+                            <button className='paginacao-btn' disabled={page === 0} onClick={() => setPage(prev => prev - 1)}>
                                 Anterior
                             </button>
-
                             <span className='paginacao-texto'>Página {page + 1} de {totalPages}</span>
-
-                            <button className='paginacao-btn'
-                                disabled={page >= totalPages - 1}
-                                onClick={() => setPage(prev => prev + 1)}
-                            >
+                            <button className='paginacao-btn' disabled={page >= totalPages - 1} onClick={() => setPage(prev => prev + 1)}>
                                 Próxima
                             </button>
                         </div>
@@ -363,7 +335,7 @@ const TodosPatrimonios = ({ statusFiltro, tituloPagina}) => {
                     }}
                     onPatrimonioSalvo={() => {
                         toast.success("Patrimônio salvo com sucesso!");
-                        carregarDados(page); // Atualiza a lista após salvar/editar
+                        carregarDados(page); 
                     }}
                 />
             </main>
