@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -27,6 +28,13 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
     @Autowired
     private TelegramService telegramService;
+
+
+    @Scheduled(fixedDelay = 900000) //
+    public void clearAttempts() {
+        attempts.clear();
+        logger.info("Memória de Rate Limit limpa com sucesso.");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
