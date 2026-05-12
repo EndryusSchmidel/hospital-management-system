@@ -1,86 +1,116 @@
-# 🏥 Hospital Asset Management System - Sistema de Gestão de Patrimônio Hospitalar (Full Stack) (v1.0)
+# 🏥 HMS - Hospital Management System (v1.0)
+### **Gestão Estratégica, Auditoria Crítica e Conformidade Hospitalar**
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/36f46be1-51b5-471c-a8a5-7f84e7e7a92d" alt="Dashboard do Sistema de Gestão Hospitalar" width="100%">
+  <video src="https://github.com/user-attachments/assets/4590457b-ab1b-472a-89b9-d79d37247ef0" 
+    width="100%" 
+    autoplay 
+    loop 
+    muted 
+    playsinline 
+    style="border-radius: 12px; border: 1px solid #334155;">
+  </video>
+  
+  <p align="center">
+    <br />
+    <a href="https://hospital-management-system-gilt-kappa.vercel.app/"><strong>🌐 Explorar Demo Online</strong></a>
+    &nbsp; • &nbsp;
+    <a href="https://hospital-management-system-7gyi.onrender.com/swagger-ui/index.html"><strong>📖 Documentação da API</strong></a>
+    &nbsp; • &nbsp;
+    <a href="https://www.linkedin.com/in/endryus-schmidel"><strong>💼 LinkedIn do Autor</strong></a>
+  </p>
 </div>
 
+---
 
+## 💡 A Visão do Projeto
+Em ambientes hospitalares, a disponibilidade de um ativo (como um desfibrilador ou respirador) é uma questão de vida ou morte. O **HMS** foi projetado para ir além de um simples inventário; ele é uma ferramenta de **compliance e governança**. 
 
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white).
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
-![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
-![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
-
-> Uma plataforma full-stack SaaS desenvolvida para simplificar o controle, auditoria e gestão financeira de equipamentos hospitalares.
-
-Em ambientes críticos de saúde, a perda ou falta de manutenção de um ativo (como monitores cardíacos ou respiradores) pode gerar riscos irreparáveis. Este sistema foi arquitetado para oferecer aos gestores hospitalares um controle absoluto e rastreável sobre os patrimônios.
-
-🔗 **[Acessar a Aplicação em Produção]** *https://hospital-management-system-gilt-kappa.vercel.app/*
+O sistema resolve três dores críticas:
+1. **Rastreabilidade Total:** Quem alterou o quê e quando? (Auditoria via Hibernate Envers).
+2. **Visibilidade Financeira:** Qual o valor patrimonial alocado por setor em tempo real?
+3. **Segurança de Dados:** Controle rigoroso de acesso (RBAC) em conformidade com as diretrizes da LGPD para sistemas administrativos.
 
 ---
 
-## 🚀 Destaques da Versão 1.0 (Lançamento Oficial)
+## 🚀 Diferenciais de Engenharia
 
-- 🌗 **Suporte Nativo a Temas (Light/Dark Mode):** Alternância em tempo real com persistência no `localStorage`, garantindo conforto visual.
-- 📱 **Design Responsivo 100% SaaS:** A interface se adapta perfeitamente do Desktop ao Celular, transformando tabelas complexas em "Smart Cards" e recolhendo a Sidebar em um menu off-canvas.
-- 📊 **Dashboard Analítico Dinâmico:** KPIs e gráficos interativos (Chart.js) refletindo o status financeiro e a alocação dos equipamentos por setor em tempo real.
-- 📑 **Exportação Profissional (iText/Lowagie):** Geração instantânea de relatórios PDF consolidados do inventário e do histórico de movimentações.
-- 🛡️ **Segurança Avançada (Spring Security + JWT):** Rotas protegidas, controle de acesso baseado em Roles (ADMIN vs TESTE) e interceptadores Axios que gerenciam sessões sem quebrar a UX.
+### 🛡️ Backend: Robustez e Auditoria (Java 21 & Spring Boot 3.4)
+*   **Auditoria de Dados (Audit Trail):** Implementação do **Hibernate Envers** para manter um histórico imutável de todas as entidades. Desenvolvi uma lógica customizada no `PatrimonioService` para recuperar dados de itens deletados, garantindo que nenhum rastro de informação seja perdido.
+*   **Segurança Stateless:** Autenticação via **JWT (JSON Web Tokens)** com controle de acesso baseado em Roles (`ADMIN`, `USER`, `VISITANTE`).
+*   **Arquitetura Limpa:** Uso de **Java Records** para DTOs imutáveis e `@ControllerAdvice` para um tratamento de exceções global e padronizado.
+*   **Documentação Viva:** Swagger/OpenAPI configurado para suportar testes autenticados diretamente pela interface.
 
----
-
-## 🛠️ Arquitetura e Tecnologias
-
-### 🖥️ Front-end (React + Vite)
-- **Componentização Avançada:** Estrutura modular (Modais dinâmicos, Sidebars, Tabelas e KPI Cards).
-- **Global CSS & CSS Modules:** Padronização visual aplicando o princípio DRY (Don't Repeat Yourself), com uso inteligente de variáveis CSS (`:root`) para temas.
-- **Axios Interceptors:** Tratamento centralizado de erros (401, 403), direcionando o usuário sem flashes na tela ou perda de contexto.
-- **UX Feedback:** Integração com `React Toastify`, `SweetAlert2` e ícones `Lucide React` para interações elegantes.
-
-### ⚙️ Back-end (Java 21 + Spring Boot 3)
-- **Documentação Interativa (Swagger/OpenAPI):** Interface gráfica gerada automaticamente (`/swagger-ui.html`) para exploração e teste de todos os endpoints REST, com suporte nativo à injeção de tokens JWT para simulação de requisições autenticadas.
-- **Hibernate Envers (Auditoria de Dados):** Rastreabilidade total! Cada criação, edição ou deleção lógica gera uma trilha de auditoria inalterável, exibida em uma bela "Timeline" no front-end.
-- **Padrão DTO e Java Records:** Transferência de dados imutável e segura entre as camadas.
-- **Tratamento de Exceções Global (`@ControllerAdvice`):** O backend captura violações do banco e devolve mensagens JSON amigáveis, em vez de erros genéricos (`500`).
-
-Para acessar a documentação da API, visite https://hospital-management-system-7gyi.onrender.com/swagger-ui/index.html
+### 🎨 Frontend: UX Premium e Performance (React & TypeScript)
+*   **Advanced Theme Engine:** Arquitetura de CSS baseada em **Variáveis Globais** (não apenas utilitários), permitindo um Dark Mode nativo, persistente e performático.
+*   **Reatividade de Dados:** Integração com **Chart.js** utilizando `MutationObserver` para garantir que os gráficos se adaptem às mudanças de tema sem necessidade de recarregar a página.
+*   **Design Responsivo "Smart":** Substituição de tabelas tradicionais por **Cards Expansíveis** em dispositivos móveis, priorizando a usabilidade do técnico em campo.
+*   **Interceptadores de Resiliência:** Axios configurado para gerenciar automaticamente expiração de tokens e erros de permissão (401/403), mantendo o fluxo do usuário fluido.
 
 ---
 
-## 📂 Estrutura do Projeto Backend
+## 🛠️ Stack Tecnológica
 
-*   **`OpenApiConfig`:** Configuração customizada do Swagger para suportar autenticação Bearer (JWT) globalmente.
-*   **`PatrimonioController`:** Exposição dos endpoints REST documentados e geração de PDFs.
-*   **`PatrimonioService`:** Concentração da lógica de negócio e queries avançadas do Envers para buscar o histórico de entidades, inclusive as removidas (`DEL`).
-*   **`SecurityConfig` & `JwtAuthFilter`:** Blindagem das rotas, gestão de CORS e tratamento customizado de `AccessDeniedException` (403), além de liberação inteligente das rotas do Swagger.
+| Camada | Tecnologias |
+| :--- | :--- |
+| **Backend** | Java 21, Spring Boot 3.4, Spring Security, JPA/Hibernate, Envers, Maven |
+| **Frontend** | React (Vite), TypeScript, CSS Variables, Lucide React, Axios, Chart.js |
+| **Database** | PostgreSQL |
+| **DevOps/Infra** | Docker, Render (API), Vercel (Web), GitHub Actions |
+| **Relatórios** | OpenPDF (iText) para exportação de inventários |
 
 ---
 
-## 🔧 Como Executar Localmente
+## 📂 Destaques do Código (Deep Dive)
 
-### 1. Backend (Java)
-1. Clone o repositório e abra a pasta `/back-end`.
-2. Configure as credenciais do seu PostgreSQL no arquivo `application.properties`.
-3. Execute o comando:
+### Auditoria de Itens Deletados
+Diferente de implementações básicas, o HMS consegue consultar o banco de auditoria para reconstruir o estado de um patrimônio que já não existe na tabela principal:
+```java
+// Exemplo da lógica implementada no PatrimonioService
+public List<PatrimonioHistoryDTO> getFullHistory(Long id) {
+    AuditReader reader = AuditReaderFactory.get(entityManager);
+    // Recupera todas as revisões, incluindo a de deleção
+    List<Number> revisions = reader.getRevisions(PatrimonioModel.class, id);
+    // ... lógica de mapeamento para Timeline do Frontend
+}
+```
+
+---
+
+## 🔧 Instalação e Execução
+
+### Pré-requisitos
+* Java 21
+* Node.js 18+
+* PostgreSQL rodando localmente ou via Docker
+
+### Setup Rápido
+1. **Clone e Backend:**
    ```bash
+   git clone https://github.com/seu-usuario/hms-backend
+   cd hms-backend
+   # Configure o application.properties com seu DB
    ./mvnw spring-boot:run
+   ```
 
-   
-### 2. Frontend (React)
-1. Abra um novo terminal na pasta /front-end.
-2. Instale as dependências:
-code
-Bash
-npm install
-3. Inicie o servidor de desenvolvimento:
-code
-Bash
-npm run dev
-4. Acesse http://localhost:5173 no seu navegador.
+2. **Frontend:**
+   ```bash
+   cd hms-frontend
+   npm install
+   npm run dev
+   ```
 
-👨‍💻 **Autor**
+---
 
-**Endryus Schmidel** Desenvolvedor Full-Stack focado em criar soluções limpas, seguras e escaláveis.
+## 👨‍💻 Autor e Contato
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/endryus-schmidel)
+**Endryus Schmidel** - *Software Engineer Intern / ADS Student*
+
+<p align="left">
+  <a href="https://www.linkedin.com/in/endryus-schmidel">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
+  </a>
+  <a href="mailto:endryus.dev@gmail.com">
+    <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
+  </a>
+</p>
