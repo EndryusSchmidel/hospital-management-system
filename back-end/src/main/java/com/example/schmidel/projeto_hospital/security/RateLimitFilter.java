@@ -33,7 +33,12 @@ public class RateLimitFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
-        String clientIp = request.getRemoteAddr(); // Pega o IP de quem está atacando
+        String clientIp = request.getHeader("X-Forwarded-For");
+        if (clientIp == null || clientIp.isEmpty()){
+            clientIp = request.getRemoteAddr();
+        } else {
+            clientIp = clientIp.split(",")[0];
+        }
 
         // 🎯 Alvo: Apenas a rota de login
         if ("/auth/login".equals(path)) {
