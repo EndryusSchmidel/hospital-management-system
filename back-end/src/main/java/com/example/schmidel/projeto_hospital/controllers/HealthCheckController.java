@@ -10,4 +10,9 @@ public class HealthCheckController {
     public String health() {
         return "Server is up!";
     }
+
+    @GetMapping("/api/debug/system-info")
+    public String getSystemInfo() {
+        return "Versão 1.0.2 - DB: PostgreSQL - Status: OK";
+    }
 }

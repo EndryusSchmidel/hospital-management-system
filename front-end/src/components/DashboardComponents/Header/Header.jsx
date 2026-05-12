@@ -10,9 +10,9 @@ const Header = () => {
     const menuRef = useRef();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        window.location.href = "/"; 
-    };
+    localStorage.removeItem("token");
+    navigate("/"); // Use o navigate em vez do window.location
+};
 
 
     return (

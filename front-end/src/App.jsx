@@ -3,9 +3,9 @@ import { ThemeProvider } from './context/ThemeContext';
 import Login from './pages/Login/Login'
 import Dashboard from './pages/Dashboard/Dashboard'
 import Historico from './pages/Historico/Historico'
+import Footer from './components/FooterComponents/Footer'
 import TodosPatrimonios from './pages/TodosPatrimonios/TodosPatrimonios'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Footer from './components/Footer/Footer';
 import { ToastContainer } from 'react-toastify';
 import { useAuthMonitor } from './components/UseAuthComponents/UseAuthComponents'
 
@@ -15,6 +15,7 @@ function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+      
         <Routes>
           <Route path='/' element={<Login/>}/>
 
@@ -40,7 +41,7 @@ function App() {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="colored" // 'colored' fica ótimo para sistemas hospitalares (verde/vermelho nítidos)
+          theme="colored"
         />
       </BrowserRouter>
       <Footer/>

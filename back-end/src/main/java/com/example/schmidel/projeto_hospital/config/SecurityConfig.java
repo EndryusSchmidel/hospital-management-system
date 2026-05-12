@@ -2,6 +2,7 @@ package com.example.schmidel.projeto_hospital.config;
 
 import com.example.schmidel.projeto_hospital.security.JwtAuthFilter;
 import com.example.schmidel.projeto_hospital.security.JwtService;
+import com.example.schmidel.projeto_hospital.security.RateLimitFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 public class SecurityConfig {
 
     @Autowired
+    private RateLimitFilter rateLimitFilter;
+
+    @Autowired
     private CorsConfigurationSource corsConfigurationSource;
 
     @Bean
@@ -47,7 +51,8 @@ public class SecurityConfig {
                                 "/v3/api-docs",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/api/debug/system-info"
                         ).permitAll()
 
                         // 🔓 Rotas Públicas
@@ -60,6 +65,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 // ... restante da configuração de exceptionHandling e sessionManagement
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
