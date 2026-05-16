@@ -87,7 +87,7 @@ const ForgotPassword = () => {
                     }}>
                         <CheckCircle2 size={60} color="#4ade80" style={{ marginBottom: '20px' }} />
                         
-                        <h3 style={{ color: '#fff', marginBottom: '10px', fontSize: '1.5rem' }}>
+                        <h3 style={{ color: '#4ade80', marginBottom: '10px', fontSize: '1.5rem' }}>
                             E-mail Enviado!
                         </h3>
                         
