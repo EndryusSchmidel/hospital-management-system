@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, Moon, Sun } from "lucide-react"; 
-import profileIMG from "../../../assets/profilePicture.jpeg";
+import profileIMG from "../../../assets/profilePicture.png";
 import "./Header.css";
 import { ThemeToggle } from "../../ThemeToggle";
 
