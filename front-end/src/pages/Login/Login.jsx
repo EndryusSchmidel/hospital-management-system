@@ -10,7 +10,7 @@ const Login = () => {
         localStorage.removeItem("token");
     }, []);
 
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +19,7 @@ const Login = () => {
 
     // Função mágica para o recrutador
     const preencherVisitante = () => {
-        setUsername("teste@teste.com");
+        setEmail("teste@teste.com");
         setPassword("1234");
         setLoginError("");
     };
@@ -28,7 +28,7 @@ const Login = () => {
         event.preventDefault();
         setLoginError("");
 
-        if (username.trim() === "" || password.trim() === "") {
+        if (email.trim() === "" || password.trim() === "") {
             toast.warn("Preencha todos os campos!");
             return;
         }
@@ -37,7 +37,7 @@ const Login = () => {
 
         try {
             const response = await api.post("/auth/login", {
-                username: username,
+                email: email,
                 password: password
             });
             localStorage.setItem("token", response.data.token);
@@ -71,9 +71,9 @@ const Login = () => {
                             type="email" 
                             placeholder="E-mail corporativo" 
                             className={`modern-input ${loginError ? 'input-error' : ''}`} 
-                            value={username} 
+                            value={email} 
                             onChange={(e) => {
-                                setUsername(e.target.value);
+                                setEmail(e.target.value);
                                 if(loginError) setLoginError("");
                             }}
                         />
