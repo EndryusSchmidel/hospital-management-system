@@ -108,7 +108,7 @@ const Login = () => {
                             <input type="checkbox" className="custom-checkbox"/>
                             <span>Lembrar de mim</span>
                         </label>
-                        <a href="#" className="forget-password">Esqueceu a senha?</a>
+                        <Link to="/forgot-password" className="forget-password">Esqueceu a senha?</Link>
                     </div>
 
                     {/* Botão Principal */}
