@@ -48,14 +48,16 @@ public class RateLimitFilter extends OncePerRequestFilter {
             clientIp = clientIp.split(",")[0];
         }
 
+        boolean isAuthRoute = "auth/login".equals(path) || "/auth/register".equals(path);
         // 🎯 Alvo: Apenas a rota de login
-        if ("/auth/login".equals(path)) {
+        if (isAuthRoute) {
             attempts.putIfAbsent(clientIp, new AtomicInteger(0));
             int currentAttempts = attempts.get(clientIp).incrementAndGet();
 
             if (currentAttempts > MAX_ATTEMPTS) {
                 if (currentAttempts == MAX_ATTEMPTS + 1) {
                     // 🚫 BLOQUEIO: Retorna 429 Too Many Requests
+                    String action = path.contains("login") ? "LOGIN" : "REGISTRO";
                     String msg = "Alerta: Tentativa de brute force detectada! IP: " + clientIp + " foi banido temporariamente por excesso de tentativas!";
                     telegramService.sendAlert(msg);
                     logger.error("!!! ALERTA DE SEGURANÇA: Possível Brute Force detectado do IP: {} na rota: {}", clientIp, path);
