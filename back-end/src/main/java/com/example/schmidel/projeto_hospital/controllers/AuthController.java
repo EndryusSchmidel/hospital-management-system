@@ -67,6 +67,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Realizar registro")
     public ResponseEntity<?> register(@RequestBody RegistroRequest request) {
         // 🛡️ SEGURANÇA: Verifica se o e-mail já existe
         if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {

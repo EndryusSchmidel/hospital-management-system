@@ -41,6 +41,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
+        logger.info("Rota: [{}]", path);
         String clientIp = request.getHeader("X-Forwarded-For");
         if (clientIp == null || clientIp.isEmpty()){
             clientIp = request.getRemoteAddr();
@@ -48,7 +49,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
             clientIp = clientIp.split(",")[0];
         }
 
-        boolean isAuthRoute = "auth/login".equals(path) || "/auth/register".equals(path);
+        boolean isAuthRoute = "/auth/login".equals(path) || "/auth/register".equals(path);
         // 🎯 Alvo: Apenas a rota de login
         if (isAuthRoute) {
             attempts.putIfAbsent(clientIp, new AtomicInteger(0));
