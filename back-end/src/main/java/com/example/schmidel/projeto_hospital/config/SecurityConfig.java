@@ -1,9 +1,11 @@
 package com.example.schmidel.projeto_hospital.config;
 
+import com.example.schmidel.projeto_hospital.security.CustomUserDetailsService;
 import com.example.schmidel.projeto_hospital.security.JwtAuthFilter;
 import com.example.schmidel.projeto_hospital.security.JwtService;
 import com.example.schmidel.projeto_hospital.security.RateLimitFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,6 +27,21 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    @Value("${app.admin.username}")
+    private String adminUsername;
+
+    @Value("${app.admin.password}")
+    private String adminPassword;
+
+    @Value("${app.test.username}")
+    private String testUsername;
+
+    @Value("${app.test.password}")
+    private String testPassword;
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     private RateLimitFilter rateLimitFilter;
@@ -78,30 +95,12 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    // 🔐 Encoder de senha (obrigatório no Spring moderno)
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 👥 Usuários em memória
-    @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-
-        UserDetails admin = User.builder()
-                .username("admin@admin.com")
-                .password(encoder.encode("141808"))
-                .roles("ADMIN")
-                .build();
-
-        UserDetails teste = User.builder()
-                .username("teste@teste.com")
-                .password(encoder.encode("1234"))
-                .roles("TESTE")
-                .build();
-
-        return new InMemoryUserDetailsManager(admin, teste);
-    }
 }
 
 
