@@ -1,6 +1,7 @@
 import './App.css'
 import { ThemeProvider } from './context/ThemeContext';
 import Login from './pages/Login/Login'
+import Register from './pages/Login/Register';
 import Dashboard from './pages/Dashboard/Dashboard'
 import Historico from './pages/Historico/Historico'
 import Footer from './components/FooterComponents/Footer'
@@ -18,6 +19,8 @@ function App() {
       
         <Routes>
           <Route path='/' element={<Login/>}/>
+
+          <Route path='/register' element={<Login/>}/>
 
           <Route path='/dashboard' element={<Dashboard/>}/>
 

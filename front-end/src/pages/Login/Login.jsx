@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Mail, Lock, Info, AlertCircle, ArrowRight } from "lucide-react"; // 🚀 Ícones modernos e limpos
 import { toast } from 'react-toastify';
 import api from "../../services/api";
@@ -135,7 +135,7 @@ const Login = () => {
                 </div>
 
                 <div className="signup-link">
-                    <p>Não possui credenciais? <a href="#">Solicitar acesso</a></p>
+                    <p>Não possui credenciais? <Link to="/register">Solicitar acesso</Link></p>
                 </div>
             </div>
         </div>
