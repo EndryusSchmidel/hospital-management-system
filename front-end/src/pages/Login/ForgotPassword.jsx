@@ -77,11 +77,21 @@ const ForgotPassword = () => {
                         </button>
                     </form>
                 ) : (
-                    // 🟢 Estado de Sucesso (Feedback Visual)
-                    <div className="success-message-container" style={{ textAlign: 'center', padding: '20px 0' }}>
-                        <CheckCircle2 size={50} color="#4ade80" style={{ marginBottom: '15px' }} />
-                        <h3 style={{ color: '#fff', marginBottom: '10px' }}>E-mail Enviado!</h3>
-                        <p style={{ color: '#aaa', fontSize: '0.9rem', marginBottom: '20px' }}>
+                    <div className="success-message-container" style={{ 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        textAlign: 'center', 
+                        padding: '30px 0' 
+                    }}>
+                        <CheckCircle2 size={60} color="#4ade80" style={{ marginBottom: '20px' }} />
+                        
+                        <h3 style={{ color: '#fff', marginBottom: '10px', fontSize: '1.5rem' }}>
+                            E-mail Enviado!
+                        </h3>
+                        
+                        <p style={{ color: '#aaa', fontSize: '0.95rem', lineHeight: '1.5', maxWidth: '280px' }}>
                             Verifique sua caixa de entrada e a pasta de spam para redefinir sua senha.
                         </p>
                     </div>
