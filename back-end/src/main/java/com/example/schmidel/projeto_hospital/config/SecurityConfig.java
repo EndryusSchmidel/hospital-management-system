@@ -28,18 +28,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Value("${app.admin.username}")
-    private String adminUsername;
-
-    @Value("${app.admin.password}")
-    private String adminPassword;
-
-    @Value("${app.test.username}")
-    private String testUsername;
-
-    @Value("${app.test.password}")
-    private String testPassword;
-
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
